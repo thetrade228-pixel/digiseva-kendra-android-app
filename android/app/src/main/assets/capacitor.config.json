@@ -1,0 +1,21 @@
+{
+  "appId": "in.digisevakendra.app",
+  "appName": "DigiSeva Kendra",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1500,
+      "backgroundColor": "#1565C0",
+      "androidSplashResourceName": "splash",
+      "showSpinner": false
+    },
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#1565C0",
+      "overlaysWebView": true
+    }
+  }
+}

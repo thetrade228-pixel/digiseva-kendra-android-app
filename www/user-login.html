@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<link rel="icon" type="image/png" href="logo.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Login / Register — DigiSeva Kendra</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Hind:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+:root {
+  --primary:#1565C0; --primary-dark:#0D47A1; --accent:#FF6F00; --accent2:#FFC107;
+  --white:#fff; --bg:#F0F4FF; --text:#1a1a2e; --muted:#546E7A;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Hind',sans-serif; background:var(--bg); min-height:100vh; display:flex; flex-direction:column; }
+
+/* NAV */
+nav { background:#fff; padding:12px 32px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 2px 12px rgba(21,101,192,0.08); }
+.logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+.logo-icon { width:44px; height:44px; border-radius:50%; object-fit:contain; display:block; }
+.logo-text { font-family:'Baloo 2',cursive; font-size:19px; font-weight:800; color:var(--primary); }
+.nav-link { color:var(--primary); text-decoration:none; font-size:14px; font-weight:600; display:flex; align-items:center; gap:6px; }
+
+/* MAIN */
+.main { flex:1; display:flex; align-items:center; justify-content:center; padding:40px 20px; }
+.auth-box {
+  background:#fff; border-radius:20px; box-shadow:0 8px 40px rgba(21,101,192,0.13);
+  width:100%; max-width:480px; overflow:hidden;
+}
+.auth-tabs { display:flex; border-bottom:2px solid #e8eef8; }
+.tab-btn {
+  flex:1; padding:18px; background:none; border:none; cursor:pointer;
+  font-family:'Baloo 2',cursive; font-size:17px; font-weight:700; color:var(--muted);
+  transition:.2s; position:relative;
+}
+.tab-btn.active { color:var(--primary); }
+.tab-btn.active::after { content:''; position:absolute; bottom:-2px; left:0; right:0; height:3px; background:var(--primary); border-radius:2px 2px 0 0; }
+.tab-content { display:none; padding:32px; }
+.tab-content.active { display:block; }
+
+.auth-head { margin-bottom:24px; text-align:center; }
+.auth-head h2 { font-family:'Baloo 2',cursive; font-size:22px; font-weight:800; color:var(--text); }
+.auth-head p { color:var(--muted); font-size:14px; margin-top:4px; }
+
+.form-group { margin-bottom:18px; }
+.form-group label { display:block; font-size:13px; font-weight:600; color:var(--text); margin-bottom:6px; }
+.input-wrap { position:relative; }
+.input-wrap i { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#90A4AE; font-size:15px; }
+.form-group input, .form-group select {
+  width:100%; padding:12px 14px 12px 40px; border:1.5px solid #C5D8F8;
+  border-radius:10px; font-size:15px; font-family:'Hind',sans-serif; color:var(--text);
+  background:#fff; transition:.2s; outline:none;
+}
+.form-group input:focus, .form-group select:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(21,101,192,0.1); }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.btn-submit {
+  width:100%; padding:14px; background:var(--primary); color:#fff; border:none;
+  border-radius:10px; font-size:16px; font-weight:700; font-family:'Baloo 2',cursive;
+  cursor:pointer; transition:.2s; margin-top:6px;
+}
+.btn-submit:hover { background:var(--primary-dark); transform:translateY(-1px); box-shadow:0 4px 16px rgba(21,101,192,0.3); }
+.form-footer { text-align:center; margin-top:16px; font-size:13px; color:var(--muted); }
+.form-footer a { color:var(--primary); font-weight:600; text-decoration:none; }
+.forgot { text-align:right; margin-top:-10px; margin-bottom:14px; }
+.forgot a { font-size:12px; color:var(--primary); text-decoration:none; }
+.divider { display:flex; align-items:center; gap:12px; margin:20px 0; }
+.divider span { flex:1; height:1px; background:#e0e8f5; }
+.divider p { font-size:12px; color:#90A4AE; white-space:nowrap; }
+.alert { padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:16px; display:none; }
+.alert.error { background:#FFEBEE; color:#C62828; border:1px solid #FFCDD2; }
+.alert.success { background:#E8F5E9; color:#2E7D32; border:1px solid #C8E6C9; }
+@media(max-width:520px){
+  body{ padding:12px; align-items:flex-start; padding-top:24px; }
+  .card{ border-radius:16px; }
+  .card-body{ padding:22px 16px; }
+  .card-header{ padding:22px 16px 16px; }
+  .input-wrap input{ font-size:15px; }
+  .btn-login{ font-size:15px; padding:13px; }
+}
+
+/* PASSWORD RESET MODAL */
+.modal-overlay {
+  display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5);
+  z-index:9999; align-items:center; justify-content:center;
+}
+.modal-overlay.open { display:flex; }
+.modal-box {
+  background:#fff; border-radius:20px; padding:32px; width:90%; max-width:420px;
+  box-shadow:0 8px 40px rgba(21,101,192,0.2); position:relative;
+}
+.modal-box h3 { font-family:'Baloo 2',cursive; font-size:20px; color:var(--text); margin-bottom:6px; }
+.modal-box p { font-size:13px; color:var(--muted); margin-bottom:20px; }
+.modal-close {
+  position:absolute; top:14px; right:16px; background:none; border:none;
+  font-size:20px; color:var(--muted); cursor:pointer;
+}
+.modal-close:hover { color:var(--text); }
+
+</style>
+<!-- ===== FIREBASE CONFIG ===== -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check.js";
+  import { getAuth, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getDatabase, ref, set, get, update, remove, onValue, query, orderByChild, equalTo }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBCpcHJQQRu9bQsnH6plsTSLl12Mt_7tA4",
+    authDomain: "jan-seva-kendra1.firebaseapp.com",
+    databaseURL: "https://jan-seva-kendra1-default-rtdb.firebaseio.com",
+    projectId: "jan-seva-kendra1",
+    storageBucket: "jan-seva-kendra1.firebasestorage.app",
+    messagingSenderId: "839635987276",
+    appId: "1:839635987276:web:fbfe3969efa45c37793de9"
+  };
+
+  const app = initializeApp(firebaseConfig);
+
+  // App Check — sirf hamari asli app hi database access kar sake
+  initializeAppCheck(app, {
+    provider: new ReCaptchaV3Provider("6Lc6qEItAAAAAKin7WboQWEtWOd9D5Jcvsn9p7eD"),
+    isTokenAutoRefreshEnabled: true
+  });
+
+  const db  = getDatabase(app);
+  const auth = getAuth(app);
+
+  // Firebase DB window par expose
+  window._FB = { db, ref, set, get, update, remove, onValue, query, orderByChild, equalTo, auth, signInWithCustomToken };
+  console.log('✅ DSK Firebase DB Connected');
+  window.dispatchEvent(new Event('firebase-ready'));
+</script>
+<!-- ===== /FIREBASE CONFIG ===== -->
+
+
+<style>
+  html, body { overscroll-behavior: none; -webkit-overflow-scrolling: touch; }
+  * { -webkit-tap-highlight-color: transparent; }
+  body { -webkit-user-select: none; user-select: none; }
+  input, textarea { -webkit-user-select: text; user-select: text; }
+  ::-webkit-scrollbar { display: none; }
+</style>
+</head>
+<body>
+
+<script>
+// Login/Register page hamesha apna form dikhayega. Purana saved session yahan
+// clear kar dete hain taaki ye page kabhi seedha dashboard par na bhej de —
+// dashboard par jaane ke liye user ko hamesha yahin se login/register karna hoga.
+(function() {
+  try {
+    localStorage.removeItem('jsk_current_user');
+    sessionStorage.removeItem('jsk_current_user');
+  } catch(e) {}
+})();
+</script>
+
+<nav>
+  <a href="index.html" class="logo">
+    <img src="logo.png" alt="DigiSeva Kendra logo" class="logo-icon">
+    <div class="logo-text">DigiSeva Kendra</div>
+  </a>
+  <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home par Jayen</a>
+</nav>
+
+<div class="main">
+  <div class="auth-box">
+    <div class="auth-tabs">
+      <button class="tab-btn active" onclick="showTab('login')"><i class="fas fa-sign-in-alt"></i> Login</button>
+      <button class="tab-btn" onclick="showTab('register')"><i class="fas fa-user-plus"></i> Register</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="tab-content active" id="tab-login">
+      <div class="auth-head">
+        <h2>Welcome Back!</h2>
+        <p>Apne account mein login karen</p>
+      </div>
+      <div class="alert error" id="login-err">User ID ya Password galat hai.</div>
+      <div class="form-group">
+        <label>User ID / Mobile Number</label>
+        <div class="input-wrap"><i class="fas fa-user"></i><input type="text" id="login-id" placeholder="BJSxxxxxxx ya Mobile"></div>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-wrap"><i class="fas fa-lock"></i><input type="password" id="login-pass" placeholder="Apna password dalen"></div>
+      </div>
+      <div class="forgot"><a href="#" onclick="openResetModal(); return false;">Password bhul gaye?</a></div>
+      <button class="btn-submit" onclick="doLogin()"><i class="fas fa-sign-in-alt"></i> Login Karen</button>
+      <div class="form-footer">Naya account nahi hai? <a href="#" onclick="showTab('register')">Register Karen</a></div>
+    </div>
+
+    <!-- REGISTER -->
+    <div class="tab-content" id="tab-register">
+      <div class="auth-head">
+        <h2>New Account Banaye</h2>
+        <p>Join Karen aur sabhi services ka labh uthayen</p>
+      </div>
+      <div class="alert success" id="reg-ok">Registration safal! Ab login karen.</div>
+      <div class="alert" id="reg-closed-banner" style="display:none;background:#FFEBEE;color:#C62828;border:1.5px solid #FFCDD2;border-radius:10px;padding:14px 16px;margin-bottom:16px;font-size:13.5px;line-height:1.6;">
+        <i class="fas fa-lock"></i> <strong>Naye registrations abhi band hain.</strong><br>Admin ne temporary tor par naye accounts banana band kar diya hai. Kuch der baad dobara try karen.
+      </div>
+      <div id="reg-form-wrap">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Pura Naam</label>
+          <div class="input-wrap"><i class="fas fa-user"></i><input type="text" id="reg-name" placeholder="Apna naam"></div>
+        </div>
+        <div class="form-group">
+          <label>Mobile Number</label>
+          <div class="input-wrap"><i class="fas fa-phone"></i><input type="tel" id="reg-mobile" placeholder="10 digit"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Shop / Business Name</label>
+        <div class="input-wrap"><i class="fas fa-store"></i><input type="text" id="reg-shop" placeholder="Dukaan ya business ka naam"></div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <div class="input-wrap"><i class="fas fa-envelope"></i><input type="email" id="reg-email" placeholder="yourname@email.com"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Password</label>
+          <div class="input-wrap"><i class="fas fa-lock"></i><input type="password" id="reg-pass" placeholder="Password"></div>
+        </div>
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <div class="input-wrap"><i class="fas fa-lock"></i><input type="password" id="reg-pass2" placeholder="Dobara dalen"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>State</label>
+        <div class="input-wrap"><i class="fas fa-map"></i>
+          <select id="reg-state">
+            <option>-- State Chunen --</option>
+            <option>Andhra Pradesh</option><option>Arunachal Pradesh</option><option>Assam</option>
+            <option>Bihar</option><option>Chhattisgarh</option><option>Goa</option>
+            <option>Gujarat</option><option>Haryana</option><option>Himachal Pradesh</option>
+            <option>Jharkhand</option><option>Karnataka</option><option>Kerala</option>
+            <option>Madhya Pradesh</option><option>Maharashtra</option><option>Manipur</option>
+            <option>Meghalaya</option><option>Mizoram</option><option>Nagaland</option>
+            <option>Odisha</option><option>Punjab</option><option>Rajasthan</option>
+            <option>Sikkim</option><option>Tamil Nadu</option><option>Telangana</option>
+            <option>Tripura</option><option>Uttar Pradesh</option><option>Uttarakhand</option>
+            <option>West Bengal</option><option>Delhi</option><option>Jammu &amp; Kashmir</option>
+            <option>Ladakh</option><option>Puducherry</option><option>Chandigarh</option>
+            <option>Andaman &amp; Nicobar Islands</option><option>Dadra &amp; Nagar Haveli and Daman &amp; Diu</option>
+            <option>Lakshadweep</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Aadhar Card Number <span style="color:red;">*</span></label>
+        <div class="input-wrap"><i class="fas fa-id-card"></i><input type="tel" id="reg-aadhar" maxlength="12" placeholder="12 digit Aadhar number" oninput="this.value=this.value.replace(/\D/g,'')"></div>
+      </div>
+      <div class="form-group">
+        <label>PAN Card Number <span style="color:#90A4AE;font-weight:400;">(Optional)</span></label>
+        <div class="input-wrap"><i class="fas fa-address-card"></i><input type="text" id="reg-pan" maxlength="10" placeholder="ABCDE1234F (optional)" style="text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()"></div>
+      </div>
+      <button class="btn-submit" onclick="doRegister()"><i class="fas fa-user-plus"></i> Register Karen</button>
+      </div>
+      <div class="form-footer">Pehle se account hai? <a href="#" onclick="showTab('login')">Login Karen</a></div>
+    </div>
+
+    <!-- SET NEW PASSWORD (sirf reset-link se khulta hai) -->
+    <div class="tab-content" id="tab-newpass">
+      <div class="auth-head">
+        <h2>Naya Password Set Karen</h2>
+        <p>Apna naya password niche dalen</p>
+      </div>
+      <div class="alert error" id="newpass-err" style="display:none;"></div>
+      <div class="alert success" id="newpass-ok" style="display:none;"></div>
+      <div class="form-group">
+        <label>Naya Password</label>
+        <div class="input-wrap"><i class="fas fa-lock"></i><input type="password" id="newpass-1" placeholder="Kam se kam 6 characters"></div>
+      </div>
+      <div class="form-group">
+        <label>Naya Password (Dobara)</label>
+        <div class="input-wrap"><i class="fas fa-lock"></i><input type="password" id="newpass-2" placeholder="Dobara dalen"></div>
+      </div>
+      <button class="btn-submit" id="newpass-btn" onclick="submitNewPassword()"><i class="fas fa-check"></i> Password Set Karen</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function showResetPasswordTab() {
+  document.querySelector('.auth-tabs').style.display = 'none';
+  document.getElementById('tab-login').classList.remove('active');
+  document.getElementById('tab-register').classList.remove('active');
+  document.getElementById('tab-newpass').classList.add('active');
+}
+
+async function submitNewPassword() {
+  const p1 = document.getElementById('newpass-1').value;
+  const p2 = document.getElementById('newpass-2').value;
+  const errEl = document.getElementById('newpass-err');
+  const okEl  = document.getElementById('newpass-ok');
+  const btn   = document.getElementById('newpass-btn');
+  errEl.style.display = 'none';
+  okEl.style.display = 'none';
+
+  if (!p1 || p1.length < 6) { errEl.textContent = 'Password kam se kam 6 characters ka hona chahiye.'; errEl.style.display = 'block'; return; }
+  if (p1 !== p2) { errEl.textContent = 'Dono password match nahi kar rahe.'; errEl.style.display = 'block'; return; }
+
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get('reset');
+  if (!token) { errEl.textContent = 'Reset link invalid hai.'; errEl.style.display = 'block'; return; }
+
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Save ho raha hai...';
+
+  try {
+    const resp = await fetch('https://digisevakendra.in/api/reset-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token, newPassword: p1 })
+    });
+    const data = await resp.json();
+    if (!resp.ok || data.error) {
+      errEl.textContent = data.error || 'Kuch galat ho gaya. Dobara try karen.';
+      errEl.style.display = 'block';
+      btn.disabled = false; btn.innerHTML = '<i class="fas fa-check"></i> Password Set Karen';
+      return;
+    }
+    okEl.textContent = '✅ Password successfully set ho gaya! Ab isi se login karen.';
+    okEl.style.display = 'block';
+    btn.innerHTML = '<i class="fas fa-check"></i> Ho Gaya!';
+    setTimeout(() => {
+      window.location.href = window.location.pathname; // reset link se bahar, saaf login page pe
+    }, 2000);
+  } catch (e) {
+    errEl.textContent = 'Server se connect nahi ho pa raha. Dobara try karen.';
+    errEl.style.display = 'block';
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-check"></i> Password Set Karen';
+  }
+}
+
+// Page load par check karo — agar reset link se aaye hain to seedha
+// "Set New Password" form dikhao, login/register tabs chhupa do
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('reset')) showResetPasswordTab();
+})();
+</script>
+
+<script>
+function showTab(t) {
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active', (t==='login'&&i===0)||(t==='register'&&i===1)));
+  document.getElementById('tab-login').classList.toggle('active', t==='login');
+  document.getElementById('tab-register').classList.toggle('active', t==='register');
+}
+
+// ✅ REGISTRATION ON/OFF — Admin Panel ke System Settings se REAL-TIME sync
+// Admin jaise hi "User Registration" toggle band/chalu karta hai, ye form
+// turant (bina refresh kiye) khud-ba-khud show/hide ho jata hai.
+let _registrationOpen = true;
+function applyRegistrationState(isOpen) {
+  _registrationOpen = (isOpen !== false); // default open agar setting set hi na ho
+  const formWrap = document.getElementById('reg-form-wrap');
+  const banner   = document.getElementById('reg-closed-banner');
+  if (formWrap) formWrap.style.display = _registrationOpen ? '' : 'none';
+  if (banner)   banner.style.display   = _registrationOpen ? 'none' : 'block';
+}
+
+function startRegistrationLiveSync() {
+  if (!window._FB) { window.addEventListener('firebase-ready', startRegistrationLiveSync, { once: true }); return; }
+  const { db, ref, onValue } = window._FB;
+  onValue(ref(db, 'admin/settings/registration'), function(snap) {
+    applyRegistrationState(snap.exists() ? snap.val() : true);
+  });
+}
+startRegistrationLiveSync();
+
+// ✅ MAINTENANCE MODE — Admin Panel ke System Settings se REAL-TIME sync.
+// ON hote hi (turant, bina reload) poora login/register page block ho jata hai.
+function applyMaintenanceMode(isOn) {
+  if (isOn) {
+    document.body.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:#FFF3E0;font-family:Hind,sans-serif;text-align:center;padding:24px;"><div style="font-size:64px;margin-bottom:16px;">🛠️</div><h2 style="color:#E65100;font-size:28px;margin-bottom:8px;">Maintenance Mode</h2><p style="color:#BF360C;font-size:15px;max-width:420px;">Platform abhi temporarily band hai. Thodi der mein wapas aayein.</p></div>';
+  }
+}
+function startMaintenanceLiveSync() {
+  if (!window._FB) { window.addEventListener('firebase-ready', startMaintenanceLiveSync, { once: true }); return; }
+  const { db, ref, onValue } = window._FB;
+  onValue(ref(db, 'admin/settings/maintenance'), function(snap) {
+    applyMaintenanceMode(snap.exists() ? snap.val() === true : false);
+  });
+}
+startMaintenanceLiveSync();
+
+// ✅ URL ke ?tab=login ya ?tab=register ke hisaab se sahi form kholo.
+// Home page se "Login" dabane par ?tab=login aata hai, "Register" dabane par ?tab=register.
+(function() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get('tab');
+    if (tab === 'register' || tab === 'login') { showTab(tab); }
+  } catch(e) {}
+})();
+
+function generateUserId() {
+  const num = Math.floor(100000 + Math.random() * 900000);
+  return 'BJS' + num;
+}
+
+// ✅ SAFE SESSION SAVE — sessionStorage + localStorage dono mein likhta hai
+function saveSession(user) {
+  const json = JSON.stringify(user);
+  try { localStorage.setItem('jsk_current_user', json); } catch(e) {}
+  try { sessionStorage.setItem('jsk_current_user', json); } catch(e) {}
+  // Verify
+  return !!(localStorage.getItem('jsk_current_user') || sessionStorage.getItem('jsk_current_user'));
+}
+
+async function doLogin() {
+  const id   = document.getElementById('login-id').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  const err  = document.getElementById('login-err');
+  const btn  = document.querySelector('#tab-login .btn-submit');
+
+  if (!id || !pass) { err.style.display='block'; err.textContent='User ID aur Password dono zaruri hain.'; return; }
+
+  btn.disabled = true; btn.textContent = '⏳ Login ho raha hai...';
+  err.style.display = 'none';
+
+  // Firebase ready hone ka wait karo (max 6 sec)
+  let waited = 0;
+  while (!window._FB && waited < 60) {
+    await new Promise(r => setTimeout(r, 100));
+    waited++;
+  }
+
+  let user = null;
+
+  // ✅ SECURITY UPGRADE: Step 1 — asli login backend (/api/login) se verify karo.
+  // Ye ek real Firebase Auth token deta hai, jisse database rules "sirf apna
+  // data dekho" enforce kar sakte hain.
+  try {
+    const resp = await fetch('https://digisevakendra.in/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, password: pass, role: 'user' })
+    });
+    const data = await resp.json();
+
+    if (!resp.ok || !data.token) {
+      throw new Error(data.error || 'ID ya password galat hai');
+    }
+
+    // Step 2: Us secure token se real Firebase Auth login karo
+    const { auth, signInWithCustomToken, db, ref, get } = window._FB;
+    await signInWithCustomToken(auth, data.token);
+
+    // ✅ DIAGNOSTIC: agar role permanently save nahi ho paya, ab ye console
+    // mein dikhega (pehle chup-chaap sirf server pe log hota tha)
+    if (data.claimsPersisted === false) {
+      console.error('⚠️ Role permanently save nahi ho paya (claims persist fail):', data.claimsWarning);
+    }
+
+    // Step 3: Ab authenticated hone ke baad apna data fetch karo
+    const snap = await get(ref(db, 'users/' + data.uid));
+    if (snap.exists()) user = snap.val();
+  } catch (apiErr) {
+    // Step 4 (fallback): agar backend function kisi wajah se na chale, purana
+    // tareeka try karo taaki login poori tarah band na ho jaye.
+    if (window._FB) {
+      try {
+        const { db, ref, get, query, orderByChild, equalTo } = window._FB;
+        const byId = query(ref(db, 'users'), orderByChild('userId'), equalTo(id));
+        let snap = await get(byId).catch(() => null);
+        if (!snap || !snap.exists()) {
+          const byMobile = query(ref(db, 'users'), orderByChild('mobile'), equalTo(id));
+          snap = await get(byMobile).catch(() => null);
+        }
+        if (snap && snap.exists()) {
+          const entries = Object.entries(snap.val());
+          for (const [fbKey, u] of entries) {
+            const userRef = ref(db, 'users/' + (u.userId || fbKey));
+            if (await verifyAndMigratePassword(u, pass, userRef)) { user = u; break; }
+          }
+        }
+      } catch (fbErr) { /* ignore, fallback to localStorage next */ }
+    }
+    if (!user) {
+      const _localFallback = JSON.parse(localStorage.getItem('jsk_users') || '[]');
+      for (const u of _localFallback) {
+        if ((u.userId === id || u.mobile === id) && await verifyAndMigratePassword(u, pass, null)) { user = u; break; }
+      }
+    }
+    if (!user) {
+      err.style.display = 'block';
+      err.textContent = (apiErr && apiErr.message) ? apiErr.message : 'User ID/Mobile ya Password galat hai. Pehle Register karen.';
+      btn.disabled = false; btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login Karen';
+      return;
+    }
+  }
+
+  if (!user) {
+    err.style.display = 'block';
+    err.textContent = 'User ID/Mobile ya Password galat hai. Pehle Register karen.';
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login Karen';
+    return;
+  }
+
+  // Step 5: Session save karo
+  const ok = saveSession(user);
+  console.log('✅ Session saved:', ok, '| User:', user.userId);
+
+  btn.innerHTML = '✅ Login Safal! Redirect ho raha hai...';
+  setTimeout(() => { window.location.href = 'user-dashboard.html'; }, 800);
+}
+
+// ✅ SECURITY FIX: password hashing now uses a random PER-USER salt instead of
+// one hardcoded salt shared by everyone (a shared salt sitting in public JS
+// source gives zero real protection — anyone can build one rainbow table for
+// the whole user base). Each user's salt is stored next to their hash.
+async function hashPassword(pass, salt) {
+  if (!(window.crypto && window.crypto.subtle)) {
+    throw new Error('SECURE_CONTEXT_REQUIRED');
+  }
+  const encoder = new TextEncoder();
+  const data = encoder.encode(pass + '::' + salt);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function generateSalt() {
+  const arr = new Uint8Array(16);
+  crypto.getRandomValues(arr);
+  return Array.from(arr).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Only used to recognise accounts created BEFORE this fix (old shared salt).
+// Never used for new accounts. Accounts are migrated off this on next login.
+async function legacyHashPassword(pass) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(pass + 'jsk_salt_2024');
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Verifies `pass` against a user record. Supports three historical formats —
+// new per-user-salted hash, old shared-salt hash, and very old plain text —
+// and silently upgrades the record to the new salted format on success so
+// the old shared salt / plain text is never relied on again.
+async function verifyAndMigratePassword(user, pass, userRef) {
+  let ok = false;
+  if (user.passwordSalt) {
+    const h = await hashPassword(pass, user.passwordSalt);
+    ok = (h === user.password);
+  } else {
+    const legacy = await legacyHashPassword(pass);
+    ok = (user.password === legacy) || (user.password === pass);
+    if (ok && userRef && window._FB && window._FB.update) {
+      const newSalt = generateSalt();
+      const newHash = await hashPassword(pass, newSalt);
+      window._FB.update(userRef, { password: newHash, passwordSalt: newSalt }).catch(() => {});
+    }
+  }
+  return ok;
+}
+
+async function doRegister() {
+  if (!_registrationOpen) {
+    alert('⛔ Naye registrations abhi admin ne band kar diye hain. Kuch der baad try karen.');
+    return;
+  }
+  const name   = document.getElementById('reg-name').value.trim();
+  const mobile = document.getElementById('reg-mobile').value.trim();
+  const shop   = document.getElementById('reg-shop').value.trim();
+  const email  = document.getElementById('reg-email').value.trim();
+  const pass   = document.getElementById('reg-pass').value;
+  const pass2  = document.getElementById('reg-pass2').value;
+  const state  = document.getElementById('reg-state').value;
+  const aadhar = document.getElementById('reg-aadhar').value.trim();
+  const pan    = document.getElementById('reg-pan').value.trim();
+  const ok     = document.getElementById('reg-ok');
+  const btn    = document.querySelector('#tab-register .btn-submit');
+
+  if (!name || !mobile || !pass) { alert('Naam, Mobile aur Password zaruri hain!'); return; }
+  if (mobile.length < 10) { alert('Mobile number 10 digit ka hona chahiye!'); return; }
+  if (pass !== pass2) { alert('Dono passwords match nahi kar rahe!'); return; }
+  if (!aadhar || aadhar.length !== 12) { alert('Sahi 12 digit Aadhar number dalen — yeh zaruri hai!'); return; }
+  if (pan && !/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(pan)) { alert('PAN Card number galat format mein hai (e.g. ABCDE1234F).'); return; }
+
+  btn.disabled = true; btn.textContent = '⏳ Register ho raha hai...';
+
+  const { db, ref, get, set } = window._FB;
+
+  // Duplicate check — login se pehle chalta hai, isliye safe backend
+  // endpoint use karo (database rules unauthenticated read allow nahi
+  // karte, aur seedha khol dena Aadhar/PAN/password bhi expose kar dega)
+  let isDuplicate = false;
+  try {
+    const resp = await fetch('https://digisevakendra.in/api/lookup-user', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ mode: 'duplicate-check', mobile })
+    });
+    const data = await resp.json();
+    isDuplicate = !!data.exists;
+  } catch (lookupErr) {
+    // Fallback: purana direct-query tareeka (agar function na chale)
+    const { query, orderByChild, equalTo } = window._FB;
+    const dupSnap = await get(query(ref(db, 'users'), orderByChild('mobile'), equalTo(mobile))).catch(() => null);
+    isDuplicate = !!(dupSnap && dupSnap.exists());
+  }
+  if (isDuplicate) {
+    alert('Yeh mobile number pehle se registered hai! Login karen.');
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-user-plus"></i> Register Karen';
+    return;
+  }
+
+  // ✅ SECURITY FIX: random per-user salt generated at registration time
+  const newSalt    = generateSalt();
+  const hashedPass = await hashPassword(pass, newSalt);
+  const newUser = {
+    userId: generateUserId(),
+    name: name,
+    mobile: mobile,
+    shop: shop || 'DigiSeva Kendra',
+    email: email || mobile + '@jsk.in',
+    state: state,
+    password: hashedPass,     // ✅ hashed with this user's own salt
+    passwordSalt: newSalt,    // salt is not secret, but unique per user
+    aadhar: aadhar,
+    pan: pan || '',
+    package: 'Normal',
+    walletBal: 0,
+    joinDate: new Date().toLocaleDateString('hi-IN')
+  };
+
+  try {
+    // Firebase DB mein save karo
+    const { db, ref, set } = window._FB;
+    await set(ref(db, 'users/' + newUser.userId), newUser);
+
+    // ✅ Firebase primary — localStorage mein save karna hataya gaya
+
+    ok.textContent = '✅ Registration safal! Aapka User ID: ' + newUser.userId + ' — Ab login karen.';
+    ok.style.display = 'block';
+    btn.innerHTML = '<i class="fas fa-user-plus"></i> Register Karen';
+    btn.disabled = false;
+    setTimeout(() => { ok.style.display = 'none'; showTab('login'); }, 3500);
+
+  } catch(e) {
+    alert('Registration error: ' + e.message);
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-user-plus"></i> Register Karen';
+  }
+}
+</script>
+<!-- PASSWORD RESET MODAL -->
+<div class="modal-overlay" id="resetModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeResetModal()"><i class="fas fa-times"></i></button>
+    <h3><i class="fas fa-key" style="color:var(--primary);"></i> Password Reset</h3>
+    <p>Apna Mobile Number ya User ID aur registered Email dalen — password aapki email par bhej diya jayega.</p>
+    <div class="alert error" id="reset-err" style="display:none;"></div>
+    <div class="alert success" id="reset-ok" style="display:none;"></div>
+    <div class="form-group">
+      <label>User ID / Mobile Number</label>
+      <div class="input-wrap"><i class="fas fa-user"></i><input type="text" id="reset-id" placeholder="BJSxxxxxxx ya Mobile Number"></div>
+    </div>
+    <div class="form-group">
+      <label>Registered Email</label>
+      <div class="input-wrap"><i class="fas fa-envelope"></i><input type="email" id="reset-email" placeholder="Apni registered email dalen"></div>
+    </div>
+    <button class="btn-submit" id="reset-btn" onclick="doPasswordReset()">
+      <i class="fas fa-paper-plane"></i> Password Email Karen
+    </button>
+  </div>
+</div>
+
+<script>
+// ===== EMAILJS CONFIG =====
+// EmailJS pe free account banao: https://www.emailjs.com
+// Niche apni keys daalo:
+const EMAILJS_PUBLIC_KEY  = 'mQX4SR9vaAHDZrBtI';
+const EMAILJS_SERVICE_ID  = 'service_3h0c3xj';
+const EMAILJS_TEMPLATE_ID = 'template_wbuy20a';
+
+// EmailJS Initialize
+(function() {
+  try { emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY }); } catch(e) {}
+})();
+
+function openResetModal() {
+  document.getElementById('resetModal').classList.add('open');
+  document.getElementById('reset-id').value = '';
+  document.getElementById('reset-email').value = '';
+  document.getElementById('reset-err').style.display = 'none';
+  document.getElementById('reset-ok').style.display = 'none';
+}
+
+function closeResetModal() {
+  document.getElementById('resetModal').classList.remove('open');
+}
+
+// Close modal when clicking outside
+document.getElementById('resetModal').addEventListener('click', function(e) {
+  if (e.target === this) closeResetModal();
+});
+
+async function doPasswordReset() {
+  const inputId    = document.getElementById('reset-id').value.trim();
+  const inputEmail = document.getElementById('reset-email').value.trim().toLowerCase();
+  const errEl      = document.getElementById('reset-err');
+  const okEl       = document.getElementById('reset-ok');
+  const btn        = document.getElementById('reset-btn');
+
+  errEl.style.display = 'none';
+  okEl.style.display  = 'none';
+
+  if (!inputId || !inputEmail) {
+    errEl.textContent = 'User ID/Mobile aur Email dono zaruri hain.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Dhundh raha hai...';
+
+  // Firebase ready hone ka wait karo
+  let waited = 0;
+  while (!window._FB && waited < 60) {
+    await new Promise(r => setTimeout(r, 100));
+    waited++;
+  }
+
+  if (!window._FB) {
+    errEl.textContent = 'Database se connection nahi ho pa raha. Thodi der baad try karen.';
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Password Email Karen';
+    return;
+  }
+
+  try {
+    // Login se pehle chalta hai, isliye safe backend endpoint use karo
+    // (database rules unauthenticated read allow nahi karte)
+    let user = null;
+    let resetToken = null; // sirf backend endpoint se milta hai (one-time link ke liye)
+    try {
+      const resp = await fetch('https://digisevakendra.in/api/lookup-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: 'forgot-password', id: inputId, email: inputEmail })
+      });
+      const data = await resp.json();
+      if (data.found) { user = data.user; resetToken = data.resetToken || null; }
+    } catch (lookupErr) {
+      // Fallback: purana direct-query tareeka (agar function na chale).
+      // Note: is fallback mein reset link nahi ban sakta (token backend
+      // hi generate/save karta hai), isliye resetToken null hi rahega.
+      const { db, ref, get, query, orderByChild, equalTo } = window._FB;
+      const byId = query(ref(db, 'users'), orderByChild('userId'), equalTo(inputId));
+      let snap = await get(byId).catch(() => null);
+      if (!snap || !snap.exists()) {
+        const byMobile = query(ref(db, 'users'), orderByChild('mobile'), equalTo(inputId));
+        snap = await get(byMobile).catch(() => null);
+      }
+      user = (snap && snap.exists())
+        ? Object.values(snap.val()).find(u => (u.email || '').toLowerCase() === inputEmail)
+        : null;
+    }
+
+    if (!user) {
+      errEl.textContent = 'User ID/Mobile ya Email match nahi hua. Sahi details dalen.';
+      errEl.style.display = 'block';
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-paper-plane"></i> Password Email Karen';
+      return;
+    }
+
+    // EmailJS se email bhejo
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Email bhej raha hai...';
+
+    // ✅ Asli password kabhi email nahi hota (hash hai, recover nahi ho
+    // sakta). Ek one-time RESET LINK bhejte hain — user click karke khud
+    // apna naya password set karta hai. Link 30 minute mein expire ho
+    // jata hai aur sirf ek baar use ho sakta hai.
+    const resetLink = resetToken
+      ? (window.location.origin + window.location.pathname + '?reset=' + resetToken)
+      : null;
+
+    const templateParams = {
+      to_email   : user.email,
+      to_name    : user.name || 'User',
+      user_id    : user.userId,
+      user_mobile: user.mobile,
+      user_pass  : resetLink
+        ? '[Neeche diye gaye link se apna naya password set karen — ye link 30 minute tak valid hai]'
+        : '[Apna password reset karne ke liye admin se contact karen: support@digisevakendra.in]',
+      change_pass_link: resetLink || 'https://digisevakendra.in/user-login',
+      change_pass_note : resetLink
+        ? 'Ye link 30 minute tak valid hai aur sirf ek baar use ho sakta hai.'
+        : '',
+      site_name  : 'DigiSeva Kendra'
+    };
+
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+
+    okEl.innerHTML = resetLink
+      ? '✅ Password reset link aapki email <strong>' + user.email + '</strong> par bhej diya gaya hai! Email check karen.'
+      : '✅ Password aapki email <strong>' + user.email + '</strong> par bhej diya gaya hai! Email check karen.';
+    okEl.style.display = 'block';
+    btn.innerHTML = '<i class="fas fa-check"></i> Email Bheja Gaya!';
+
+    setTimeout(() => { closeResetModal(); }, 4000);
+
+  } catch(e) {
+    console.error('Reset error:', e);
+    if (e.status === 400 || String(e).includes('publicKey')) {
+      errEl.textContent = 'EmailJS configure nahi hua hai. Admin se contact karen.';
+    } else {
+      errEl.textContent = 'Email bhejne mein error: ' + (e.text || e.message || 'Unknown error');
+    }
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Password Email Karen';
+  }
+}
+</script>
+
+<script>
+// ===== WHATSAPP FLOATING BUTTON (DRAGGABLE) =====
+function _initWABtn() {
+  if (document.getElementById('jsk-wa-btn')) return;
+  var savedPos = {};
+  try { savedPos = JSON.parse(localStorage.getItem('jsk_wa_pos')||'{}'); } catch(e){}
+  var isLeft = savedPos.side === 'left';
+  var btn = document.createElement('a');
+  btn.id = 'jsk-wa-btn';
+  btn.target = '_blank'; btn.rel = 'noopener';
+  btn.title = 'WhatsApp pe Contact Karen';
+  btn.innerHTML = '<i class="fab fa-whatsapp" style="font-size:32px;pointer-events:none;"></i>';
+  btn.style.cssText = 'position:fixed;bottom:'+(savedPos.bottom||24)+'px;'+(isLeft?'left':'right')+':'+(savedPos.edge||24)+'px;z-index:99999;width:60px;height:60px;background:#25D366;color:#fff;border-radius:50%;display:none;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.6);text-decoration:none;cursor:grab;user-select:none;';
+  document.body.appendChild(btn);
+  var isDrag=false, moved=false, sx, sy, sl, st;
+  function onDown(cx,cy) {
+    isDrag=true; moved=false;
+    var r=btn.getBoundingClientRect(); sx=cx; sy=cy; sl=r.left; st=r.top;
+    btn.style.transition='none'; btn.style.cursor='grabbing';
+  }
+  function onMove(cx,cy) {
+    if(!isDrag) return;
+    var dx=cx-sx, dy=cy-sy;
+    if(Math.abs(dx)>5||Math.abs(dy)>5) moved=true;
+    btn.style.top=Math.max(10,Math.min(window.innerHeight-70,st+dy))+'px';
+    btn.style.bottom='auto';
+    btn.style.left=Math.max(10,Math.min(window.innerWidth-70,sl+dx))+'px';
+    btn.style.right='auto';
+  }
+  function onUp() {
+    if(!isDrag) return; isDrag=false;
+    btn.style.cursor='grab'; btn.style.transition='';
+    if(moved) {
+      var r=btn.getBoundingClientRect();
+      var left=r.left < window.innerWidth/2;
+      var bot=Math.max(10,window.innerHeight-r.bottom);
+      var edge=left?Math.max(10,r.left):Math.max(10,window.innerWidth-r.right);
+      btn.style.top='auto'; btn.style.bottom=bot+'px';
+      if(left){btn.style.left=edge+'px';btn.style.right='auto';}
+      else{btn.style.right=edge+'px';btn.style.left='auto';}
+      localStorage.setItem('jsk_wa_pos',JSON.stringify({side:left?'left':'right',bottom:bot,edge:edge}));
+    }
+  }
+  btn.addEventListener('mousedown',function(e){onDown(e.clientX,e.clientY);e.preventDefault();});
+  document.addEventListener('mousemove',function(e){onMove(e.clientX,e.clientY);});
+  document.addEventListener('mouseup',onUp);
+  btn.addEventListener('touchstart',function(e){onDown(e.touches[0].clientX,e.touches[0].clientY);},{passive:true});
+  btn.addEventListener('touchmove',function(e){onMove(e.touches[0].clientX,e.touches[0].clientY);if(moved)e.preventDefault();},{passive:false});
+  btn.addEventListener('touchend',onUp);
+  btn.addEventListener('click',function(e){if(moved){e.preventDefault();}});
+}
+function _applyWhatsApp(s) {
+  if (!s||!s.whatsappEnabled||!s.whatsappNumber) {
+    var b=document.getElementById('jsk-wa-btn'); if(b) b.style.display='none'; return;
+  }
+  _initWABtn();
+  var b=document.getElementById('jsk-wa-btn');
+  b.href='https://wa.me/'+s.whatsappNumber+'?text='+encodeURIComponent(s.whatsappMessage||'Namaste! Mujhe help chahiye.');
+  b.style.display='flex';
+}
+function _loadWA() {
+  var ls={};
+  try{ls=JSON.parse(localStorage.getItem('jsk_website_settings')||'{}');}catch(e){}
+  if(window._FB){
+    window._FB.get(window._FB.ref(window._FB.db,'admin/website_settings')).then(function(snap){
+      var s=snap.exists()?Object.assign({},ls,snap.val()):ls;
+      _applyWhatsApp(s);
+      window._FB.onValue(window._FB.ref(window._FB.db,'admin/website_settings'),function(s2){if(s2.exists())_applyWhatsApp(s2.val());});
+    }).catch(function(){_applyWhatsApp(ls);});
+  } else { _applyWhatsApp(ls); }
+}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',function(){setTimeout(_loadWA,500);});}
+else{setTimeout(_loadWA,500);}
+window.addEventListener('firebase-ready',function(){setTimeout(_loadWA,200);});
+// ===== END WHATSAPP =====
+
+// ===== BLOCK INSPECT / RIGHT-CLICK / DEVTOOLS SHORTCUTS (Admin Panel se ON/OFF) =====
+(function() {
+  function _ctxHandler(e) { e.preventDefault(); }
+  function _keyHandler(e) {
+    if (e.keyCode === 123) { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.keyCode === 85) { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.keyCode === 83) { e.preventDefault(); return false; }
+  }
+  function _applyInspectBlock(on) {
+    document.removeEventListener('contextmenu', _ctxHandler);
+    document.removeEventListener('keydown', _keyHandler);
+    if (on) {
+      document.addEventListener('contextmenu', _ctxHandler);
+      document.addEventListener('keydown', _keyHandler);
+    }
+  }
+  function _readSettingAndApply() {
+    var s = {};
+    try { s = JSON.parse(localStorage.getItem('jsk_website_settings') || '{}'); } catch(e) {}
+    _applyInspectBlock(s.disableInspect !== false);
+  }
+  _readSettingAndApply();
+  function _watchFirebase() {
+    if (!window._FB) return;
+    window._FB.get(window._FB.ref(window._FB.db, 'admin/website_settings')).then(function(snap) {
+      if (snap.exists()) {
+        try {
+          var existing = JSON.parse(localStorage.getItem('jsk_website_settings') || '{}');
+          localStorage.setItem('jsk_website_settings', JSON.stringify(Object.assign({}, existing, snap.val())));
+        } catch(e) {}
+        _applyInspectBlock(snap.val().disableInspect !== false);
+      }
+    }).catch(function(){});
+    window._FB.onValue(window._FB.ref(window._FB.db, 'admin/website_settings'), function(snap) {
+      if (snap.exists()) _applyInspectBlock(snap.val().disableInspect !== false);
+    });
+  }
+  if (window._FB) { setTimeout(_watchFirebase, 600); }
+  window.addEventListener('firebase-ready', function() { setTimeout(_watchFirebase, 300); });
+})();
+// ===== END BLOCK INSPECT =====
+
+</script>
+</body>
+</html>

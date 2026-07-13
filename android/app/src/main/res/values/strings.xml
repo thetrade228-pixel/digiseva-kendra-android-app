@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">DigiSeva Kendra</string>
+    <string name="title_activity_main">DigiSeva Kendra</string>
+    <string name="package_name">in.digisevakendra.app</string>
+    <string name="custom_url_scheme">in.digisevakendra.app</string>
+</resources>

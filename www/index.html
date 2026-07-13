@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<link rel="icon" type="image/png" href="logo.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>DigiSeva Kendra - Digital India Services</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Hind:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --primary: #1565C0;
+  --primary-dark: #0D47A1;
+  --primary-light: #42A5F5;
+  --accent: #FF6F00;
+  --accent2: #FFC107;
+  --green: #2E7D32;
+  --white: #ffffff;
+  --bg: #F0F4FF;
+  --text: #1a1a2e;
+  --text-muted: #546E7A;
+  --card-shadow: 0 4px 24px rgba(21,101,192,0.10);
+  --radius: 16px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body { font-family:'Hind',sans-serif; color:var(--text); background:var(--white); }
+
+/* TOP BAR */
+.topbar {
+  background: var(--primary);
+  color:#fff;
+  font-size:13px;
+  padding:8px 40px;
+  padding-top: max(env(safe-area-inset-top, 0px), 22px);
+  display:flex; justify-content:space-between; align-items:center;
+  flex-wrap:wrap; gap:8px;
+}
+.topbar span { display:flex; align-items:center; gap:6px; }
+.topbar a { color:#fff; text-decoration:none; }
+.topbar .tb-right { display:flex; gap:20px; }
+
+/* NAVBAR */
+nav {
+  background:#fff;
+  padding:14px 40px;
+  
+  display:flex; align-items:center; justify-content:space-between;
+  box-shadow:0 2px 16px rgba(21,101,192,0.08);
+  position:sticky; top:0; z-index:100;
+}
+.logo { display:flex; align-items:center; gap:12px; text-decoration:none; }
+.logo-icon {
+  width:52px; height:52px; border-radius:50%;
+  object-fit:contain; display:block;
+}
+.logo-text { font-family:'Baloo 2',cursive; font-size:22px; font-weight:800; color:var(--primary); line-height:1.1; }
+.logo-text span { display:block; font-size:11px; font-weight:500; color:var(--accent); letter-spacing:1px; }
+.nav-links { display:flex; gap:28px; list-style:none; }
+.nav-links a { text-decoration:none; color:var(--text); font-weight:500; font-size:15px; transition:.2s; position:relative; padding-bottom:4px; }
+.nav-links a::after { content:''; position:absolute; bottom:0; left:0; width:0; height:2px; background:var(--primary); transition:.3s; border-radius:2px; }
+.nav-links a:hover { color:var(--primary); }
+.nav-links a:hover::after, .nav-links a.active::after { width:100%; }
+.nav-links a.active { color:var(--primary); }
+.nav-btns { display:flex; gap:10px; }
+.btn { padding:10px 22px; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; border:none; transition:.2s; font-family:'Hind',sans-serif; text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
+.btn-outline { background:transparent; border:2px solid var(--primary); color:var(--primary); }
+.btn-outline:hover { background:var(--primary); color:#fff; }
+.btn-primary { background:var(--primary); color:#fff; }
+.btn-primary:hover { background:var(--primary-dark); transform:translateY(-1px); box-shadow:0 4px 16px rgba(21,101,192,0.3); }
+.btn-accent { background:var(--accent); color:#fff; }
+.btn-accent:hover { background:#E65100; }
+
+/* HERO */
+.hero {
+  min-height:88vh;
+  background: linear-gradient(120deg, #0D47A1 0%, #1565C0 50%, #1976D2 100%);
+  display:flex; align-items:center; justify-content:center;
+  text-align:center; padding:80px 40px 60px;
+  position:relative; overflow:hidden;
+}
+.hero::before {
+  content:''; position:absolute; inset:0;
+  background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.hero-badge {
+  display:inline-block; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3);
+  color:#fff; padding:6px 18px; border-radius:50px; font-size:13px; font-weight:600;
+  letter-spacing:2px; margin-bottom:20px; backdrop-filter:blur(8px);
+}
+.hero h1 {
+  font-family:'Baloo 2',cursive; font-size:clamp(32px,6vw,62px); font-weight:800;
+  color:#fff; line-height:1.15; margin-bottom:20px;
+}
+.hero h1 .blue-text { color:var(--accent2); }
+.hero p { color:rgba(255,255,255,0.88); font-size:17px; max-width:680px; margin:0 auto 36px; line-height:1.7; }
+.hero-btns { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+.hero-btns .btn { font-size:16px; padding:14px 32px; border-radius:10px; }
+.hero-btns .btn-white { background:#fff; color:var(--primary); font-weight:700; }
+.hero-btns .btn-white:hover { background:var(--accent2); color:var(--primary-dark); }
+.hero-btns .btn-ghost { background:rgba(255,255,255,0.15); color:#fff; border:2px solid rgba(255,255,255,0.4); }
+.hero-btns .btn-ghost:hover { background:rgba(255,255,255,0.25); }
+.hero-stats {
+  display:flex; gap:40px; justify-content:center; margin-top:52px; flex-wrap:wrap;
+}
+.hero-stat { text-align:center; color:#fff; }
+.hero-stat .num { font-family:'Baloo 2',cursive; font-size:32px; font-weight:800; color:var(--accent2); }
+.hero-stat .label { font-size:13px; opacity:.8; margin-top:2px; }
+
+/* SECTION BASE */
+section { padding:80px 40px; }
+.section-tag {
+  display:inline-block; background:var(--bg); border:1px solid #C5D8F8;
+  color:var(--primary); padding:5px 16px; border-radius:50px; font-size:12px;
+  font-weight:700; letter-spacing:2px; margin-bottom:14px;
+}
+.section-title { font-family:'Baloo 2',cursive; font-size:clamp(24px,4vw,38px); font-weight:800; color:var(--text); }
+.section-title span { color:var(--primary); }
+.section-sub { color:var(--text-muted); font-size:16px; margin-top:10px; max-width:600px; margin-left:auto; margin-right:auto; }
+.text-center { text-align:center; }
+
+/* QUICK SERVICES */
+.quick-services { background:var(--bg); }
+.services-grid4 { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; margin-top:40px; max-width:1200px; margin-left:auto; margin-right:auto; }
+.scard {
+  background:#fff; border-radius:var(--radius); padding:32px 24px;
+  box-shadow:var(--card-shadow); transition:.3s; border:1.5px solid transparent;
+  cursor:default;
+}
+.scard:hover { transform:translateY(-6px); box-shadow:0 12px 40px rgba(21,101,192,0.15); border-color:var(--primary-light); }
+.scard-icon { font-size:32px; color:var(--primary); margin-bottom:16px; }
+.scard h3 { font-family:'Baloo 2',cursive; font-size:18px; font-weight:700; margin-bottom:10px; }
+.scard p { color:var(--text-muted); font-size:14px; line-height:1.6; }
+
+/* ABOUT */
+.about { background:#fff; }
+.about-inner { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; max-width:1100px; margin:0 auto; }
+.about-img-box {
+  background: linear-gradient(135deg,var(--primary),var(--primary-light));
+  border-radius:24px; padding:40px; color:#fff; text-align:center;
+  position:relative; overflow:hidden;
+}
+.about-img-box::before {
+  content:''; position:absolute; top:-30px; right:-30px;
+  width:140px; height:140px; border-radius:50%; background:rgba(255,255,255,0.08);
+}
+.about-img-box .big-num { font-family:'Baloo 2',cursive; font-size:80px; font-weight:800; color:var(--accent2); line-height:1; }
+.about-img-box p { font-size:18px; font-weight:600; margin-top:8px; }
+.about-img-box .since { font-size:14px; opacity:.8; margin-top:4px; }
+.about-points { margin-top:24px; display:flex; flex-direction:column; gap:14px; }
+.about-point { display:flex; align-items:flex-start; gap:12px; }
+.about-point .icon { color:var(--primary); font-size:18px; margin-top:2px; flex-shrink:0; }
+.about-point p { color:var(--text-muted); font-size:15px; line-height:1.6; }
+
+/* STATS BAR */
+.stats-bar { background:var(--bg); }
+.stats-progress-grid { display:grid; grid-template-columns:1fr 1fr; gap:28px 60px; max-width:1000px; margin:40px auto 0; }
+.prog-item {}
+.prog-label { display:flex; justify-content:space-between; margin-bottom:8px; font-size:13px; font-weight:600; letter-spacing:.5px; color:var(--text); }
+.prog-bar { height:10px; background:#D0E2FF; border-radius:10px; overflow:hidden; }
+.prog-fill { height:100%; background:linear-gradient(90deg,var(--primary),var(--primary-light)); border-radius:10px; transition:width 1.2s ease; }
+.counters { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; max-width:1000px; margin:48px auto 0; }
+.counter-card {
+  background:#fff; border-radius:var(--radius); padding:28px 20px; text-align:center;
+  box-shadow:var(--card-shadow);
+}
+.counter-card .c-icon { width:52px; height:52px; background:var(--primary); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:22px; margin:0 auto 12px; }
+.counter-card .c-num { font-family:'Baloo 2',cursive; font-size:32px; font-weight:800; color:var(--text); }
+.counter-card .c-label { color:var(--text-muted); font-size:14px; margin-top:4px; }
+.counter-card { overflow-wrap:anywhere; word-break:break-word; }
+
+/* CONTACT GRID */
+.contact-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; max-width:900px; margin:40px auto 0; }
+
+/* ALL SERVICES */
+.all-services { background:#fff; }
+.services-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; max-width:1200px; margin:40px auto 0; }
+.service-item {
+  background:var(--bg); border-radius:14px; padding:28px 20px;
+  display:flex; flex-direction:column; gap:12px;
+  border:1.5px solid transparent; transition:.3s; cursor:default;
+}
+.service-item:hover { background:#fff; border-color:var(--primary); box-shadow:var(--card-shadow); transform:translateY(-4px); }
+.service-item .s-icon { font-size:28px; color:var(--primary); }
+.service-item h4 { font-family:'Baloo 2',cursive; font-size:15px; font-weight:700; color:var(--text); }
+
+/* FOOTER */
+footer { background:#0a1628; color:#ccc; padding:60px 40px 0; }
+.footer-grid { display:grid; grid-template-columns:1.5fr 1fr 1fr 1.2fr; gap:40px; max-width:1200px; margin:0 auto; }
+.footer-brand {}
+.footer-logo { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+.footer-logo .fl-icon { width:48px; height:48px; border-radius:50%; object-fit:contain; display:block; }
+.footer-logo .fl-text { font-family:'Baloo 2',cursive; font-size:18px; font-weight:800; color:#fff; }
+.footer-brand p { font-size:14px; line-height:1.7; color:#9ab; margin-bottom:16px; }
+.footer-contact p { font-size:14px; color:#9ab; margin-bottom:6px; display:flex; gap:8px; align-items:center; }
+.footer-contact a { color:#9ab; text-decoration:none; }
+.footer-section h4 { color:#fff; font-family:'Baloo 2',cursive; font-size:16px; font-weight:700; margin-bottom:16px; }
+.footer-links { list-style:none; display:flex; flex-direction:column; gap:10px; }
+.footer-links a { color:#9ab; text-decoration:none; font-size:14px; transition:.2s; display:flex; align-items:center; gap:8px; }
+.footer-links a:hover { color:var(--accent2); }
+.social-icons { display:flex; gap:10px; margin-top:8px; flex-wrap:wrap; }
+.social-icon { width:38px; height:38px; border-radius:8px; background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; color:#ccc; text-decoration:none; font-size:16px; transition:.2s; }
+.social-icon:hover { background:var(--primary); color:#fff; }
+.footer-bottom { border-top:1px solid #1e2d4a; margin-top:40px; padding:20px 0; display:flex; justify-content:space-between; align-items:center; font-size:13px; color:#67788a; max-width:1200px; margin-left:auto; margin-right:auto; flex-wrap:wrap; gap:8px; }
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .services-grid4,.services-grid,.counters,.stats-progress-grid,.contact-grid{ grid-template-columns:1fr 1fr; }
+  .about-inner{ grid-template-columns:1fr; }
+  .footer-grid{ grid-template-columns:1fr 1fr; }
+  nav{ padding:14px 20px; }
+  .nav-links, .nav-btns { display:none; }
+  .hero h1{ font-size:clamp(26px,5vw,48px); }
+  .hero p{ font-size:15px; }
+  .hero-btns{ flex-wrap:wrap; gap:10px; }
+  .hero-stats{ flex-wrap:wrap; gap:12px; }
+}
+@media(max-width:600px){
+  .services-grid4,.services-grid,.counters,.stats-progress-grid,.contact-grid{ grid-template-columns:1fr; }
+  .footer-grid{ grid-template-columns:1fr; }
+  .footer-bottom{ flex-direction:column; text-align:center; }
+  section{ padding:48px 16px; }
+  .topbar{ font-size:11px; padding:6px 12px; flex-wrap:wrap; gap:4px; }
+  .hero{ padding:60px 16px 40px; }
+  .hero h1{ font-size:clamp(22px,7vw,36px); }
+  .scard,.service-item{ padding:18px 14px; }
+}
+
+/* ANIMATE */
+@keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+.hero > * { animation: fadeUp .7s ease both; }
+.hero .hero-badge { animation-delay:.1s }
+.hero h1 { animation-delay:.2s }
+.hero p { animation-delay:.3s }
+.hero .hero-btns { animation-delay:.4s }
+.hero .hero-stats { animation-delay:.5s }
+</style>
+<!-- ===== FIREBASE CONFIG ===== -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check.js";
+  import { getDatabase, ref, set, get, push, update, remove, onValue, child }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBCpcHJQQRu9bQsnH6plsTSLl12Mt_7tA4",
+    authDomain: "jan-seva-kendra1.firebaseapp.com",
+    databaseURL: "https://jan-seva-kendra1-default-rtdb.firebaseio.com",
+    projectId: "jan-seva-kendra1",
+    storageBucket: "jan-seva-kendra1.firebasestorage.app",
+    messagingSenderId: "839635987276",
+    appId: "1:839635987276:web:fbfe3969efa45c37793de9"
+  };
+
+  const app = initializeApp(firebaseConfig);
+
+  // App Check — sirf hamari asli app hi database access kar sake
+  initializeAppCheck(app, {
+    provider: new ReCaptchaV3Provider("6Lc6qEItAAAAAKin7WboQWEtWOd9D5Jcvsn9p7eD"),
+    isTokenAutoRefreshEnabled: true
+  });
+
+  const db  = getDatabase(app);
+
+  window._FB = { db, ref, set, get, push, update, remove, onValue, child };
+  console.log('✅ DSK Firebase DB Connected');
+  // Firebase ready event — website settings apply karne ke liye
+  window.dispatchEvent(new Event('firebase-ready'));
+</script>
+<!-- ===== /FIREBASE CONFIG ===== -->
+
+
+<style>
+  html, body { overscroll-behavior: none; -webkit-overflow-scrolling: touch; }
+  * { -webkit-tap-highlight-color: transparent; }
+  body { -webkit-user-select: none; user-select: none; }
+  input, textarea { -webkit-user-select: text; user-select: text; }
+  ::-webkit-scrollbar { display: none; }
+</style>
+</head>
+<body>
+
+<script>
+// ✅ FIX 24: Agar user pehle se logged in hai to dashboard pe redirect karo
+(function() {
+  try {
+    const u = JSON.parse(localStorage.getItem('jsk_current_user') || sessionStorage.getItem('jsk_current_user') || 'null');
+    if (u && u.userId) {
+      // Optional: show a banner instead of auto-redirect
+      // window.location.href = 'user-dashboard.html';
+    }
+  } catch(e) {}
+})();
+</script>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <span><i class="fas fa-clock"></i> <span id="idx-working-hours">Working Time: Mon to Sat — 9:00 AM to 6:00 PM</span></span>
+  <div class="tb-right">
+    <span><i class="fas fa-envelope"></i> <a id="idx-topbar-email-link" href="mailto:support@digisevakendra.in"><span id="idx-topbar-email">support@digisevakendra.in</span></a></span>
+    <span><i class="fas fa-phone"></i> <span id="idx-topbar-phone">+91 9999999999</span></span>
+    <a id="idx-topbar-yt" href="#"><i class="fab fa-youtube"></i></a>
+    <a id="idx-topbar-fb" href="#"><i class="fab fa-facebook"></i></a>
+    <a id="idx-topbar-ig" href="#"><i class="fab fa-instagram"></i></a>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="index.html" class="logo">
+    <img src="logo.png" alt="DigiSeva Kendra logo" class="logo-icon">
+    <div class="logo-text"><span id="idx-site-name">DigiSeva Kendra</span> <span id="idx-site-tagline">Digital India Services</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#">Training Videos</a></li>
+  </ul>
+  <div class="nav-btns">
+    <a href="user-login.html?tab=login" class="btn btn-outline">Login</a>
+    <a href="user-login.html?tab=register" class="btn btn-primary">Register</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="hero-badge" id="idx-hero-badge">✦ Since 2014 ✦ Trusted by 60,000+ Users</div>
+    <h1><span id="idx-hero-title1">Welcome to</span> <span class="blue-text" id="idx-hero-title2">DigiSeva Kendra</span><br><span id="idx-hero-title3">Digital India Portal</span></h1>
+    <p id="idx-hero-desc">DigiSeva Kendra ek aisa platform hai jo aapko sabhi digital services ek jagah deta hai. Mobile Recharge se lekar PAN Card, Banking aur Insurance tak — sab kuch highest commission ke saath.</p>
+    <div class="hero-btns">
+      <a href="user-login.html?tab=login" class="btn btn-white"><i class="fas fa-sign-in-alt"></i> Login</a>
+      <a href="user-login.html?tab=register" class="btn btn-ghost"><i class="fas fa-user-plus"></i> Register Now</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num" id="idx-stat1-num">60,000+</div><div class="label" id="idx-stat1-lbl">Happy Clients</div></div>
+      <div class="hero-stat"><div class="num" id="idx-stat2-num">18+</div><div class="label" id="idx-stat2-lbl">Services</div></div>
+      <div class="hero-stat"><div class="num" id="idx-stat3-num">9 Hrs</div><div class="label" id="idx-stat3-lbl">Support</div></div>
+      <div class="hero-stat"><div class="num" id="idx-stat4-num">15+</div><div class="label" id="idx-stat4-lbl">Team Members</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK SERVICES -->
+<section class="quick-services">
+  <div class="text-center">
+    <span class="section-tag">OUR SERVICES</span>
+    <h2 class="section-title">Humari <span>Pramukh Sevayen</span></h2>
+    <p class="section-sub">Sabhi services highest commission ke saath milti hain</p>
+  </div>
+  <div class="services-grid4">
+    <div class="scard">
+      <div class="scard-icon"><i class="fas fa-mobile-alt"></i></div>
+      <h3>Recharge</h3>
+      <p>Mobile Recharge, DTH Recharge aur FASTag Recharge ki sabhi suvidhayen yahan milti hain.</p>
+    </div>
+    <div class="scard">
+      <div class="scard-icon"><i class="fas fa-file-invoice"></i></div>
+      <h3>Bill Payment</h3>
+      <p>Electricity Bill, Postpaid Bill aur Landline Bill payment ki sahulat.</p>
+    </div>
+    <div class="scard">
+      <div class="scard-icon"><i class="fas fa-id-card"></i></div>
+      <h3>PAN Center</h3>
+      <p>Authorised PAN Card center, highest margin ke saath UTI aur NSDL services.</p>
+    </div>
+    <div class="scard">
+      <div class="scard-icon"><i class="fas fa-university"></i></div>
+      <h3>Banking</h3>
+      <p>Fino Payment Bank aur AEPS (Aadhar Enabled Payment System) services.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <div class="about-img-box">
+      <div class="big-num">10+</div>
+      <p>Saalon ka anubhav</p>
+      <div class="since">Est. 2014 — Digital India Mission</div>
+      <div style="margin-top:32px; display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+        <div style="background:rgba(255,255,255,0.12); padding:14px; border-radius:12px;">
+          <div style="font-family:'Baloo 2',cursive; font-size:24px; font-weight:800;">60K+</div>
+          <div style="font-size:12px; opacity:.8; margin-top:2px;">Happy Clients</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.12); padding:14px; border-radius:12px;">
+          <div style="font-family:'Baloo 2',cursive; font-size:24px; font-weight:800;">18+</div>
+          <div style="font-size:12px; opacity:.8; margin-top:2px;">Services</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <span class="section-tag">ABOUT US</span>
+      <h2 class="section-title">Hamari <span>Parichay</span></h2>
+      <p style="color:var(--text-muted); margin-top:14px; font-size:15px; line-height:1.8;">DigiSeva Kendra ek successful digital platform hai jo aapko aur aapke customers ko best-in-class digital services deta hai. Hum Merchants aur Consumers ke beech ek strong business relationship banate hain taaki sabhi parties ko maximum benefit mile.</p>
+      <div class="about-points">
+        <div class="about-point"><div class="icon"><i class="fas fa-check-circle"></i></div><p><strong>Highest Commission:</strong> Sabhi services par market ki sabse zyada commission milti hai.</p></div>
+        <div class="about-point"><div class="icon"><i class="fas fa-check-circle"></i></div><p><strong>24/7 Support:</strong> Har waqt aapke saath — kisi bhi samasya ka turant samadhan.</p></div>
+        <div class="about-point"><div class="icon"><i class="fas fa-check-circle"></i></div><p><strong>Secure Platform:</strong> Aapka data aur transactions poori tarah surakshit hain.</p></div>
+        <div class="about-point"><div class="icon"><i class="fas fa-check-circle"></i></div><p><strong>Training Videos:</strong> Har service ke liye training material aur videos available hain.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<section class="stats-bar">
+  <div class="text-center">
+    <span class="section-tag">PERFORMANCE</span>
+    <h2 class="section-title">Humari <span>Success Rate</span></h2>
+  </div>
+  <div class="stats-progress-grid">
+    <div class="prog-item">
+      <div class="prog-label"><span>RECHARGE SUCCESS RATE</span><span>100%</span></div>
+      <div class="prog-bar"><div class="prog-fill" style="width:100%"></div></div>
+    </div>
+    <div class="prog-item">
+      <div class="prog-label"><span>AADHAR TO PAN SUCCESS RATE</span><span>80%</span></div>
+      <div class="prog-bar"><div class="prog-fill" style="width:80%"></div></div>
+    </div>
+    <div class="prog-item">
+      <div class="prog-label"><span>POSTPAID BILL SUCCESS RATE</span><span>90%</span></div>
+      <div class="prog-bar"><div class="prog-fill" style="width:90%"></div></div>
+    </div>
+    <div class="prog-item">
+      <div class="prog-label"><span>DTH SUCCESS RATE</span><span>99%</span></div>
+      <div class="prog-bar"><div class="prog-fill" style="width:99%"></div></div>
+    </div>
+    <div class="prog-item">
+      <div class="prog-label"><span>ELECTRICITY BILLER ONLINE</span><span>75%</span></div>
+      <div class="prog-bar"><div class="prog-fill" style="width:75%"></div></div>
+    </div>
+    <div class="prog-item">
+      <div class="prog-label"><span>CUSTOMER SUPPORT</span><span>100%</span></div>
+      <div class="prog-bar"><div class="prog-fill" style="width:100%"></div></div>
+    </div>
+  </div>
+  <div class="counters">
+    <div class="counter-card">
+      <div class="c-icon"><i class="fas fa-smile"></i></div>
+      <div class="c-num">59,800</div>
+      <div class="c-label">Happy Clients</div>
+    </div>
+    <div class="counter-card">
+      <div class="c-icon"><i class="fas fa-cogs"></i></div>
+      <div class="c-num">18</div>
+      <div class="c-label">Services</div>
+    </div>
+    <div class="counter-card">
+      <div class="c-icon"><i class="fas fa-headset"></i></div>
+      <div class="c-num">9 Hrs</div>
+      <div class="c-label">Hours of Support</div>
+    </div>
+    <div class="counter-card">
+      <div class="c-icon"><i class="fas fa-users"></i></div>
+      <div class="c-num">15</div>
+      <div class="c-label">Team Members</div>
+    </div>
+  </div>
+</section>
+
+<!-- ALL SERVICES -->
+<section class="all-services" id="services">
+  <div class="text-center">
+    <span class="section-tag">SERVICES</span>
+    <h2 class="section-title">Sabhi <span>Sevayen</span> Dekhen</h2>
+    <p class="section-sub">Hum sabhi services highest commission ke saath provide karte hain</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-item"><div class="s-icon"><i class="fas fa-mobile-alt"></i></div><h4>Mobile Recharges</h4></div>
+    <div class="service-item"><div class="s-icon"><i class="fas fa-satellite-dish"></i></div><h4>DTH Recharges</h4></div>
+    <div class="service-item"><div class="s-icon"><i class="fas fa-car"></i></div><h4>FASTag Recharge</h4></div>
+    <div class="service-item"><div class="s-icon"><i class="fas fa-file-invoice-dollar"></i></div><h4>Postpaid Bill</h4></div>
+    <div class="service-item"><div class="s-icon"><i class="fas fa-phone"></i></div><h4>Landline Bill</h4></div>
+    <div class="service-item"><div class="s-icon"><i class="fas fa-bolt"></i></div><h4>Electricity Bills</h4></div>
+    <div class="service-item"><div class="s-icon"><i class="fas fa-exchange-alt"></i></div><h4>Money Transfer</h4></div>
+    <div class="service-item"><div class="s-icon"><i class="fas fa-id-card"></i></div><h4>UTI PAN Coupon's</h4></div>
+    <div class="service-item"><div class="s-icon"><i class="fas fa-id-badge"></i></div><h4>PAN Card</h4></div>
+    <div class="service-item"><div class="s-icon"><i class="fas fa-search"></i></div><h4>Find Lost PAN (Aadhar to PAN)</h4></div>
+    <div class="service-item"><div class="s-icon"><i class="fas fa-building"></i></div><h4>UTI PAN Agency</h4></div>
+    <div class="service-item"><div class="s-icon"><i class="fas fa-fingerprint"></i></div><h4>AEPS (Aadhar Payment)</h4></div>
+    <div class="service-item"><div class="s-icon"><i class="fas fa-motorcycle"></i></div><h4>Bike Insurance</h4></div>
+    <div class="service-item"><div class="s-icon"><i class="fas fa-car-crash"></i></div><h4>Car Insurance</h4></div>
+    <div class="service-item"><div class="s-icon"><i class="fas fa-university"></i></div><h4>Fino Bank</h4></div>
+    <div class="service-item"><div class="s-icon"><i class="fas fa-heartbeat"></i></div><h4>PMJAY (Jan Arogya Yojana)</h4></div>
+    <div class="service-item"><div class="s-icon"><i class="fas fa-car-alt"></i></div><h4>New FASTag</h4></div>
+    <div class="service-item"><div class="s-icon"><i class="fas fa-id-card-alt"></i></div><h4>NSDL PAN eKYC</h4></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section style="background:var(--bg)" id="contact">
+  <div class="text-center">
+    <span class="section-tag">CONTACT</span>
+    <h2 class="section-title">Humse <span>Sampark Karen</span></h2>
+  </div>
+  <div class="contact-grid">
+    <div class="counter-card">
+      <div class="c-icon"><i class="fas fa-phone"></i></div>
+      <div style="font-weight:700; margin:8px 0;">Phone</div>
+      <div style="color:var(--text-muted); font-size:14px;" id="idx-contact-phone">+91 9999999999</div>
+    </div>
+    <div class="counter-card">
+      <div class="c-icon"><i class="fas fa-envelope"></i></div>
+      <div style="font-weight:700; margin:8px 0;">Email</div>
+      <div style="color:var(--text-muted); font-size:14px;" id="idx-contact-email">support@digisevakendra.in</div>
+    </div>
+    <div class="counter-card">
+      <div class="c-icon"><i class="fas fa-map-marker-alt"></i></div>
+      <div style="font-weight:700; margin:8px 0;">Address</div>
+      <div style="color:var(--text-muted); font-size:14px;" id="idx-contact-address">Uttar Pradesh, India</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <img src="logo.png" alt="DigiSeva Kendra logo" class="fl-icon">
+        <div class="fl-text">DigiSeva Kendra</div>
+      </div>
+      <p id="idx-footer-about">DigiSeva Kendra ek trusted digital services platform hai jo 2014 se Merchants aur Consumers ko best services provide kar raha hai.</p>
+      <div class="footer-contact">
+        <p><i class="fas fa-map-marker-alt"></i> <span id="idx-footer-address">Uttar Pradesh, India - 250501</span></p>
+        <p><i class="fas fa-phone"></i> <a id="idx-footer-phone-link" href="tel:+919999999999"><span id="idx-footer-phone">+91 9999999999</span></a></p>
+        <p><i class="fas fa-envelope"></i> <a id="idx-footer-email-link" href="mailto:support@digisevakendra.in"><span id="idx-footer-email">support@digisevakendra.in</span></a></p>
+      </div>
+    </div>
+    <div class="footer-section">
+      <h4>Useful Links</h4>
+      <ul class="footer-links">
+        <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+        <li><a href="#about"><i class="fas fa-chevron-right"></i> About</a></li>
+        <li><a href="#services"><i class="fas fa-chevron-right"></i> Services</a></li>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> Term & Conditions</a></li>
+        <li><a href="#contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> Training Videos</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>Our Services</h4>
+      <ul class="footer-links">
+        <li><a href="#"><i class="fas fa-chevron-right"></i> Recharge</a></li>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> Bill Payment</a></li>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> PAN Card</a></li>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> Banking (AEPS)</a></li>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> Insurance</a></li>
+        <li><a href="#"><i class="fas fa-chevron-right"></i> Money Transfer</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>Social Networks</h4>
+      <p style="font-size:14px; margin-bottom:12px;">Hum available hain — sampark karen</p>
+      <div class="social-icons">
+        <a id="idx-social-twitter" href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+        <a id="idx-social-facebook" href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+        <a id="idx-social-instagram" href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+        <a id="idx-social-youtube" href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+        <a id="idx-social-linkedin" href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+      <div style="margin-top:20px;">
+        <a id="idx-playstore" href="#" style="display:inline-block; background:#000; color:#fff; padding:10px 18px; border-radius:10px; text-decoration:none; font-size:13px; font-weight:600; display:flex; align-items:center; gap:8px; width:fit-content;">
+          <i class="fab fa-google-play" style="font-size:18px;"></i>
+          <span>GET IT ON<br><strong style="font-size:15px;">Google Play</strong></span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© Copyright <span id="idx-copyright">2018–2026</span> <strong style="color:#fff;">DigiSeva Kendra</strong>. All Rights Reserved.</span>
+    <span>Powered By <strong style="color:var(--accent2);">DigiSeva Kendra</strong></span>
+  </div>
+</footer>
+
+<script>
+// ===== JSK WEBSITE SETTINGS APPLY =====
+// Admin panel se save kiya hua data Firebase + localStorage dono se read karta hai
+
+function _applySettings(s) {
+  if (!s || typeof s !== 'object') return;
+  function setTxt(id, val) { var el=document.getElementById(id); if(el && val) el.textContent = val; }
+  function setAttr(id, attr, val) { var el=document.getElementById(id); if(el && val) el.setAttribute(attr, val); }
+
+  // Top bar
+  setTxt('idx-working-hours', s.workingHours);
+  setTxt('idx-topbar-email', s.topbarEmail);
+  if(s.topbarEmail) setAttr('idx-topbar-email-link','href','mailto:'+s.topbarEmail);
+  setTxt('idx-topbar-phone', s.topbarPhone);
+  if(s.topbarYt && s.topbarYt !== '#') setAttr('idx-topbar-yt','href',s.topbarYt);
+  if(s.topbarFb && s.topbarFb !== '#') setAttr('idx-topbar-fb','href',s.topbarFb);
+  if(s.topbarIg && s.topbarIg !== '#') setAttr('idx-topbar-ig','href',s.topbarIg);
+
+  // Navbar logo
+  setTxt('idx-logo-short', s.logoShort);
+  setTxt('idx-site-name', s.siteName);
+  setTxt('idx-site-tagline', s.siteTagline);
+  if(s.pageTitle) document.title = s.pageTitle;
+
+  // Hero
+  setTxt('idx-hero-badge', s.heroBadge);
+  setTxt('idx-hero-title1', s.heroTitle1);
+  setTxt('idx-hero-title2', s.heroTitle2);
+  setTxt('idx-hero-title3', s.heroTitle3);
+  setTxt('idx-hero-desc', s.heroDesc);
+
+  // Stats
+  setTxt('idx-stat1-num', s.stat1Num); setTxt('idx-stat1-lbl', s.stat1Lbl);
+  setTxt('idx-stat2-num', s.stat2Num); setTxt('idx-stat2-lbl', s.stat2Lbl);
+  setTxt('idx-stat3-num', s.stat3Num); setTxt('idx-stat3-lbl', s.stat3Lbl);
+  setTxt('idx-stat4-num', s.stat4Num); setTxt('idx-stat4-lbl', s.stat4Lbl);
+
+  // Contact
+  setTxt('idx-contact-phone', s.contactPhone);
+  setTxt('idx-contact-email', s.contactEmail);
+  setTxt('idx-contact-address', s.contactAddress);
+
+  // Footer
+  setTxt('idx-footer-about', s.footerAbout);
+  setTxt('idx-footer-address', s.footerAddress);
+  setTxt('idx-footer-phone', s.footerPhone);
+  if(s.footerPhone) setAttr('idx-footer-phone-link','href','tel:'+s.footerPhone.replace(/[^+\d]/g,''));
+  setTxt('idx-footer-email', s.footerEmail);
+  if(s.footerEmail) setAttr('idx-footer-email-link','href','mailto:'+s.footerEmail);
+  setTxt('idx-copyright', s.copyright);
+
+  // Social links
+  if(s.socialTwitter  && s.socialTwitter  !== '#') setAttr('idx-social-twitter','href',s.socialTwitter);
+  if(s.socialFacebook && s.socialFacebook !== '#') setAttr('idx-social-facebook','href',s.socialFacebook);
+  if(s.socialInstagram&& s.socialInstagram!== '#') setAttr('idx-social-instagram','href',s.socialInstagram);
+  if(s.socialYoutube  && s.socialYoutube  !== '#') setAttr('idx-social-youtube','href',s.socialYoutube);
+  if(s.socialLinkedin && s.socialLinkedin !== '#') setAttr('idx-social-linkedin','href',s.socialLinkedin);
+  if(s.playstore      && s.playstore      !== '#') setAttr('idx-playstore','href',s.playstore);
+}
+
+// Step 1: localStorage se turant apply karo (fast first paint)
+(function(){
+  try {
+    var s = JSON.parse(localStorage.getItem('jsk_website_settings') || '{}');
+    if (s && Object.keys(s).length > 0) _applySettings(s);
+  } catch(e) {}
+})();
+
+// Step 2: Public API se fresh data lao (koi login zaroori nahi — sabke liye
+// kaam karta hai). ✅ FIX: pehle ye seedha client Firebase SDK se padhta tha,
+// jisse sirf un browsers mein naya data dikhta tha jinme pehle se koi
+// (admin/user) login karke baitha tha (Firebase Auth session poore browser
+// mein persist hota hai). Ab /api/public-settings (service-account se, bina
+// login ke) use karta hai — isliye HAR visitor ko turant latest data milega.
+function _fetchPublicSettings() {
+  fetch('https://digisevakendra.in/api/public-settings').then(function(r){ return r.json(); }).then(function(data){
+    if (!data) return;
+    var s = data.websiteSettings || {};
+    if (Object.keys(s).length > 0) {
+      try { localStorage.setItem('jsk_website_settings', JSON.stringify(s)); } catch(e) {}
+      _applySettings(s);
+      _applyWhatsApp(s);
+      _applyInspectBlock(s.disableInspect !== false);
+    }
+    _applyMaintenanceMode(!!data.maintenance);
+  }).catch(function(){});
+}
+// Turant ek baar load karo, phir har 15 second mein refresh karo taaki admin
+// ke changes bina page-reload ke bhi jaldi dikhen.
+_fetchPublicSettings();
+setInterval(_fetchPublicSettings, 15000);
+// ===== END WEBSITE SETTINGS =====
+
+// ===== WHATSAPP FLOATING BUTTON (DRAGGABLE) =====
+function _initWABtn() {
+  if (document.getElementById('jsk-wa-btn')) return;
+  var savedPos = {};
+  try { savedPos = JSON.parse(localStorage.getItem('jsk_wa_pos')||'{}'); } catch(e){}
+  var isLeft = savedPos.side === 'left';
+  var btn = document.createElement('a');
+  btn.id = 'jsk-wa-btn';
+  btn.target = '_blank'; btn.rel = 'noopener';
+  btn.title = 'WhatsApp pe Contact Karen';
+  btn.innerHTML = '<i class="fab fa-whatsapp" style="font-size:32px;pointer-events:none;"></i>';
+  btn.style.cssText = 'position:fixed;bottom:'+(savedPos.bottom||24)+'px;'+(isLeft?'left':'right')+':'+(savedPos.edge||24)+'px;z-index:99999;width:60px;height:60px;background:#25D366;color:#fff;border-radius:50%;display:none;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.6);text-decoration:none;cursor:grab;user-select:none;';
+  document.body.appendChild(btn);
+  var isDrag=false, moved=false, sx, sy, sl, st;
+  function onDown(cx,cy) {
+    isDrag=true; moved=false;
+    var r=btn.getBoundingClientRect(); sx=cx; sy=cy; sl=r.left; st=r.top;
+    btn.style.transition='none'; btn.style.cursor='grabbing';
+  }
+  function onMove(cx,cy) {
+    if(!isDrag) return;
+    var dx=cx-sx, dy=cy-sy;
+    if(Math.abs(dx)>5||Math.abs(dy)>5) moved=true;
+    btn.style.top=Math.max(10,Math.min(window.innerHeight-70,st+dy))+'px';
+    btn.style.bottom='auto';
+    btn.style.left=Math.max(10,Math.min(window.innerWidth-70,sl+dx))+'px';
+    btn.style.right='auto';
+  }
+  function onUp() {
+    if(!isDrag) return; isDrag=false;
+    btn.style.cursor='grab'; btn.style.transition='';
+    if(moved) {
+      var r=btn.getBoundingClientRect();
+      var left=r.left < window.innerWidth/2;
+      var bot=Math.max(10,window.innerHeight-r.bottom);
+      var edge=left?Math.max(10,r.left):Math.max(10,window.innerWidth-r.right);
+      btn.style.top='auto'; btn.style.bottom=bot+'px';
+      if(left){btn.style.left=edge+'px';btn.style.right='auto';}
+      else{btn.style.right=edge+'px';btn.style.left='auto';}
+      localStorage.setItem('jsk_wa_pos',JSON.stringify({side:left?'left':'right',bottom:bot,edge:edge}));
+    }
+  }
+  btn.addEventListener('mousedown',function(e){onDown(e.clientX,e.clientY);e.preventDefault();});
+  document.addEventListener('mousemove',function(e){onMove(e.clientX,e.clientY);});
+  document.addEventListener('mouseup',onUp);
+  btn.addEventListener('touchstart',function(e){onDown(e.touches[0].clientX,e.touches[0].clientY);},{passive:true});
+  btn.addEventListener('touchmove',function(e){onMove(e.touches[0].clientX,e.touches[0].clientY);if(moved)e.preventDefault();},{passive:false});
+  btn.addEventListener('touchend',onUp);
+  btn.addEventListener('click',function(e){if(moved){e.preventDefault();}});
+}
+function _applyWhatsApp(s) {
+  if (!s||!s.whatsappEnabled||!s.whatsappNumber) {
+    var b=document.getElementById('jsk-wa-btn'); if(b) b.style.display='none'; return;
+  }
+  _initWABtn();
+  var b=document.getElementById('jsk-wa-btn');
+  b.href='https://wa.me/'+s.whatsappNumber+'?text='+encodeURIComponent(s.whatsappMessage||'Namaste! Mujhe help chahiye.');
+  b.style.display='flex';
+}
+// ===== END WHATSAPP =====
+
+// ===== MAINTENANCE MODE (Admin → System Settings) =====
+// ON hote hi (turant, bina reload, live) poora homepage block ho jata hai.
+function _applyMaintenanceMode(isOn) {
+  if (isOn) {
+    document.body.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:#FFF3E0;font-family:Hind,sans-serif;text-align:center;padding:24px;"><div style="font-size:64px;margin-bottom:16px;">🛠️</div><h2 style="color:#E65100;font-size:28px;margin-bottom:8px;">Maintenance Mode</h2><p style="color:#BF360C;font-size:15px;max-width:420px;">Platform abhi temporarily band hai. Thodi der mein wapas aayein.</p></div>';
+  }
+}
+// ===== END MAINTENANCE MODE =====
+
+// ===== BLOCK INSPECT / RIGHT-CLICK / DEVTOOLS SHORTCUTS (Admin Panel se ON/OFF) =====
+(function() {
+  function _ctxHandler(e) { e.preventDefault(); }
+  function _keyHandler(e) {
+    if (e.keyCode === 123) { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.keyCode === 85) { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.keyCode === 83) { e.preventDefault(); return false; }
+  }
+  window._applyInspectBlock = function _applyInspectBlock(on) {
+    document.removeEventListener('contextmenu', _ctxHandler);
+    document.removeEventListener('keydown', _keyHandler);
+    if (on) {
+      document.addEventListener('contextmenu', _ctxHandler);
+      document.addEventListener('keydown', _keyHandler);
+    }
+  };
+  var s = {};
+  try { s = JSON.parse(localStorage.getItem('jsk_website_settings') || '{}'); } catch(e) {}
+  window._applyInspectBlock(s.disableInspect !== false);
+})();
+function _applyInspectBlock(on) { window._applyInspectBlock(on); }
+// ===== END BLOCK INSPECT =====
+
+
+
+</script>
+<script>
+// App install/usage tracking — sirf jab ye Android app ke andar chal raha ho
+// (regular website visitors ke liye kuch nahi karta).
+(function(){
+  try {
+    if (!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform())) return;
+    var did = localStorage.getItem('jsk_device_id');
+    if (!did) {
+      did = 'dev_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+      localStorage.setItem('jsk_device_id', did);
+    }
+    fetch('https://digisevakendra.in/api/track-app', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ deviceId: did, platform: 'android' })
+    }).catch(function(){});
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>

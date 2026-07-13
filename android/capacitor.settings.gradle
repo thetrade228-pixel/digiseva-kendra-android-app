@@ -1,0 +1,12 @@
+// Local copies (self-contained, no node_modules needed to build)
+include ':capacitor-android'
+project(':capacitor-android').projectDir = new File('./capacitor-android')
+
+include ':capacitor-app'
+project(':capacitor-app').projectDir = new File('./capacitor-app')
+
+include ':capacitor-splash-screen'
+project(':capacitor-splash-screen').projectDir = new File('./capacitor-splash-screen')
+
+include ':capacitor-status-bar'
+project(':capacitor-status-bar').projectDir = new File('./capacitor-status-bar')

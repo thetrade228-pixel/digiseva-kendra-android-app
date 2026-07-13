@@ -1,0 +1,2869 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<link rel="icon" type="image/png" href="logo.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Staff Panel — DigiSeva Kendra</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Hind:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --primary:#1565C0; --primary-dark:#0D47A1; --primary-light:#42A5F5;
+  --accent:#FF6F00; --accent2:#FFC107; --green:#2E7D32; --red:#C62828;
+  --sidebar:#0f1629; --sidebar-hover:#1a2545; --sidebar-active:#1565C0;
+  --white:#fff; --bg:#F0F4FF; --text:#1a1a2e; --muted:#546E7A;
+  --card-shadow:0 4px 24px rgba(21,101,192,0.12);
+  --radius:14px; --sidebar-w:250px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Hind',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;}
+
+/* ====== SIDEBAR ====== */
+.sidebar{
+  width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--sidebar);
+  display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;
+  
+  overflow-y:auto;z-index:200;
+}
+.sidebar::-webkit-scrollbar{width:4px;}
+.sidebar::-webkit-scrollbar-thumb{background:#2d3f5e;border-radius:4px;}
+.sb-brand{padding:20px 18px 16px;border-bottom:1px solid #1e2d4a;display:flex;align-items:center;gap:12px;}
+.sb-logo{width:42px;height:42px;border-radius:10px;object-fit:contain;flex-shrink:0;display:block;}
+.sb-name{font-family:'Baloo 2',cursive;font-size:14px;font-weight:700;color:#fff;line-height:1.3;}
+.sb-name small{display:block;font-size:10px;font-weight:400;color:#42A5F5;font-family:'Hind',sans-serif;letter-spacing:.5px;}
+.staff-badge{margin:12px 18px;background:rgba(21,101,192,0.18);border:1px solid rgba(66,165,245,0.35);border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px;}
+.staff-badge .dot{width:8px;height:8px;border-radius:50%;background:#42A5F5;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.6;transform:scale(1.3);}}
+.staff-badge span{font-size:11px;color:#90CAF9;font-weight:600;letter-spacing:.5px;}
+.sb-nav{flex:1;padding:8px 0;}
+.sb-section-label{padding:14px 18px 4px;font-size:9px;font-weight:700;color:#3a5270;letter-spacing:2px;text-transform:uppercase;}
+.sb-item{display:flex;align-items:center;justify-content:space-between;padding:11px 18px;cursor:pointer;color:#8aa0be;font-size:13px;transition:.2s;border-left:3px solid transparent;user-select:none;}
+.sb-item:hover{background:var(--sidebar-hover);color:#fff;}
+.sb-item.active{background:var(--sidebar-active);color:#fff;border-left-color:var(--accent2);}
+.sb-item-left{display:flex;align-items:center;gap:10px;}
+.sb-item i.mi{width:18px;text-align:center;font-size:14px;}
+.sb-count{background:#1565C0;color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:50px;}
+.sb-count.red{background:#e53935;}
+.sb-count.orange{background:#FF6F00;}
+.sb-footer{padding:14px 18px;border-top:1px solid #1e2d4a;}
+.staff-info{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.staff-av{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,#1565C0,#42A5F5);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;flex-shrink:0;}
+.staff-name{font-size:12px;color:#fff;font-weight:600;}
+.staff-role{font-size:10px;color:#42A5F5;}
+.sb-signout{display:flex;align-items:center;gap:8px;color:#e57373;font-size:12.5px;cursor:pointer;padding:6px 0;}
+
+/* ====== MAIN ====== */
+.main-wrap{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+.topbar{background:#fff;padding:0 24px;height:62px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 12px rgba(21,101,192,0.08);position:sticky;top:0;z-index:100;}
+.topbar-left h2{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:var(--text);}
+.topbar-left p{font-size:12px;color:var(--muted);}
+.topbar-right{display:flex;align-items:center;gap:14px;}
+.staff-chip{display:flex;align-items:center;gap:8px;background:#E3F2FD;border:1.5px solid #BBDEFB;padding:6px 14px;border-radius:50px;}
+.staff-chip .av{width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#1565C0,#42A5F5);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:800;}
+.staff-chip span{font-size:13px;font-weight:700;color:#0D47A1;}
+.tb-icon{position:relative;cursor:pointer;color:var(--muted);font-size:17px;}
+.tb-badge{position:absolute;top:-5px;right:-5px;background:#e53935;color:#fff;font-size:9px;font-weight:700;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+
+.content{padding:24px;flex:1;}
+.page{display:none;}
+.page.active{display:block;}
+
+.page-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:10px;}
+.page-hdr h2{font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;}
+.page-hdr p{font-size:13px;color:var(--muted);margin-top:2px;}
+.btn-primary{background:var(--primary);color:#fff;border:none;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:700;font-family:'Baloo 2',cursive;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:.2s;}
+.btn-primary:hover{background:var(--primary-dark);}
+.btn-danger{background:#e53935;color:#fff;border:none;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;}
+.btn-success{background:var(--green);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;}
+
+/* STAT CARDS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
+.stat-card{background:#fff;border-radius:var(--radius);padding:20px;box-shadow:var(--card-shadow);position:relative;overflow:hidden;border-bottom:3px solid transparent;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease;}
+.stat-card:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(0,0,0,0.12);}
+.stat-card.blue{border-color:var(--primary);}
+.stat-card.green{border-color:var(--green);}
+.stat-card.orange{border-color:var(--accent);}
+.stat-card.red{border-color:#e53935;}
+.stat-card .sc-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;}
+.stat-card.blue .sc-icon{background:#E3F2FD;color:var(--primary);}
+.stat-card.green .sc-icon{background:#E8F5E9;color:var(--green);}
+.stat-card.orange .sc-icon{background:#FFF3E0;color:var(--accent);}
+.stat-card.red .sc-icon{background:#FFEBEE;color:#e53935;}
+.stat-card .sc-val{font-family:'Baloo 2',cursive;font-size:28px;font-weight:800;color:var(--text);}
+.stat-card .sc-label{font-size:12px;color:var(--muted);font-weight:600;margin-top:2px;}
+
+.no-access-box{background:#fff;border-radius:var(--radius);padding:40px 24px;box-shadow:var(--card-shadow);text-align:center;color:var(--muted);}
+.no-access-box i{font-size:34px;color:#C5D8F8;display:block;margin-bottom:12px;}
+
+/* TABLE */
+.table-card{background:#fff;border-radius:var(--radius);box-shadow:var(--card-shadow);overflow:hidden;margin-bottom:20px;}
+.table-head{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f0f4ff;flex-wrap:wrap;gap:10px;}
+.table-head h3{font-family:'Baloo 2',cursive;font-size:16px;font-weight:800;}
+.table-filters{display:flex;gap:10px;flex-wrap:wrap;}
+.tf-input{padding:7px 12px;border:1.5px solid #C5D8F8;border-radius:8px;font-size:12px;outline:none;font-family:'Hind',sans-serif;}
+.tf-select{padding:7px 12px;border:1.5px solid #C5D8F8;border-radius:8px;font-size:12px;outline:none;font-family:'Hind',sans-serif;}
+table{width:100%;border-collapse:collapse;}
+th{background:#f8faff;padding:11px 16px;font-size:11px;font-weight:700;color:var(--muted);text-align:left;letter-spacing:.5px;text-transform:uppercase;}
+td{padding:12px 16px;font-size:13px;border-top:1px solid #f0f4ff;}
+tr:hover td{background:#f8faff;}
+.user-cell{display:flex;align-items:center;gap:10px;}
+.user-av{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--primary),var(--primary-light));display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0;}
+.user-name{font-size:13px;font-weight:700;}
+.user-id{font-size:11px;color:var(--muted);}
+.status-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:50px;font-size:11px;font-weight:700;}
+.status-chip.active{background:#E8F5E9;color:var(--green);}
+.status-chip.inactive{background:#FFEBEE;color:#e53935;}
+.status-chip.pending{background:#FFF3E0;color:var(--accent);}
+
+/* FORM */
+.notice-form{background:#fff;border-radius:var(--radius);padding:24px;box-shadow:var(--card-shadow);margin-bottom:20px;}
+.notice-form h3{font-family:'Baloo 2',cursive;font-size:17px;font-weight:800;margin-bottom:16px;}
+.fg{margin-bottom:16px;}
+.fg label{display:block;font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+.fg input,.fg select,.fg textarea{width:100%;padding:11px 14px;border:1.5px solid #C5D8F8;border-radius:10px;font-size:14px;font-family:'Hind',sans-serif;color:var(--text);outline:none;background:#fff;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--primary);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+
+/* COMPLAINTS */
+.priority-chip{display:inline-block;padding:2px 9px;border-radius:50px;font-size:10px;font-weight:700;}
+.priority-chip.high{background:#FFEBEE;color:#e53935;}
+.priority-chip.medium{background:#FFF3E0;color:#FF6F00;}
+.priority-chip.low{background:#E8F5E9;color:var(--green);}
+
+/* WALLET APPROVAL */
+.wa-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
+.wa-card{background:#fff;border-radius:12px;padding:18px;box-shadow:var(--card-shadow);display:flex;align-items:center;gap:14px;border-left:4px solid transparent;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease;}
+.wa-card:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(0,0,0,0.12);}
+.wa-card.orange{border-color:var(--accent);}
+.wa-card.green{border-color:var(--green);}
+.wa-card.red{border-color:#e53935;}
+.wa-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.wa-card.orange .wa-icon{background:#FFF3E0;color:var(--accent);}
+.wa-card.green .wa-icon{background:#E8F5E9;color:var(--green);}
+.wa-card.red .wa-icon{background:#FFEBEE;color:#e53935;}
+.wa-val{font-family:'Baloo 2',cursive;font-size:26px;font-weight:800;color:var(--text);}
+.wa-label{font-size:12px;color:var(--muted);font-weight:600;}
+.approval-row{background:#fff;border-radius:14px;padding:18px 22px;box-shadow:0 2px 12px rgba(21,101,192,0.08);margin-bottom:12px;border-left:4px solid var(--accent);}
+.approval-row.approved{border-left-color:var(--green);opacity:.7;}
+.approval-row.rejected{border-left-color:#e53935;opacity:.7;}
+.ar-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+.ar-user{display:flex;align-items:center;gap:12px;}
+.ar-av{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--primary),var(--primary-light));display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:800;flex-shrink:0;}
+.ar-name{font-size:14px;font-weight:700;color:var(--text);}
+.ar-id{font-size:11px;color:var(--muted);}
+.ar-amt{font-family:'Baloo 2',cursive;font-size:24px;font-weight:800;color:var(--primary);}
+.ar-req-id{font-size:10px;color:var(--muted);text-align:right;}
+.ar-details{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
+.ar-detail-item{background:#F8FBFF;border-radius:8px;padding:10px 12px;}
+.ar-detail-label{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.ar-detail-val{font-size:13px;font-weight:700;color:var(--text);}
+.ar-ss{border-radius:10px;overflow:hidden;border:1.5px solid #C5D8F8;margin-bottom:14px;cursor:pointer;position:relative;}
+.ar-ss img{width:100%;max-height:180px;object-fit:cover;display:block;}
+.ar-ss-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;opacity:0;transition:.2s;}
+.ar-ss:hover .ar-ss-overlay{opacity:1;}
+.ar-ss-overlay span{color:#fff;font-size:13px;font-weight:700;}
+.ar-actions{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;}
+.ar-actions input,.ar-actions textarea{flex:1;min-width:160px;padding:10px 14px;border:1.5px solid #C5D8F8;border-radius:10px;font-family:'Hind',sans-serif;font-size:13px;outline:none;}
+.ar-actions textarea{resize:vertical;min-height:60px;}
+.btn-approve{background:#2E7D32;color:#fff;border:none;padding:11px 22px;border-radius:10px;font-size:14px;font-weight:700;font-family:'Baloo 2',cursive;cursor:pointer;transition:.2s;white-space:nowrap;}
+.btn-approve:hover{background:#1B5E20;transform:translateY(-1px);}
+.btn-reject{background:#C62828;color:#fff;border:none;padding:11px 22px;border-radius:10px;font-size:14px;font-weight:700;font-family:'Baloo 2',cursive;cursor:pointer;transition:.2s;white-space:nowrap;}
+.btn-reject:hover{background:#B71C1C;transform:translateY(-1px);}
+.ar-status-done{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:700;}
+.ar-status-done.approved{background:#E8F5E9;color:#2E7D32;}
+.ar-status-done.rejected{background:#FFEBEE;color:#C62828;}
+.ar-reson-show{font-size:12px;font-weight:400;margin-top:3px;opacity:.8;}
+
+/* Screenshot modal */
+.ss-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;align-items:center;justify-content:center;}
+.ss-modal.show{display:flex;}
+.ss-modal img{max-width:90vw;max-height:90vh;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.5);}
+.ss-modal-close{position:absolute;top:20px;right:24px;color:#fff;font-size:28px;cursor:pointer;background:none;border:none;}
+
+/* ALERT */
+.sys-alert{padding:12px 16px;border-radius:10px;margin-bottom:16px;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;}
+.sys-alert.info{background:#E3F2FD;color:var(--primary);border:1px solid #BBDEFB;}
+.sys-alert.success{background:#E8F5E9;color:var(--green);border:1px solid #C8E6C9;}
+.sys-alert.warning{background:#FFF3E0;color:#E65100;border:1px solid #FFCC80;}
+.sys-alert.error{background:#FFEBEE;color:#B71C1C;border:1px solid #FFCDD2;}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:#1a2236;color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px;z-index:9999;transform:translateX(200px);opacity:0;transition:.3s;}
+.toast.show{transform:translateX(0);opacity:1;}
+.toast.success{border-left:4px solid var(--green);}
+.toast.error{border-left:4px solid #e53935;}
+
+/* LOGIN PAGE */
+.login-page{position:fixed;inset:0;background:linear-gradient(135deg,#0f1629,#1a2545);display:flex;align-items:center;justify-content:center;z-index:9000;padding:16px;}
+.login-box{background:#1a2236;border-radius:20px;padding:40px;width:380px;max-width:100%;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.login-box .logo{text-align:center;margin-bottom:28px;}
+.login-box .logo-icon{width:60px;height:60px;border-radius:14px;object-fit:contain;display:block;margin:0 auto 10px;}
+.login-box .logo-title{font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;color:#fff;}
+.login-box .logo-sub{font-size:11px;color:#42A5F5;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+.lf-group{margin-bottom:16px;}
+.lf-group label{display:block;font-size:11px;font-weight:700;color:#7a90b8;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+.lf-group input{width:100%;padding:12px 16px;background:#0f1629;border:1.5px solid #2a3d5e;border-radius:10px;color:#fff;font-size:14px;outline:none;font-family:'Hind',sans-serif;}
+.lf-group input:focus{border-color:var(--primary);}
+.btn-login{width:100%;padding:14px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;border:none;border-radius:10px;font-family:'Baloo 2',cursive;font-size:17px;font-weight:800;cursor:pointer;margin-top:6px;transition:.2s;}
+.btn-login:hover{opacity:.9;}
+.btn-login:disabled{opacity:.6;cursor:not-allowed;}
+.login-err{background:rgba(229,57,53,0.15);border:1px solid rgba(229,57,53,.3);color:#ef9a9a;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:14px;display:none;}
+.login-foot-note{text-align:center;margin-top:16px;font-size:11px;color:#546E7A;line-height:1.5;}
+
+/* MOBILE RESPONSIVE */
+.adm-menu-toggle{display:none;background:none;border:none;cursor:pointer;font-size:20px;color:var(--muted);padding:4px 8px;margin-right:8px;}
+.adm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:8999;}
+.adm-overlay.show{display:block;}
+@media(max-width:900px){
+  .adm-menu-toggle{display:inline-flex;align-items:center;}
+  .sidebar{transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);z-index:9000;}
+  .sidebar.open{transform:translateX(0);box-shadow:4px 0 24px rgba(0,0,0,.35);}
+  .main-wrap{margin-left:0 !important;}
+  .content{padding:14px;}
+  .topbar{padding:0 14px;}
+  .topbar-left h2{font-size:15px;}
+  .topbar-left p{display:none;}
+  .stats-grid{grid-template-columns:repeat(2,1fr) !important;gap:10px;}
+  .form-row{grid-template-columns:1fr !important;}
+  .wa-stats{grid-template-columns:1fr 1fr !important;}
+  .ar-details{grid-template-columns:1fr 1fr !important;}
+  table{overflow-x:auto;display:block;}
+  .staff-chip span{display:none;}
+}
+@media(max-width:480px){
+  .content{padding:10px;}
+  .stats-grid{grid-template-columns:1fr 1fr !important;gap:8px;}
+  .wa-stats{grid-template-columns:1fr !important;}
+  .topbar-left h2{font-size:14px;}
+}
+/* ===== PAN Applications: stats + tabs + filter bar (matches admin panel) ===== */
+.pan-stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px;}
+.pan-stat{background:#fff;border-radius:12px;padding:16px 18px;box-shadow:var(--card-shadow);display:flex;align-items:center;gap:12px;}
+.pan-stat-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.pan-stat-icon.orange{background:#FFF3E0;color:#E65100;}
+.pan-stat-icon.blue{background:#E3F2FD;color:#1565C0;}
+.pan-stat-icon.green{background:#E8F5E9;color:#2E7D32;}
+.pan-stat-icon.red{background:#FFEBEE;color:#C62828;}
+.pan-stat-icon.purple{background:#F3E5F5;color:#6A1B9A;}
+.pan-stat-val{font-family:'Baloo 2',cursive;font-size:24px;font-weight:800;color:var(--text);}
+.pan-stat-label{font-size:12px;color:var(--muted);font-weight:600;}
+.pan-tabs{display:flex;gap:4px;background:#e8eef8;border-radius:12px;padding:4px;margin-bottom:18px;flex-wrap:wrap;}
+.pan-tab{flex:1;min-width:110px;padding:10px 12px;border:none;border-radius:9px;background:none;font-family:'Baloo 2',cursive;font-size:12.5px;font-weight:700;color:var(--muted);cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:6px;}
+.pan-tab.active{background:#fff;color:var(--primary);box-shadow:0 2px 8px rgba(21,101,192,0.12);}
+.pan-tab .ptab-count{background:var(--accent);color:#fff;font-size:10px;font-weight:800;padding:1px 7px;border-radius:50px;}
+.pan-tab.active .ptab-count{background:var(--primary);}
+.pan-filter-bar{background:#fff;border-radius:12px;padding:12px 16px;box-shadow:var(--card-shadow);margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.pan-filter-bar input,.pan-filter-bar select{padding:8px 12px;border:1.5px solid #C5D8F8;border-radius:9px;font-size:13px;font-family:'Hind',sans-serif;outline:none;background:#fff;}
+.pan-filter-bar input:focus,.pan-filter-bar select:focus{border-color:var(--primary);}
+@media (max-width:768px){
+  .pan-stats-row{grid-template-columns:repeat(2,1fr) !important;gap:8px;}
+  .pan-tabs{overflow-x:auto;flex-wrap:nowrap !important;padding-bottom:6px;}
+  .pan-tab{min-width:100px !important;font-size:11.5px !important;padding:8px 9px !important;}
+}
+/* ===== PAN Enquiry: reply modal (matches admin panel) ===== */
+.pan-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;}
+.pan-modal-overlay.show{display:flex;}
+.pan-modal-box{background:#fff;border-radius:18px;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.25);}
+.pan-modal-header{padding:18px 24px;border-bottom:1px solid #f0f4ff;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:2;}
+.pan-modal-header h3{font-family:'Baloo 2',cursive;font-size:17px;font-weight:800;}
+.pan-modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);padding:4px 8px;border-radius:6px;transition:.2s;}
+.pan-modal-close:hover{background:#f0f4ff;color:#C62828;}
+.pan-modal-body{padding:24px;}
+.pan-modal-actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px 24px;border-top:1px solid #f0f4ff;background:#FAFBFF;}
+</style>
+
+<style>
+  html, body { overscroll-behavior: none; -webkit-overflow-scrolling: touch; }
+  * { -webkit-tap-highlight-color: transparent; }
+  body { -webkit-user-select: none; user-select: none; }
+  input, textarea { -webkit-user-select: text; user-select: text; }
+  ::-webkit-scrollbar { display: none; }
+</style>
+</head>
+<body>
+
+<!-- ===== STAFF LOGIN ===== -->
+<div class="login-page" id="loginPage">
+  <div class="login-box">
+    <div class="logo">
+      <img src="logo.png" alt="DigiSeva Kendra logo" class="logo-icon">
+      <div class="logo-title">DigiSeva Kendra</div>
+      <div class="logo-sub">👤 Staff Portal</div>
+    </div>
+    <div class="login-err" id="loginErr">Staff ID ya Password galat hai!</div>
+    <div class="lf-group">
+      <label>Staff ID</label>
+      <input type="text" id="staffId" placeholder="Apna Staff ID daalen" autocomplete="username">
+    </div>
+    <div class="lf-group">
+      <label>Password</label>
+      <input type="password" id="staffPass" placeholder="Apna password dalen" autocomplete="current-password">
+    </div>
+    <button type="button" class="btn-login" id="loginBtn" onclick="doStaffLogin()"><i class="fas fa-user-shield"></i> Login Karo</button>
+    <div class="login-foot-note">Ye ID/Password aapko Admin ne diya hoga.<br>Bhool gaye ho to Admin se sampark karen.</div>
+  </div>
+</div>
+
+<!-- ===== SIDEBAR ===== -->
+<div class="adm-overlay" id="admOverlay" onclick="admCloseSidebar()"></div>
+<div class="sidebar" id="sidebar">
+  <div class="sb-brand">
+    <img src="logo.png" alt="DigiSeva Kendra logo" class="sb-logo">
+    <div class="sb-name">DigiSeva Kendra<small>STAFF PANEL</small></div>
+  </div>
+  <div class="staff-badge">
+    <div class="dot"></div>
+    <span id="staffBadgeText">STAFF ACCESS</span>
+  </div>
+
+  <nav class="sb-nav">
+    <div class="sb-section-label">Dashboard</div>
+    <div class="sb-item active" data-perm="always" onclick="showPage('dashboard',this)">
+      <div class="sb-item-left"><i class="fas fa-tachometer-alt mi"></i> Overview</div>
+    </div>
+
+    <div class="sb-section-label">User Management</div>
+    <div class="sb-item" data-perm="viewUsers" onclick="showPage('users',this)">
+      <div class="sb-item-left"><i class="fas fa-users mi"></i> All Users</div>
+      <span class="sb-count" id="sb-user-count">…</span>
+    </div>
+    <div class="sb-item" data-perm="addUser" onclick="showPage('add-user',this)">
+      <div class="sb-item-left"><i class="fas fa-user-plus mi"></i> Add New User</div>
+    </div>
+    <div class="sb-item" data-perm="kyc" onclick="showPage('kyc',this)">
+      <div class="sb-item-left"><i class="fas fa-id-card mi"></i> KYC Requests</div>
+      <span class="sb-count red" id="sb-kyc-count">…</span>
+    </div>
+
+    <div class="sb-section-label">Financial</div>
+    <div class="sb-item" data-perm="wallet" onclick="showPage('wallet-requests',this)">
+      <div class="sb-item-left"><i class="fas fa-money-check-alt mi"></i> Wallet Requests</div>
+      <span class="sb-count orange" id="sb-wr-count">0</span>
+    </div>
+
+    <div class="sb-section-label">PAN Card</div>
+    <div class="sb-item" data-perm="panApplications" onclick="showPage('pan-applications',this)">
+      <div class="sb-item-left"><i class="fas fa-id-card mi"></i> PAN Applications</div>
+      <span class="sb-count red" id="sb-pan-count">…</span>
+    </div>
+    <div class="sb-item" data-perm="hardCopy" onclick="showPage('hard-copy',this)">
+      <div class="sb-item-left"><i class="fas fa-copy mi"></i> Hard Copy Requests</div>
+      <span class="sb-count orange" id="sb-hcr-count">…</span>
+    </div>
+    <div class="sb-item" data-perm="panEnquiry" onclick="showPage('pan-enquiry',this)">
+      <div class="sb-item-left"><i class="fas fa-search mi"></i> PAN Enquiry Requests</div>
+      <span class="sb-count" id="sb-penq-count">…</span>
+    </div>
+
+    <div class="sb-section-label">Support</div>
+    <div class="sb-item" data-perm="complaints" onclick="showPage('complaints',this)">
+      <div class="sb-item-left"><i class="fas fa-exclamation-circle mi"></i> Complaints</div>
+      <span class="sb-count red" id="sb-complaint-count">…</span>
+    </div>
+
+    <div class="sb-section-label">Account</div>
+    <div class="sb-item" data-perm="always" onclick="showPage('my-activity',this)">
+      <div class="sb-item-left"><i class="fas fa-history mi"></i> My Activity</div>
+    </div>
+  </nav>
+
+  <div class="sb-footer">
+    <div class="staff-info">
+      <div class="staff-av" id="staffAvatar">S</div>
+      <div><div class="staff-name" id="staffFooterName">Staff</div><div class="staff-role">Limited Access</div></div>
+    </div>
+    <div class="sb-signout" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Logout</div>
+  </div>
+</div>
+
+<!-- ===== MAIN WRAP ===== -->
+<div class="main-wrap">
+  <div class="topbar">
+    <div class="topbar-left">
+      <button class="adm-menu-toggle" onclick="admToggleSidebar()" title="Menu"><i class="fas fa-bars"></i></button>
+      <h2 id="pageTitle">Dashboard Overview</h2>
+      <p id="pageSubtitle">DigiSeva Kendra Staff Panel</p>
+    </div>
+    <div class="topbar-right">
+      <div class="tb-icon" title="Pending KYC" onclick="showPage('kyc',null)" id="topbar-kyc-bell" style="display:none;">
+        <i class="fas fa-id-card"></i>
+        <span class="tb-badge" id="topbar-kyc-badge">0</span>
+      </div>
+      <div class="tb-icon" title="Pending Wallet Requests" onclick="showPage('wallet-requests',null)" id="topbar-wallet-bell" style="display:none;">
+        <i class="fas fa-wallet"></i>
+        <span class="tb-badge" id="topbar-wallet-badge">0</span>
+      </div>
+      <div class="staff-chip">
+        <div class="av" id="topbarAvatar">S</div>
+        <span id="topbarName">Staff</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ==================== DASHBOARD ==================== -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-hdr"><div><h2 id="dashGreeting">Namaste!</h2><p>Aapko aaj jo kaam karna hai, neeche se shuru karen</p></div></div>
+      <div class="stats-grid" id="dashStatsGrid">
+        <div class="stat-card blue" data-perm="viewUsers" onclick="showPage('users',null)">
+          <div class="sc-icon"><i class="fas fa-users"></i></div>
+          <div class="sc-val" id="stat-total-users">…</div>
+          <div class="sc-label">Total Users</div>
+        </div>
+        <div class="stat-card red" data-perm="kyc" onclick="showPage('kyc',null)">
+          <div class="sc-icon"><i class="fas fa-id-card"></i></div>
+          <div class="sc-val" id="stat-kyc-pending">…</div>
+          <div class="sc-label">Pending KYC</div>
+        </div>
+        <div class="stat-card orange" data-perm="wallet" onclick="showPage('wallet-requests',null)">
+          <div class="sc-icon"><i class="fas fa-wallet"></i></div>
+          <div class="sc-val" id="stat-wr-pending">…</div>
+          <div class="sc-label">Pending Wallet Requests</div>
+        </div>
+        <div class="stat-card green" data-perm="complaints" onclick="showPage('complaints',null)">
+          <div class="sc-icon"><i class="fas fa-exclamation-circle"></i></div>
+          <div class="sc-val" id="stat-complaints-open">…</div>
+          <div class="sc-label">Open Complaints</div>
+        </div>
+        <div class="stat-card blue" data-perm="panApplications" style="background:linear-gradient(135deg,#1565C020,#1565C010);" onclick="showPage('pan-applications',null)">
+          <div class="sc-icon" style="background:#1565C020;color:#1565C0;"><i class="fas fa-id-card"></i></div>
+          <div class="sc-val" id="stat-pan-pending">…</div>
+          <div class="sc-label">Total Pending PAN Card</div>
+        </div>
+        <div class="stat-card" data-perm="hardCopy" style="background:linear-gradient(135deg,#E65100 15,#E6510010);" onclick="showPage('hard-copy',null)">
+          <div class="sc-icon" style="background:#E6510020;color:#E65100;"><i class="fas fa-copy"></i></div>
+          <div class="sc-val" id="stat-hcr-pending">…</div>
+          <div class="sc-label">Pending Hard Copy</div>
+        </div>
+      </div>
+      <div class="no-access-box" id="noPermBox" style="display:none;">
+        <i class="fas fa-lock"></i>
+        Abhi aapko koi specific permission nahi di gayi hai.<br>Admin se apna access set karwane ko kahen.
+      </div>
+    </div>
+
+    <!-- ==================== ALL USERS (VIEW ONLY) ==================== -->
+    <div class="page" id="page-users">
+      <div class="page-hdr"><div><h2>All Users</h2><p>Sabhi registered users — sirf dekhne ke liye</p></div></div>
+      <div class="table-card">
+        <div class="table-head">
+          <h3><i class="fas fa-users" style="color:var(--primary);"></i> User Directory (<span id="userCountLbl">0</span>)</h3>
+          <div class="table-filters">
+            <input type="text" class="tf-input" id="usersSearchInp" placeholder="🔍 Naam ya mobile se search karen..." oninput="renderStaffUsers()">
+          </div>
+        </div>
+        <table>
+          <thead><tr><th>User</th><th>Mobile</th><th>State</th><th>Wallet</th><th>Status</th><th>KYC</th><th>Registered</th></tr></thead>
+          <tbody id="usersTable"><tr><td colspan="7" style="text-align:center;padding:24px;color:#90A4AE;">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ==================== ADD USER ==================== -->
+    <div class="page" id="page-add-user">
+      <div class="page-hdr"><div><h2>Add New User</h2><p>Naya retailer account banaye</p></div></div>
+      <div class="notice-form" style="max-width:700px;">
+        <h3><i class="fas fa-user-plus" style="color:var(--primary);"></i> New User Registration</h3>
+        <div class="form-row">
+          <div class="fg"><label>Pura Naam</label><input type="text" id="au-name" placeholder="User ka naam"></div>
+          <div class="fg"><label>Mobile Number</label><input type="tel" id="au-mobile" placeholder="10 digit mobile"></div>
+        </div>
+        <div class="form-row">
+          <div class="fg"><label>Email</label><input type="email" id="au-email" placeholder="email@domain.com"></div>
+          <div class="fg"><label>Shop Name</label><input type="text" id="au-shop" placeholder="Dukaan ka naam"></div>
+        </div>
+        <div class="form-row">
+          <div class="fg"><label>State</label>
+            <select id="au-state"><option value="">-- Select --</option><option>Andhra Pradesh</option><option>Arunachal Pradesh</option><option>Assam</option><option>Bihar</option><option>Chhattisgarh</option><option>Goa</option><option>Gujarat</option><option>Haryana</option><option>Himachal Pradesh</option><option>Jharkhand</option><option>Karnataka</option><option>Kerala</option><option>Madhya Pradesh</option><option>Maharashtra</option><option>Manipur</option><option>Meghalaya</option><option>Mizoram</option><option>Nagaland</option><option>Odisha</option><option>Punjab</option><option>Rajasthan</option><option>Sikkim</option><option>Tamil Nadu</option><option>Telangana</option><option>Tripura</option><option>Uttar Pradesh</option><option>Uttarakhand</option><option>West Bengal</option><option>Delhi</option><option>Jammu &amp; Kashmir</option><option>Ladakh</option><option>Puducherry</option><option>Chandigarh</option><option>Andaman &amp; Nicobar Islands</option><option>Dadra &amp; Nagar Haveli and Daman &amp; Diu</option><option>Lakshadweep</option></select>
+          </div>
+          <div class="fg"><label>City</label><input type="text" id="au-city" placeholder="Shehar ka naam"></div>
+        </div>
+        <div class="form-row">
+          <div class="fg"><label>Password</label><input type="password" id="au-password" placeholder="Password set karen"></div>
+          <div class="fg"><label>Initial Wallet Balance (₹)</label><input type="number" id="au-wallet" placeholder="0" value="0"></div>
+        </div>
+        <div class="fg"><label>User Type</label><select id="au-type"><option>Retailer</option><option>Distributor</option><option>Master Distributor</option></select></div>
+        <div style="display:flex;gap:10px;margin-top:4px;">
+          <button class="btn-primary" onclick="staffCreateUser()"><i class="fas fa-save"></i> User Create Karen</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== KYC ==================== -->
+    <div class="page" id="page-kyc">
+      <div class="page-hdr">
+        <div><h2><i class="fas fa-id-card-alt" style="color:var(--primary);"></i> KYC Requests</h2><p>Verification requests review, approve, reject ya hold karen</p></div>
+        <button class="btn-primary" onclick="staffLoadKycSubmissions(kycActiveTab)"><i class="fas fa-sync"></i> Refresh</button>
+      </div>
+
+      <!-- KYC STAT CARDS -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;" id="kyc-stat-cards">
+        <div class="kyc-stat-card" style="background:#fff;border-radius:14px;padding:18px 20px;box-shadow:0 4px 20px rgba(255,111,0,0.13);border-left:4px solid #FF6F00;display:flex;align-items:center;gap:14px;cursor:pointer;" onclick="kycSwitchTab('pending')">
+          <div style="width:50px;height:50px;border-radius:13px;background:#FFF3E0;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i class="fas fa-clock" style="font-size:22px;color:#FF6F00;"></i>
+          </div>
+          <div>
+            <div style="font-family:'Baloo 2',cursive;font-size:30px;font-weight:800;color:#1a1a2e;line-height:1;" id="kyc-count-pending">0</div>
+            <div style="font-size:12px;font-weight:700;color:#FF6F00;margin-top:2px;">Pending</div>
+          </div>
+        </div>
+        <div class="kyc-stat-card" style="background:#fff;border-radius:14px;padding:18px 20px;box-shadow:0 4px 20px rgba(46,125,50,0.12);border-left:4px solid #2E7D32;display:flex;align-items:center;gap:14px;cursor:pointer;" onclick="kycSwitchTab('approved')">
+          <div style="width:50px;height:50px;border-radius:13px;background:#E8F5E9;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i class="fas fa-check-circle" style="font-size:22px;color:#2E7D32;"></i>
+          </div>
+          <div>
+            <div style="font-family:'Baloo 2',cursive;font-size:30px;font-weight:800;color:#1a1a2e;line-height:1;" id="kyc-count-approved">0</div>
+            <div style="font-size:12px;font-weight:700;color:#2E7D32;margin-top:2px;">Approved</div>
+          </div>
+        </div>
+        <div class="kyc-stat-card" style="background:#fff;border-radius:14px;padding:18px 20px;box-shadow:0 4px 20px rgba(198,40,40,0.12);border-left:4px solid #C62828;display:flex;align-items:center;gap:14px;cursor:pointer;" onclick="kycSwitchTab('rejected')">
+          <div style="width:50px;height:50px;border-radius:13px;background:#FFEBEE;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i class="fas fa-times-circle" style="font-size:22px;color:#C62828;"></i>
+          </div>
+          <div>
+            <div style="font-family:'Baloo 2',cursive;font-size:30px;font-weight:800;color:#1a1a2e;line-height:1;" id="kyc-count-rejected">0</div>
+            <div style="font-size:12px;font-weight:700;color:#C62828;margin-top:2px;">Rejected</div>
+          </div>
+        </div>
+        <div class="kyc-stat-card" style="background:#fff;border-radius:14px;padding:18px 20px;box-shadow:0 4px 20px rgba(123,31,162,0.12);border-left:4px solid #7B1FA2;display:flex;align-items:center;gap:14px;cursor:pointer;" onclick="kycSwitchTab('hold')">
+          <div style="width:50px;height:50px;border-radius:13px;background:#F3E5F5;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i class="fas fa-pause-circle" style="font-size:22px;color:#7B1FA2;"></i>
+          </div>
+          <div>
+            <div style="font-family:'Baloo 2',cursive;font-size:30px;font-weight:800;color:#1a1a2e;line-height:1;" id="kyc-count-hold">0</div>
+            <div style="font-size:12px;font-weight:700;color:#7B1FA2;margin-top:2px;">Hold</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KYC TAB BAR -->
+      <div style="display:flex;gap:4px;background:#e8eef8;border-radius:12px;padding:4px;margin-bottom:18px;flex-wrap:wrap;" id="kyc-tab-bar">
+        <button class="kyc-tab-btn active" id="kyc-tab-pending" onclick="kycSwitchTab('pending')" style="flex:1;padding:9px 16px;border:none;border-radius:9px;font-family:'Baloo 2',cursive;font-size:13px;font-weight:700;cursor:pointer;transition:.2s;background:#FF6F00;color:#fff;">
+          <i class="fas fa-clock"></i> Pending <span id="kyc-tab-badge-pending" style="background:rgba(255,255,255,0.3);padding:1px 7px;border-radius:20px;font-size:11px;margin-left:4px;">0</span>
+        </button>
+        <button class="kyc-tab-btn" id="kyc-tab-approved" onclick="kycSwitchTab('approved')" style="flex:1;padding:9px 16px;border:none;border-radius:9px;font-family:'Baloo 2',cursive;font-size:13px;font-weight:700;cursor:pointer;transition:.2s;background:transparent;color:#546E7A;">
+          <i class="fas fa-check-circle"></i> Approved <span id="kyc-tab-badge-approved" style="background:rgba(0,0,0,0.08);padding:1px 7px;border-radius:20px;font-size:11px;margin-left:4px;">0</span>
+        </button>
+        <button class="kyc-tab-btn" id="kyc-tab-rejected" onclick="kycSwitchTab('rejected')" style="flex:1;padding:9px 16px;border:none;border-radius:9px;font-family:'Baloo 2',cursive;font-size:13px;font-weight:700;cursor:pointer;transition:.2s;background:transparent;color:#546E7A;">
+          <i class="fas fa-times-circle"></i> Rejected <span id="kyc-tab-badge-rejected" style="background:rgba(0,0,0,0.08);padding:1px 7px;border-radius:20px;font-size:11px;margin-left:4px;">0</span>
+        </button>
+        <button class="kyc-tab-btn" id="kyc-tab-hold" onclick="kycSwitchTab('hold')" style="flex:1;padding:9px 16px;border:none;border-radius:9px;font-family:'Baloo 2',cursive;font-size:13px;font-weight:700;cursor:pointer;transition:.2s;background:transparent;color:#546E7A;">
+          <i class="fas fa-pause-circle"></i> Hold <span id="kyc-tab-badge-hold" style="background:rgba(0,0,0,0.08);padding:1px 7px;border-radius:20px;font-size:11px;margin-left:4px;">0</span>
+        </button>
+        <button class="kyc-tab-btn" id="kyc-tab-all" onclick="kycSwitchTab('all')" style="flex:1;padding:9px 16px;border:none;border-radius:9px;font-family:'Baloo 2',cursive;font-size:13px;font-weight:700;cursor:pointer;transition:.2s;background:transparent;color:#546E7A;">
+          <i class="fas fa-list"></i> Sab
+        </button>
+      </div>
+
+      <!-- Pending Alert Banner -->
+      <div class="sys-alert warning" id="kyc-alert-bar" style="display:none;margin-bottom:14px;"><i class="fas fa-exclamation-triangle"></i> <span id="kyc-alert-text"></span> KYC submissions pending hain — abhi review karen!</div>
+
+      <!-- KYC Submissions Table -->
+      <div class="table-card">
+        <div class="table-head">
+          <h3 id="kyc-table-heading"><i class="fas fa-file-alt" style="color:#E65100;"></i> KYC Submissions — Pending</h3>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input type="text" id="kyc-search-inp" placeholder="Search naam, ID..." onkeyup="kycSearchFilter()" style="padding:7px 12px;border:1.5px solid #C5D8F8;border-radius:8px;font-size:12px;outline:none;font-family:'Hind',sans-serif;width:170px;">
+          </div>
+        </div>
+        <table>
+          <thead><tr><th>User</th><th>Document</th><th>Doc Number</th><th>Submitted</th><th>Files</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="kyc-submissions-tbody">
+            <tr><td colspan="7" style="text-align:center;padding:20px;color:#1565C0;"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- KYC Hold Modal -->
+      <div id="kycHoldModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;">
+        <div style="background:#fff;border-radius:18px;padding:28px;width:420px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+            <div style="width:42px;height:42px;border-radius:10px;background:#F3E5F5;display:flex;align-items:center;justify-content:center;"><i class="fas fa-pause-circle" style="font-size:20px;color:#7B1FA2;"></i></div>
+            <div><div style="font-family:'Baloo 2',cursive;font-size:17px;font-weight:800;">KYC Hold Karna</div><div style="font-size:12px;color:#546E7A;">Hold reason likhein — user ko dikhega</div></div>
+          </div>
+          <textarea id="kyc-hold-reason" placeholder="Hold ka karan likhein (e.g. Documents unclear hain, dobara upload karen)..." style="width:100%;padding:12px 14px;border:1.5px solid #C5D8F8;border-radius:10px;font-family:'Hind',sans-serif;font-size:14px;outline:none;resize:none;min-height:90px;box-sizing:border-box;margin-bottom:16px;"></textarea>
+          <div style="display:flex;gap:10px;">
+            <button onclick="confirmKycHold()" style="flex:1;background:#7B1FA2;color:#fff;border:none;padding:12px;border-radius:10px;font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;cursor:pointer;"><i class="fas fa-pause"></i> Hold Karen</button>
+            <button onclick="closeKycHoldModal()" style="background:#f0f4ff;color:#546E7A;border:none;padding:12px 18px;border-radius:10px;font-family:'Baloo 2',cursive;font-size:14px;font-weight:700;cursor:pointer;">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== WALLET REQUESTS ==================== -->
+    <div class="page" id="page-wallet-requests">
+      <div class="page-hdr">
+        <div><h2><i class="fas fa-wallet" style="color:var(--accent);"></i> Wallet Recharge Requests</h2><p>User wallet add money requests — Approve ya Reject karen</p></div>
+        <div style="display:flex;gap:8px;">
+          <select class="tf-select" id="wr-filter" onchange="renderWalletRequests(this.value)" style="padding:10px 14px;font-size:13px;">
+            <option value="all">Sab Requests</option>
+            <option value="pending">⏳ Pending</option>
+            <option value="approved">✓ Approved</option>
+            <option value="rejected">✗ Rejected</option>
+          </select>
+          <button class="btn-primary" onclick="loadWalletRequests()"><i class="fas fa-sync"></i> Refresh</button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="wa-stats">
+        <div class="wa-card orange" onclick="document.getElementById('wr-filter').value='pending';renderWalletRequests('pending');">
+          <div class="wa-icon"><i class="fas fa-clock"></i></div>
+          <div><div class="wa-val" id="wa-pending-count">0</div><div class="wa-label">Pending Requests</div></div>
+        </div>
+        <div class="wa-card green" onclick="document.getElementById('wr-filter').value='approved';renderWalletRequests('approved');">
+          <div class="wa-icon"><i class="fas fa-check-circle"></i></div>
+          <div><div class="wa-val" id="wa-approved-count">0</div><div class="wa-label">Approved Today</div></div>
+        </div>
+        <div class="wa-card red" onclick="document.getElementById('wr-filter').value='rejected';renderWalletRequests('rejected');">
+          <div class="wa-icon"><i class="fas fa-times-circle"></i></div>
+          <div><div class="wa-val" id="wa-rejected-count">0</div><div class="wa-label">Rejected Today</div></div>
+        </div>
+      </div>
+
+      <!-- Pending Alert Banner -->
+      <div id="wr-pending-alert" class="sys-alert warning" style="display:none;margin-bottom:16px;">
+        <i class="fas fa-exclamation-triangle"></i> <span id="wr-alert-text"></span> Wallet requests pending hain. Please review karen.
+      </div>
+
+      <!-- Firebase status -->
+      <div id="wr-fb-status"></div>
+
+      <!-- Request List -->
+      <div id="walletRequestsList">
+        <div style="text-align:center;padding:40px;background:#fff;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);">
+          <i class="fas fa-spinner fa-spin" style="font-size:32px;color:#1565C0;margin-bottom:12px;display:block;"></i>
+          <div style="font-size:14px;color:#546E7A;">Wallet requests load ho rahi hain...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== COMPLAINTS ==================== -->
+    <div class="page" id="page-complaints">
+      <div class="page-hdr"><div><h2>Complaints</h2><p>User complaints resolve karen</p></div></div>
+      <div class="table-card">
+        <div class="table-head"><h3><i class="fas fa-exclamation-circle" style="color:#e53935;"></i> Complaint Queue</h3></div>
+        <table>
+          <thead><tr><th>ID</th><th>User</th><th>Service</th><th>Detail</th><th>Priority</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="complaints-tbody"><tr><td colspan="7" style="text-align:center;padding:24px;color:#90A4AE;">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ==================== PAN APPLICATIONS ==================== -->
+    <div class="page" id="page-pan-applications">
+      <div class="page-hdr">
+        <div><h2>PAN Applications</h2><p>Pending PAN applications approve, reject ya hold karen</p></div>
+        <button class="btn-primary" onclick="loadStaffPanApps()"><i class="fas fa-sync"></i> Refresh</button>
+      </div>
+
+      <!-- Stats -->
+      <div class="pan-stats-row">
+        <div class="pan-stat" onclick="staffPanStatClick('Pending')" style="cursor:pointer;" title="Click karke sirf Pending dekhein">
+          <div class="pan-stat-icon orange"><i class="fas fa-clock"></i></div>
+          <div><div class="pan-stat-val" id="psf-pending">0</div><div class="pan-stat-label">Pending</div></div>
+        </div>
+        <div class="pan-stat" onclick="staffPanStatClick('Under Process')" style="cursor:pointer;" title="Click karke sirf Under Process dekhein">
+          <div class="pan-stat-icon blue"><i class="fas fa-spinner"></i></div>
+          <div><div class="pan-stat-val" id="psf-processing">0</div><div class="pan-stat-label">Under Process</div></div>
+        </div>
+        <div class="pan-stat" onclick="staffPanStatClick('Approved')" style="cursor:pointer;" title="Click karke sirf Approved dekhein">
+          <div class="pan-stat-icon green"><i class="fas fa-check-circle"></i></div>
+          <div><div class="pan-stat-val" id="psf-approved">0</div><div class="pan-stat-label">Approved</div></div>
+        </div>
+        <div class="pan-stat" onclick="staffPanStatClick('Rejected')" style="cursor:pointer;" title="Click karke sirf Rejected dekhein">
+          <div class="pan-stat-icon red"><i class="fas fa-times-circle"></i></div>
+          <div><div class="pan-stat-val" id="psf-rejected">0</div><div class="pan-stat-label">Rejected</div></div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="pan-tabs">
+        <button class="pan-tab active" id="pan-tab-all" onclick="switchStaffPanTab('all',this)"><i class="fas fa-list"></i> Sab Requests <span class="ptab-count" id="psftc-all">0</span></button>
+        <button class="pan-tab" id="pan-tab-NSDLNew" onclick="switchStaffPanTab('NSDL New',this)"><i class="fas fa-plus-circle"></i> NSDL New <span class="ptab-count" id="psftc-nsdl">0</span></button>
+        <button class="pan-tab" id="pan-tab-Correction" onclick="switchStaffPanTab('Correction',this)"><i class="fas fa-edit"></i> NSDL Correction <span class="ptab-count" id="psftc-corr">0</span></button>
+        <button class="pan-tab" id="pan-tab-UTI" onclick="switchStaffPanTab('UTI',this)"><i class="fas fa-plus-circle" style="color:#6A1B9A;"></i> UTI New <span class="ptab-count" id="psftc-uti">0</span></button>
+        <button class="pan-tab" id="pan-tab-UTICorrection" onclick="switchStaffPanTab('UTI Correction',this)"><i class="fas fa-edit" style="color:#AD1457;"></i> UTI Correction <span class="ptab-count" id="psftc-utic">0</span></button>
+        <button class="pan-tab" id="pan-tab-Pending" onclick="switchStaffPanTab('Pending',this)"><i class="fas fa-clock"></i> Pending <span class="ptab-count" id="psftc-pending">0</span></button>
+        <button class="pan-tab" id="pan-tab-UnderProcess" onclick="switchStaffPanTab('Under Process',this)"><i class="fas fa-spinner"></i> Under Process <span class="ptab-count" id="psftc-processing">0</span></button>
+        <button class="pan-tab" id="pan-tab-Approved" onclick="switchStaffPanTab('Approved',this)"><i class="fas fa-check"></i> Approved <span class="ptab-count" id="psftc-approved">0</span></button>
+        <button class="pan-tab" id="pan-tab-Rejected" onclick="switchStaffPanTab('Rejected',this)"><i class="fas fa-times" style="color:#C62828;"></i> Rejected <span class="ptab-count" id="psftc-rejected">0</span></button>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="pan-filter-bar">
+        <input type="text" id="pan-search" oninput="renderStaffPanApps()" placeholder="🔍 Naam / ACK No / Mobile / User ID / Aadhar / DOB khojein..." style="flex:1;min-width:200px;">
+        <select id="pan-filter" onchange="renderStaffPanApps()" style="width:160px;">
+          <option value="all">Sab Status</option>
+          <option value="Pending">Pending</option>
+          <option value="Under Process">Under Process</option>
+          <option value="Approved">Approved</option>
+          <option value="Rejected">Rejected</option>
+          <option value="Hold">Hold</option>
+        </select>
+        <button class="pan-filter-btn" style="background:#2E7D32;border:none;color:#fff;border-radius:9px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;" onclick="staffPanExportCSV()"><i class="fas fa-file-csv"></i> CSV</button>
+      </div>
+
+      <div class="table-card">
+        <div class="table-head" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+          <h3><i class="fas fa-id-card" style="color:var(--primary);"></i> Applications List (<span id="pan-count-lbl">0</span>)</h3>
+        </div>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead><tr><th>ACK No</th><th>Naam / DOB / Aadhar</th><th>Mobile</th><th>Applied By</th><th>Type</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="pan-apps-tbody"><tr><td colspan="8" style="text-align:center;padding:24px;color:#90A4AE;">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAN Application Detail / Document / Slip Modal -->
+    <div class="pan-modal-overlay" id="staffPanAppModal">
+      <div class="pan-modal-box">
+        <div class="pan-modal-header">
+          <h3 id="spam-title"><i class="fas fa-id-card"></i> PAN Application</h3>
+          <button class="pan-modal-close" onclick="closeStaffPanAppModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="pan-modal-body" id="spam-body"></div>
+        <div class="pan-modal-actions" id="spam-actions"></div>
+      </div>
+    </div>
+
+    <!-- ==================== HARD COPY REQUESTS ==================== -->
+    <div class="page" id="page-hard-copy">
+      <div class="page-hdr"><div><h2>Hard Copy Requests</h2><p>PAN card hard copy requests manage karen</p></div></div>
+      <div class="table-card">
+        <div class="table-head" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+          <h3><i class="fas fa-copy" style="color:#E65100;"></i> Hard Copy Requests (<span id="hcr-count-lbl">0</span>)</h3>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <select id="hcr-filter" onchange="renderStaffHcr()" style="border:1.5px solid #E3F2FD;border-radius:8px;padding:6px 12px;font-size:13px;color:var(--text);">
+              <option value="all">Sabhi</option>
+              <option value="Pending">Pending</option>
+              <option value="Approved">Approved</option>
+              <option value="Dispatched">Dispatched</option>
+            </select>
+            <button onclick="loadStaffHcr()" style="background:#1565C0;color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;"><i class="fas fa-sync-alt"></i> Refresh</button>
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead><tr><th>Req ID</th><th>User</th><th>Address</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="hcr-tbody"><tr><td colspan="6" style="text-align:center;padding:24px;color:#90A4AE;">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== PAN ENQUIRY REQUESTS ==================== -->
+    <div class="page" id="page-pan-enquiry">
+      <div class="page-hdr">
+        <div><h2><i class="fas fa-search" style="color:#6A1B9A;"></i> PAN Enquiry Requests</h2><p>User ke PAN Find/Verify/Link/Details/PDF requests — Result bhejein</p></div>
+        <button class="btn-primary" onclick="loadStaffPanEnquiry()"><i class="fas fa-sync"></i> Refresh</button>
+      </div>
+
+      <!-- Stats -->
+      <div class="pan-stats-row">
+        <div class="pan-stat" onclick="staffPeqStatClick('pending')" style="cursor:pointer;" title="Click karke sirf Pending dekhein">
+          <div class="pan-stat-icon orange"><i class="fas fa-clock"></i></div>
+          <div><div class="pan-stat-val" id="peqf-pending">0</div><div class="pan-stat-label">Pending</div></div>
+        </div>
+        <div class="pan-stat" onclick="staffPeqStatClick('completed')" style="cursor:pointer;" title="Click karke sirf Completed dekhein">
+          <div class="pan-stat-icon green"><i class="fas fa-check-circle"></i></div>
+          <div><div class="pan-stat-val" id="peqf-done">0</div><div class="pan-stat-label">Completed</div></div>
+        </div>
+        <div class="pan-stat" onclick="staffPeqStatClick('all')" style="cursor:pointer;" title="Click karke sab dekhein">
+          <div class="pan-stat-icon blue"><i class="fas fa-rupee-sign"></i></div>
+          <div><div class="pan-stat-val" id="peqf-revenue">₹0</div><div class="pan-stat-label">Revenue</div></div>
+        </div>
+        <div class="pan-stat" onclick="staffPeqStatClick('all')" style="cursor:pointer;" title="Click karke sab dekhein">
+          <div class="pan-stat-icon purple"><i class="fas fa-list"></i></div>
+          <div><div class="pan-stat-val" id="peqf-total">0</div><div class="pan-stat-label">Total Requests</div></div>
+        </div>
+      </div>
+
+      <!-- Service Filter Tabs -->
+      <div class="pan-tabs" style="flex-wrap:wrap;">
+        <button class="pan-tab active" id="peq-tab-all" onclick="filterStaffPanEnq('all',this)">🔍 Sab</button>
+        <button class="pan-tab" onclick="filterStaffPanEnq('aadhar-to-pan',this)"><i class="fas fa-search-plus"></i> Find PAN (₹130)</button>
+        <button class="pan-tab" onclick="filterStaffPanEnq('aadhar-link',this)"><i class="fas fa-link"></i> Aadhar Link (₹10)</button>
+        <button class="pan-tab" onclick="filterStaffPanEnq('pan-verify',this)"><i class="fas fa-user-check"></i> PAN Verify (₹5)</button>
+        <button class="pan-tab" onclick="filterStaffPanEnq('pan-details',this)"><i class="fas fa-id-badge"></i> PAN Details (₹15)</button>
+        <button class="pan-tab" onclick="filterStaffPanEnq('epan-pdf',this)"><i class="fas fa-file-pdf"></i> E-PAN PDF (₹72)</button>
+        <button class="pan-tab" id="peq-tab-pending" onclick="filterStaffPanEnq('pending',this)" style="background:#FFF3E0;color:#E65100;">⏳ Pending Only</button>
+        <button class="pan-tab" id="peq-tab-completed" onclick="filterStaffPanEnq('completed',this)" style="background:#E8F5E9;color:#2E7D32;">✅ Completed Only</button>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="pan-filter-bar">
+        <input type="text" id="peq-search" placeholder="🔍 User ID / Naam / PAN / Aadhar..." style="flex:1;min-width:200px;" oninput="renderStaffPanEnqList()">
+      </div>
+
+      <!-- ✅ DEBUG BANNER (temporary) — Firebase se raw keys dikhata hai -->
+
+      <!-- Requests List -->
+      <div id="peqf-list" style="display:flex;flex-direction:column;gap:14px;"></div>
+      <div id="peqf-empty" style="display:none;background:#fff;border-radius:14px;padding:40px;text-align:center;box-shadow:var(--card-shadow);">
+        <i class="fas fa-inbox" style="font-size:40px;color:#C5D8F8;margin-bottom:12px;display:block;"></i>
+        <div style="font-family:'Baloo 2',cursive;font-size:17px;font-weight:700;color:#90A4AE;">Koi PAN Enquiry Request nahi hai</div>
+      </div>
+    </div>
+
+    <!-- PAN ENQUIRY REPLY MODAL -->
+    <div class="pan-modal-overlay" id="staffPenqModal" style="align-items:center;justify-content:center;padding:16px;">
+      <div class="pan-modal-box">
+        <div class="pan-modal-header">
+          <h3 id="staff-penq-modal-title"><i class="fas fa-search" style="color:#6A1B9A;margin-right:8px;"></i> PAN Enquiry — Reply Bhejein</h3>
+          <button class="pan-modal-close" onclick="closeStaffPenqModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="pan-modal-body" id="staff-penq-modal-body"></div>
+        <div class="pan-modal-actions" id="staff-penq-modal-actions"></div>
+      </div>
+    </div>
+
+    <!-- ==================== MY ACTIVITY ==================== -->
+    <div class="page" id="page-my-activity">
+      <div class="page-hdr"><div><h2>My Activity</h2><p>Aapne jo bhi actions liye hain, unka record</p></div></div>
+      <div class="table-card">
+        <div class="table-head"><h3><i class="fas fa-history" style="color:var(--primary);"></i> Activity Log</h3></div>
+        <table>
+          <thead><tr><th>Time</th><th>Action</th><th>Detail</th></tr></thead>
+          <tbody id="myActivityTable"><tr><td colspan="3" style="text-align:center;padding:24px;color:#90A4AE;">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Screenshot Modal -->
+<div class="ss-modal" id="ssModal">
+  <button class="ss-modal-close" onclick="closeSsModal()">&times;</button>
+  <img id="ssModalImg" src="" alt="Payment Screenshot">
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ===== FIREBASE CONFIG ===== -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check.js";
+  import { getAuth, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getDatabase, ref, set, get, push, update, remove, onValue, child }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBCpcHJQQRu9bQsnH6plsTSLl12Mt_7tA4",
+    authDomain: "jan-seva-kendra1.firebaseapp.com",
+    databaseURL: "https://jan-seva-kendra1-default-rtdb.firebaseio.com",
+    projectId: "jan-seva-kendra1",
+    storageBucket: "jan-seva-kendra1.firebasestorage.app",
+    messagingSenderId: "839635987276",
+    appId: "1:839635987276:web:fbfe3969efa45c37793de9"
+  };
+
+  const app = initializeApp(firebaseConfig);
+
+  // App Check — sirf hamari asli app hi database access kar sake
+  initializeAppCheck(app, {
+    provider: new ReCaptchaV3Provider("6Lc6qEItAAAAAKin7WboQWEtWOd9D5Jcvsn9p7eD"),
+    isTokenAutoRefreshEnabled: true
+  });
+
+  const db  = getDatabase(app);
+  const auth = getAuth(app);
+
+  window._FB = { db, ref, set, get, push, update, remove, onValue, child, auth, signInWithCustomToken };
+  console.log('✅ DSK Firebase DB Connected (Staff Panel)');
+
+  // ✅ RACE-CONDITION FIX: auth state confirm hone tak wait karo
+  let _authReadyFired = false;
+  function _fireReady() {
+    if (_authReadyFired) return;
+    _authReadyFired = true;
+    window.dispatchEvent(new Event('firebase-ready'));
+  }
+  onAuthStateChanged(auth, function() { _fireReady(); });
+  setTimeout(_fireReady, 2500);
+</script>
+<!-- ===== /FIREBASE CONFIG ===== -->
+
+<script>
+// ============================================================
+//  STAFF PANEL — CORE LOGIC
+// ============================================================
+
+// ✅ FIX: App ka datetime "D/M/YYYY, hh:mm am/pm" (en-IN, DD/MM/YYYY) format mein save hota hai.
+// Native `new Date(str)` ise US convention (MM/DD/YYYY) maan kar galat parse karta hai —
+// e.g. "10/6/2026" (10 June) ko "October 6" bana deta hai. Isse list latest-time-upar
+// sahi se sort nahi hoti thi. Yeh function format ko sahi se (DD/MM/YYYY) parse karta hai.
+function parseStaffDT(str) {
+  if (str == null || str === '') return 0;
+  if (typeof str === 'number') return str;
+  const s = String(str).trim();
+  const m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4}),?\s*(\d{1,2}):(\d{2})\s*(am|pm)?$/i);
+  if (m) {
+    let [, d, mo, y, h, mi, ap] = m;
+    d = +d; mo = +mo; y = +y; h = +h; mi = +mi;
+    if (ap) {
+      if (/pm/i.test(ap) && h !== 12) h += 12;
+      if (/am/i.test(ap) && h === 12) h = 0;
+    }
+    return new Date(y, mo - 1, d, h, mi).getTime() || 0;
+  }
+  const t = new Date(s).getTime();
+  return isNaN(t) ? 0 : t;
+}
+
+let staffSession = null;       // { staffId, name, permissions }
+let usersData    = [];
+let walletRequests = [];
+let _panAppsCache = [];
+let _hcrCache = [];
+let _panEnqCache = [];
+let _complaintsCache = [];
+
+// ======== IP RESTRICTION (Security Settings — admin se control hota hai) ========
+// Note: ye client-side check hai — server/Cloudflare level jitna reliable nahi,
+// lekin staff panel ko bina-whitelisted-IP ke access se rokne ke liye kaafi hai.
+function getClientIP() {
+  return fetch('https://api.ipify.org?format=json')
+    .then(r => r.json())
+    .then(d => d.ip || null)
+    .catch(() => null);
+}
+
+function blockPanelForIPRestriction(ip) {
+  document.body.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:#FFEBEE;font-family:Hind,sans-serif;text-align:center;padding:24px;"><div style="font-size:64px;margin-bottom:16px;">🚫</div><h2 style="color:#C62828;font-size:26px;margin-bottom:8px;">Access Denied</h2><p style="color:#B71C1C;font-size:15px;max-width:420px;">Aapka IP address (<b>' + (ip || 'unknown') + '</b>) is panel ke liye whitelist mein nahi hai.<br>Access ke liye Admin se sampark karen.</p></div>';
+}
+
+function enforceIPRestriction() {
+  if (!window._FB) return;
+  const { db, ref, get } = window._FB;
+  get(ref(db, 'admin/settings')).then(snap => {
+    if (!snap.exists()) return;
+    const s = snap.val();
+    if (!s.iprestrict) return;
+    const list = String(s.ipWhitelist || '').split(/[,\n]/).map(x => x.trim()).filter(Boolean);
+    if (!list.length) return; // koi IP whitelist nahi hai — fail-open (lockout se bachne ke liye)
+    getClientIP().then(ip => {
+      if (!ip) return; // IP detect nahi ho paya — fail-open
+      if (list.indexOf(ip) === -1) blockPanelForIPRestriction(ip);
+    });
+  }).catch(() => {});
+}
+window.addEventListener('firebase-ready', enforceIPRestriction, { once: true });
+
+// ---------- Toast ----------
+let toastTimer;
+function toast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (type ? ' ' + type : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ---------- Mobile sidebar ----------
+function admToggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('admOverlay').classList.toggle('show');
+}
+function admCloseSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('admOverlay').classList.remove('show');
+}
+
+// ---------- Password hashing (same scheme as admin panel) ----------
+async function staffHashPassword(pass, salt) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(pass + '::' + salt);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// ---------- Brute-force throttle ----------
+const STAFF_LOCK_MS = 5 * 60 * 1000;
+const STAFF_MAX_ATTEMPTS = 5;
+function staffLoginBlocked() {
+  const lockUntil = parseInt(localStorage.getItem('jsk_staff_lock_until') || '0', 10);
+  return lockUntil > Date.now() ? lockUntil : 0;
+}
+function staffRecordFailedAttempt() {
+  const n = (parseInt(localStorage.getItem('jsk_staff_attempts') || '0', 10) || 0) + 1;
+  localStorage.setItem('jsk_staff_attempts', String(n));
+  if (n >= STAFF_MAX_ATTEMPTS) {
+    localStorage.setItem('jsk_staff_lock_until', String(Date.now() + STAFF_LOCK_MS));
+    localStorage.setItem('jsk_staff_attempts', '0');
+  }
+}
+function staffClearAttempts() {
+  localStorage.removeItem('jsk_staff_attempts');
+  localStorage.removeItem('jsk_staff_lock_until');
+}
+
+// Staff ID ko ek consistent Firebase-safe key mein convert karo
+function staffKeyFromId(id) {
+  return (id || '').trim().toLowerCase().replace(/[.#$\[\]\/\s]+/g, '_');
+}
+
+// ---------- LOGIN ----------
+function doStaffLogin() {
+  const btn = document.getElementById('loginBtn');
+  const errEl = document.getElementById('loginErr');
+
+  const lockUntil = staffLoginBlocked();
+  if (lockUntil) {
+    const mins = Math.ceil((lockUntil - Date.now()) / 60000);
+    errEl.textContent = '⛔ Bahut saare galat attempts. ' + mins + ' minute baad try karen.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Login...'; }
+
+  const idRaw = (document.getElementById('staffId').value || '').trim();
+  const pass  = (document.getElementById('staffPass').value || '');
+
+  if (!idRaw || !pass) {
+    errEl.textContent = 'Staff ID aur Password dono zaruri hain!';
+    errEl.style.display = 'block';
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-user-shield"></i> Login Karo'; }
+    return;
+  }
+
+  if (!window._FB) {
+    errEl.textContent = 'Database se connect nahi ho paya. Page reload karo.';
+    errEl.style.display = 'block';
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-user-shield"></i> Login Karo'; }
+    return;
+  }
+
+  const key = staffKeyFromId(idRaw);
+  const { db, ref, get } = window._FB;
+
+  // ✅ FIX: pehle seedha backend (/api/login) call karo — staff record ko
+  // client se pre-fetch karne ki zaroorat nahi (naye rules ke hisaab se wo
+  // read sirf login ke BAAD hi allowed hai). Status/active check bhi ab
+  // backend khud karta hai.
+  (async function() {
+    try {
+      const resp = await fetch('https://digisevakendra.in/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: key, password: pass, role: 'staff' })
+      });
+      const data = await resp.json();
+
+      if (!resp.ok || !data.token) {
+        throw new Error(data.error || 'Staff ID ya Password galat hai');
+      }
+
+      const { auth, signInWithCustomToken } = window._FB;
+      await signInWithCustomToken(auth, data.token);
+
+      // ✅ DIAGNOSTIC: agar role permanently save nahi ho paya, ab ye yahan
+      // console mein dikhega (pehle chup-chaap sirf server pe log hota tha)
+      if (data.claimsPersisted === false) {
+        console.error('⚠️ Role permanently save nahi ho paya (claims persist fail):', data.claimsWarning);
+        console.error('⚠️ Iska matlab: abhi ke liye login/access theek chalega, lekin thodi der baad role gayab ho sakta hai aur "Permission denied" errors wapas aa sakte hain.');
+      }
+
+      // Ab authenticated hain, apna record fetch karo
+      const snap = await get(ref(db, 'staff/' + key));
+      const staff = snap.exists() ? snap.val() : {};
+
+      staffClearAttempts();
+      staffSession = { staffId: key, name: staff.name || idRaw, permissions: staff.permissions || {} };
+      sessionStorage.setItem('jsk_staff_session', JSON.stringify(staffSession));
+      document.getElementById('loginPage').style.display = 'none';
+      errEl.style.display = 'none';
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-user-shield"></i> Login Karo'; }
+      toast('✅ Welcome, ' + staffSession.name + '!', 'success');
+      addStaffLog('Login', staffSession.name + ' panel mein login hua');
+      initStaffPanel();
+    } catch (apiErr) {
+      staffRecordFailedAttempt();
+      errEl.textContent = (apiErr && apiErr.message) ? apiErr.message : '❌ Staff ID ya Password galat hai!';
+      errEl.style.display = 'block';
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-user-shield"></i> Login Karo'; }
+    }
+  })();
+}
+
+function doLogout() {
+  if (staffSession) addStaffLog('Logout', staffSession.name + ' panel se logout hua');
+  sessionStorage.removeItem('jsk_staff_session');
+  staffSession = null;
+  document.getElementById('loginPage').style.display = 'flex';
+  document.getElementById('staffId').value = '';
+  document.getElementById('staffPass').value = '';
+  document.getElementById('loginErr').style.display = 'none';
+}
+
+// Enter key on login fields
+document.getElementById('staffPass').addEventListener('keyup', e => { if (e.key === 'Enter') doStaffLogin(); });
+document.getElementById('staffId').addEventListener('keyup',   e => { if (e.key === 'Enter') doStaffLogin(); });
+
+function hasPerm(p) {
+  return !!(staffSession && staffSession.permissions && staffSession.permissions[p]);
+}
+
+// ---------- Apply permission-based UI ----------
+function applyPermissions() {
+  if (!staffSession) return;
+  const perms = staffSession.permissions || {};
+  let anyGranted = false;
+
+  document.querySelectorAll('[data-perm]').forEach(el => {
+    const p = el.getAttribute('data-perm');
+    if (p === 'always') return;
+    if (perms[p]) { el.style.display = ''; anyGranted = true; }
+    else { el.style.display = 'none'; }
+  });
+
+  document.getElementById('noPermBox').style.display = anyGranted ? 'none' : 'block';
+
+  const initials = (staffSession.name || 'S').trim().split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase() || 'S';
+  document.getElementById('staffAvatar').textContent = initials;
+  document.getElementById('topbarAvatar').textContent = initials;
+  document.getElementById('staffFooterName').textContent = staffSession.name;
+  document.getElementById('topbarName').textContent = staffSession.name;
+  document.getElementById('dashGreeting').textContent = 'Namaste, ' + staffSession.name + '!';
+  document.getElementById('staffBadgeText').textContent = 'STAFF ACCESS — ' + staffSession.staffId.toUpperCase();
+}
+
+// ---------- Page navigation ----------
+function showPage(name, el) {
+  if (window.innerWidth <= 900) admCloseSidebar();
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const pg = document.getElementById('page-' + name);
+  if (pg) pg.classList.add('active');
+  if (el) {
+    document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+  }
+  const titles = {
+    dashboard:'Dashboard Overview', users:'All Users', 'add-user':'Add New User',
+    kyc:'KYC Requests', 'wallet-requests':'Wallet Recharge Requests',
+    complaints:'Complaints', 'my-activity':'My Activity',
+    'pan-applications':'PAN Applications', 'hard-copy':'Hard Copy Requests',
+    'pan-enquiry':'PAN Enquiry Requests'
+  };
+  const subtitles = {
+    dashboard:'DigiSeva Kendra Staff Panel',
+    'wallet-requests':'User requests approve ya reject karen',
+    users:'Sirf dekhne ke liye — edit/delete admin hi kar sakta hai'
+  };
+  document.getElementById('pageTitle').textContent = titles[name] || name;
+  document.getElementById('pageSubtitle').textContent = subtitles[name] || '';
+
+  if (name === 'users') renderStaffUsers();
+  if (name === 'kyc') { buildStaffKyc(); setTimeout(function(){ kycSwitchTab('pending'); }, 100); }
+  if (name === 'wallet-requests') renderWalletRequests('all');
+  if (name === 'complaints') loadStaffComplaints();
+  if (name === 'pan-applications') loadStaffPanApps();
+  if (name === 'hard-copy') loadStaffHcr();
+  if (name === 'pan-enquiry') loadStaffPanEnquiry();
+  if (name === 'my-activity') loadMyActivity();
+}
+
+// ---------- Activity log (shared with admin/logs, tagged as staff) ----------
+function addStaffLog(action, detail) {
+  if (!window._FB || !staffSession) return;
+  const { db, ref, push: fbPush } = window._FB;
+  const entry = {
+    time: new Date().toLocaleString('hi-IN'),
+    admin: staffSession.name + ' (Staff: ' + staffSession.staffId + ')',
+    action: action,
+    detail: detail,
+    ip: 'Staff Panel'
+  };
+  fbPush(ref(db, 'admin/logs'), entry).catch(e => console.warn('Staff log save error:', e));
+}
+
+function loadMyActivity() {
+  const tbody = document.getElementById('myActivityTable');
+  if (!window._FB || !staffSession) return;
+  const { db, ref, get } = window._FB;
+  get(ref(db, 'admin/logs')).then(snap => {
+    if (!snap.exists()) { tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;padding:24px;color:#90A4AE;">Koi activity nahi mili</td></tr>'; return; }
+    const mine = [];
+    snap.forEach(child => {
+      const l = child.val() || {};
+      if ((l.admin || '').includes('Staff: ' + staffSession.staffId)) mine.push(l);
+    });
+    mine.reverse();
+    if (!mine.length) { tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;padding:24px;color:#90A4AE;">Koi activity nahi mili</td></tr>'; return; }
+    tbody.innerHTML = mine.slice(0, 200).map(l => `
+      <tr><td style="font-size:12px;color:var(--muted);">${l.time}</td>
+      <td><span class="status-chip active">${l.action}</span></td>
+      <td>${l.detail}</td></tr>`).join('');
+  }).catch(() => { tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;padding:24px;color:#90A4AE;">Load nahi ho paya</td></tr>'; });
+}
+
+// ---------- Session restore on page load ----------
+(function() {
+  const raw = sessionStorage.getItem('jsk_staff_session');
+  if (raw) {
+    try {
+      staffSession = JSON.parse(raw);
+      document.getElementById('loginPage').style.display = 'none';
+    } catch (e) { staffSession = null; }
+  }
+})();
+
+window.addEventListener('firebase-ready', function() {
+  if (staffSession) initStaffPanel();
+}, { once: true });
+
+function initStaffPanel() {
+  applyPermissions();
+  loadDashboardStats();
+  if (hasPerm('viewUsers') || hasPerm('addUser') || hasPerm('kyc')) syncUsersFromFirebase();
+  if (hasPerm('wallet')) loadWalletRequests();
+  if (hasPerm('complaints')) startComplaintsBadgeSync();
+  if (hasPerm('panApplications')) loadStaffPanApps();
+  if (hasPerm('hardCopy')) loadStaffHcr();
+  if (hasPerm('panEnquiry')) loadStaffPanEnquiry();
+  setInterval(loadDashboardStats, 15000);
+  startStaffPermLiveSync();
+}
+
+// ---------- LIVE permission sync ----------
+// Admin jab bhi staff ke permissions ya status change karta hai Firebase mein,
+// ye listener turant (bina logout/login ke) staff panel ko update kar deta hai.
+function startStaffPermLiveSync() {
+  if (!window._FB || !staffSession) return;
+  const { db, ref, onValue } = window._FB;
+  onValue(ref(db, 'staff/' + staffSession.staffId), function(snap) {
+    if (!staffSession) return; // already logged out
+    if (!snap.exists()) {
+      toast('Aapka staff account delete kar diya gaya hai.', 'error');
+      doLogout();
+      return;
+    }
+    const staff = snap.val();
+
+    // Agar admin ne staff ko block/inactive kar diya — turant logout
+    if ((staff.status || 'active') !== 'active') {
+      toast('⛔ Aapka access admin ne band kar diya hai.', 'error');
+      doLogout();
+      return;
+    }
+
+    const newPerms = staff.permissions || {};
+    const oldPerms = staffSession.permissions || {};
+    const changed = JSON.stringify(newPerms) !== JSON.stringify(oldPerms);
+
+    staffSession.permissions = newPerms;
+    staffSession.name = staff.name || staffSession.name;
+    sessionStorage.setItem('jsk_staff_session', JSON.stringify(staffSession));
+
+    if (changed) {
+      applyPermissions();
+      toast('🔄 Aapki permissions admin ne update ki hain', 'success');
+      // Agar koi naya permission mila hai jiska data abhi tak load nahi hua, use load karo
+      if (hasPerm('viewUsers') || hasPerm('addUser') || hasPerm('kyc')) syncUsersFromFirebase();
+      if (hasPerm('wallet')) loadWalletRequests();
+      if (hasPerm('complaints')) startComplaintsBadgeSync();
+      if (hasPerm('panApplications')) loadStaffPanApps();
+      if (hasPerm('hardCopy')) loadStaffHcr();
+      if (hasPerm('panEnquiry')) loadStaffPanEnquiry();
+      // Agar staff abhi kisi aise page par hai jiska permission hat gaya, dashboard par bhej do
+      const activePage = document.querySelector('.page.active');
+      if (activePage) {
+        const pageName = activePage.id.replace('page-', '');
+        const pagePermMap = {
+          users: 'viewUsers', 'add-user': 'addUser', kyc: 'kyc',
+          'wallet-requests': 'wallet', complaints: 'complaints',
+          'pan-applications': 'panApplications', 'hard-copy': 'hardCopy',
+          'pan-enquiry': 'panEnquiry'
+        };
+        const neededPerm = pagePermMap[pageName];
+        if (neededPerm && !hasPerm(neededPerm)) {
+          const dashLink = document.querySelector('.sb-item[onclick*="dashboard"]');
+          showPage('dashboard', dashLink);
+        }
+      }
+    }
+  });
+}
+
+// ============================================================
+//  USERS (read from Firebase, normalize, view-only render)
+// ============================================================
+function normalizeUsersStaff(raw) {
+  return raw.map(u => ({
+    ...u,
+    userId: u.userId || u.id || '—',
+    name: u.name || 'Unknown',
+    mobile: u.mobile || '—',
+    stateField: u.state || '—',
+    walletNum: parseFloat(u.walletBal || 0) || 0,
+    status: u.status || 'active',
+    kyc: u.kyc || 'pending',
+    type: u.type || 'Retailer',
+    joinDate: u.joinDate || u.date || '—'
+  }));
+}
+
+async function syncUsersFromFirebase() {
+  if (!window._FB) return;
+  try {
+    const { db, ref, get } = window._FB;
+    const snap = await get(ref(db, 'users'));
+    usersData = snap.exists() ? normalizeUsersStaff(Object.values(snap.val())) : [];
+  } catch (e) {
+    console.warn('Users sync error:', e.message);
+    usersData = [];
+  }
+  loadDashboardStats();
+  if (document.getElementById('page-users').classList.contains('active')) renderStaffUsers();
+  if (document.getElementById('page-kyc').classList.contains('active')) buildStaffKyc();
+}
+
+function renderStaffUsers() {
+  const tbody = document.getElementById('usersTable');
+  const search = (document.getElementById('usersSearchInp').value || '').toLowerCase().trim();
+  let list = usersData;
+  if (search) list = list.filter(u => (u.name||'').toLowerCase().includes(search) || (u.mobile||'').includes(search));
+  document.getElementById('userCountLbl').textContent = usersData.length;
+  if (!list.length) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:24px;color:#90A4AE;">Koi user nahi mila</td></tr>';
+    return;
+  }
+  tbody.innerHTML = list.map(u => `
+    <tr>
+      <td><div class="user-cell"><div class="user-av">${(u.name||'U').slice(0,2).toUpperCase()}</div>
+        <div><div class="user-name">${u.name}</div><div class="user-id">${u.userId}</div></div></div></td>
+      <td>${u.mobile}</td>
+      <td>${u.stateField}</td>
+      <td>₹${u.walletNum.toLocaleString('en-IN')}</td>
+      <td><span class="status-chip ${u.status==='active'?'active':'inactive'}">${u.status}</span></td>
+      <td><span class="status-chip ${u.kyc==='approved'?'active':(u.kyc==='rejected'?'inactive':'pending')}">${u.kyc}</span></td>
+      <td style="font-size:12px;color:var(--muted);">${(u.joinDate||'').toString().slice(0,10)}</td>
+    </tr>`).join('');
+}
+
+// ============================================================
+//  ADD USER
+// ============================================================
+async function staffCreateUser() {
+  if (!hasPerm('addUser')) { toast('Aapko ye permission nahi di gayi hai!', 'error'); return; }
+
+  const name    = (document.getElementById('au-name')?.value || '').trim();
+  const mobile  = (document.getElementById('au-mobile')?.value || '').trim();
+  const email   = (document.getElementById('au-email')?.value || '').trim();
+  const shop    = (document.getElementById('au-shop')?.value || '').trim();
+  const state   = document.getElementById('au-state')?.value || '';
+  const city    = (document.getElementById('au-city')?.value || '').trim();
+  const password= (document.getElementById('au-password')?.value || '').trim();
+  const wallet  = parseFloat(document.getElementById('au-wallet')?.value || '0');
+  const type    = document.getElementById('au-type')?.value || 'Retailer';
+
+  if (!name)     { toast('Naam zaruri hai!', 'error'); return; }
+  if (!mobile || mobile.length < 10) { toast('Valid 10 digit mobile number daalen!', 'error'); return; }
+  if (!password) { toast('Password set karna zaruri hai!', 'error'); return; }
+  if (!state) { toast('State chunen!', 'error'); return; }
+
+  if (usersData.find(u => u.mobile === mobile)) { toast('Ye mobile number pehle se register hai!', 'error'); return; }
+
+  const uid = 'BJS' + Date.now().toString().slice(-6);
+
+  async function _hashPass(p) {
+    const enc = new TextEncoder();
+    const buf = await crypto.subtle.digest('SHA-256', enc.encode(p + 'jsk_salt_2024'));
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
+  const hashedPwd = await _hashPass(password);
+
+  const newUser = {
+    userId: uid, name, mobile, email, shop,
+    state: state + (city ? ', ' + city : ''),
+    city, password: hashedPwd, walletBal: wallet, type,
+    status: 'active', kyc: 'pending',
+    joinDate: new Date().toISOString(),
+    createdBy: staffSession.name, createdById: staffSession.staffId
+  };
+
+  if (window._FB) {
+    const { db, ref, set: fbSet } = window._FB;
+    try {
+      await fbSet(ref(db, 'users/' + uid), newUser);
+      if (wallet > 0) fbSet(ref(db, 'wallet_updates/' + uid), { balance: wallet, time: Date.now() }).catch(()=>{});
+    } catch(e) { toast('User create karne mein error aaya!', 'error'); return; }
+  } else {
+    toast('Database se connect nahi ho paya!', 'error'); return;
+  }
+
+  usersData.push(normalizeUsersStaff([newUser])[0]);
+  addStaffLog('User Created', name + ' (' + uid + ') — ' + type);
+
+  ['au-name','au-mobile','au-email','au-shop','au-city','au-password'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  document.getElementById('au-wallet').value = '0';
+
+  toast('✅ User ' + name + ' (' + uid + ') successfully create ho gaya!', 'success');
+  loadDashboardStats();
+}
+
+// ============================================================
+//  KYC
+// ============================================================
+function buildStaffKyc() {
+  const pending = usersData.filter(u => u.kyc === 'pending' || !u.kyc);
+  document.getElementById('sb-kyc-count').textContent = pending.length;
+  document.getElementById('stat-kyc-pending').textContent = pending.length;
+  // Topbar bell
+  const kycBell = document.getElementById('topbar-kyc-bell');
+  const kycBadgeEl = document.getElementById('topbar-kyc-badge');
+  if (kycBell && kycBadgeEl) {
+    kycBadgeEl.textContent = pending.length;
+    kycBell.style.display = (pending.length > 0 && (staffSession?.permissions?.kyc)) ? 'block' : 'none';
+  }
+  // Load submissions into new system
+  if (document.getElementById('page-kyc').classList.contains('active')) {
+    staffLoadKycSubmissions(kycActiveTab);
+  }
+}
+
+
+
+// ============================================================
+//  KYC — TAB SYSTEM + STATS + HOLD
+// ============================================================
+var kycActiveTab = 'pending';
+var _kycAllSubs = [];
+var _kycHoldUserId = '';
+
+function kycSwitchTab(tab) {
+  kycActiveTab = tab || 'pending';
+  // Tab buttons styling
+  var tabs = ['pending','approved','rejected','hold','all'];
+  var colors = { pending:'#FF6F00', approved:'#2E7D32', rejected:'#C62828', hold:'#7B1FA2', all:'#1565C0' };
+  tabs.forEach(function(t) {
+    var btn = document.getElementById('kyc-tab-' + t);
+    if (!btn) return;
+    if (t === kycActiveTab) {
+      btn.style.background = colors[t];
+      btn.style.color = '#fff';
+    } else {
+      btn.style.background = 'transparent';
+      btn.style.color = '#546E7A';
+    }
+  });
+  // Table heading update
+  var headings = { pending:'Pending KYC Submissions', approved:'Approved KYC', rejected:'Rejected KYC', hold:'Hold Pe Rakhe KYC', all:'Sab KYC Submissions' };
+  var icons = { pending:'fa-clock', approved:'fa-check-circle', rejected:'fa-times-circle', hold:'fa-pause-circle', all:'fa-list' };
+  var iconColors = { pending:'#FF6F00', approved:'#2E7D32', rejected:'#C62828', hold:'#7B1FA2', all:'#1565C0' };
+  var headEl = document.getElementById('kyc-table-heading');
+  if (headEl) headEl.innerHTML = '<i class="fas ' + (icons[tab]||'fa-list') + '" style="color:' + (iconColors[tab]||'#1565C0') + ';"></i> ' + (headings[tab]||'KYC Submissions');
+  staffLoadKycSubmissions(kycActiveTab);
+}
+
+function staffLoadKycSubmissions(filterStatus) {
+  if (!hasPerm('kyc')) return;
+  filterStatus = filterStatus || 'pending';
+  kycActiveTab = filterStatus;
+  const tbody = document.getElementById('kyc-submissions-tbody');
+  if (!tbody) return;
+  if (!window._FB) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:#90A4AE;">Firebase ready nahi hai</td></tr>';
+    return;
+  }
+  tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:24px;color:#1565C0;"><i class="fas fa-spinner fa-spin" style="font-size:22px;margin-bottom:8px;display:block;"></i>Loading KYC submissions...</td></tr>';
+  const { db, ref, get } = window._FB;
+  get(ref(db, 'kyc_submissions')).then(function(snap) {
+    if (!snap.exists()) {
+      _kycAllSubs = [];
+      kycUpdateStats([]);
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:#90A4AE;"><i class="fas fa-inbox" style="display:block;font-size:28px;margin-bottom:8px;opacity:.35;"></i>Koi KYC submission nahi aayi abhi tak</td></tr>';
+      return;
+    }
+    _kycAllSubs = Object.values(snap.val()).filter(function(s) { return !!s; });
+    kycUpdateStats(_kycAllSubs);
+    kycRenderTable(filterStatus, (document.getElementById('kyc-search-inp')||{}).value||'');
+    staffUpdateKycBadge();
+  }).catch(function(err) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:#c62828;"><i class="fas fa-exclamation-circle"></i> Error: ' + err.message + '</td></tr>';
+  });
+}
+
+function kycUpdateStats(all) {
+  var counts = { pending:0, approved:0, rejected:0, hold:0 };
+  all.forEach(function(s) {
+    var st = s.status || 'pending';
+    if (counts[st] !== undefined) counts[st]++;
+    else counts.pending++;
+  });
+  ['pending','approved','rejected','hold'].forEach(function(k) {
+    var el = document.getElementById('kyc-count-' + k);
+    var badge = document.getElementById('kyc-tab-badge-' + k);
+    if (el) el.textContent = counts[k];
+    if (badge) badge.textContent = counts[k];
+  });
+  // Alert banner
+  var alertBar = document.getElementById('kyc-alert-bar');
+  var alertTxt = document.getElementById('kyc-alert-text');
+  if (alertBar && alertTxt) {
+    alertBar.style.display = counts.pending > 0 ? 'flex' : 'none';
+    alertTxt.textContent = counts.pending;
+  }
+}
+
+function kycSearchFilter() {
+  kycRenderTable(kycActiveTab, (document.getElementById('kyc-search-inp')||{}).value||'');
+}
+
+function kycRenderTable(filterStatus, search) {
+  var tbody = document.getElementById('kyc-submissions-tbody');
+  if (!tbody) return;
+  search = (search||'').toLowerCase().trim();
+  var subs = filterStatus === 'all' ? _kycAllSubs : _kycAllSubs.filter(function(s) {
+    return (s.status||'pending') === filterStatus;
+  });
+  if (search) {
+    subs = subs.filter(function(s) {
+      return (s.userName||'').toLowerCase().includes(search) || (s.userId||'').toLowerCase().includes(search) || (s.docNumber||'').toLowerCase().includes(search);
+    });
+  }
+  if (!subs.length) {
+    var emptyMsgs = { pending:'<i class="fas fa-check-circle" style="color:#66BB6A;font-size:28px;display:block;margin-bottom:8px;"></i>Koi pending KYC nahi!', approved:'Koi approved KYC nahi', rejected:'Koi rejected KYC nahi', hold:'Koi hold KYC nahi', all:'Koi submission nahi mili' };
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:#90A4AE;">' + (emptyMsgs[filterStatus]||'Koi data nahi') + '</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = subs.map(function(s) {
+    // Document links
+    var docLinks = '';
+    if (s.docFrontUrl) docLinks += '<a href="' + s.docFrontUrl + '" target="_blank" style="display:inline-flex;align-items:center;gap:4px;background:#E3F2FD;color:#1565C0;padding:4px 8px;border-radius:6px;font-size:11px;font-weight:700;text-decoration:none;margin-right:4px;margin-bottom:3px;"><i class="fas fa-id-card"></i> Front</a>';
+    if (s.docBackUrl)  docLinks += '<a href="' + s.docBackUrl  + '" target="_blank" style="display:inline-flex;align-items:center;gap:4px;background:#E8F5E9;color:#2E7D32;padding:4px 8px;border-radius:6px;font-size:11px;font-weight:700;text-decoration:none;margin-right:4px;margin-bottom:3px;"><i class="fas fa-id-card"></i> Back</a>';
+    if (s.selfieUrl)   docLinks += '<a href="' + s.selfieUrl   + '" target="_blank" style="display:inline-flex;align-items:center;gap:4px;background:#FFF3E0;color:#E65100;padding:4px 8px;border-radius:6px;font-size:11px;font-weight:700;text-decoration:none;margin-right:4px;margin-bottom:3px;"><i class="fas fa-camera"></i> Selfie</a>';
+    if (!docLinks && s.docBase64) docLinks = '<a href="' + s.docBase64 + '" target="_blank" style="display:inline-flex;align-items:center;gap:5px;background:#E3F2FD;color:#1565C0;padding:5px 10px;border-radius:6px;font-size:12px;font-weight:700;text-decoration:none;"><i class="fas fa-eye"></i> View</a>';
+    if (!docLinks) docLinks = '<span style="color:#90A4AE;font-size:12px;">—</span>';
+
+    // Status badge
+    var statusChip = '';
+    var st = s.status || 'pending';
+    var statusMap = {
+      pending: '<span style="background:#FFF3E0;color:#E65100;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;"><i class="fas fa-clock"></i> Pending</span>',
+      approved: '<span style="background:#E8F5E9;color:#2E7D32;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;"><i class="fas fa-check-circle"></i> Approved</span>',
+      rejected: '<span style="background:#FFEBEE;color:#C62828;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;"><i class="fas fa-times-circle"></i> Rejected</span>',
+      hold: '<span style="background:#F3E5F5;color:#7B1FA2;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;"><i class="fas fa-pause-circle"></i> Hold</span>'
+    };
+    statusChip = statusMap[st] || statusMap.pending;
+
+    // Action buttons
+    var uid = s.userId || '';
+    var docType = s.docType || '';
+    var actionHtml = '';
+    if (st === 'pending' || st === 'hold') {
+      actionHtml = '<div style="display:flex;flex-direction:column;gap:5px;">'
+        + '<button class="btn-success" style="font-size:11px;padding:5px 12px;" onclick="staffApproveKycSubmission(\'' + uid + '\',\'' + docType + '\')"><i class="fas fa-check"></i> Approve</button>'
+        + '<button class="btn-danger" style="font-size:11px;padding:5px 12px;" onclick="staffRejectKycSubmission(\'' + uid + '\')"><i class="fas fa-times"></i> Reject</button>'
+        + '<button style="background:#7B1FA2;color:#fff;border:none;padding:5px 12px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;" onclick="openKycHoldModal(\'' + uid + '\')"><i class="fas fa-pause"></i> Hold</button>'
+        + '</div>';
+    } else if (st === 'approved') {
+      actionHtml = '<div style="font-size:11px;color:#546E7A;">'
+        + (s.approvedBy ? '<div>By: <strong>' + s.approvedBy + '</strong></div>' : '')
+        + (s.approvedAt ? '<div>' + s.approvedAt + '</div>' : '')
+        + '</div>';
+    } else if (st === 'rejected') {
+      actionHtml = '<div style="font-size:11px;color:#546E7A;">'
+        + (s.rejectReason ? '<div style="color:#C62828;font-weight:600;">' + s.rejectReason + '</div>' : '')
+        + (s.rejectedBy ? '<div>By: ' + s.rejectedBy + '</div>' : '')
+        + '</div>';
+    }
+
+    var initials = (s.userName||'U').split(' ').map(function(w){return w[0];}).join('').substring(0,2).toUpperCase();
+    return '<tr>'
+      + '<td><div class="user-cell"><div class="user-av" style="background:linear-gradient(135deg,#1565C0,#42A5F5);">' + initials + '</div>'
+      + '<div><div class="user-name">' + (s.userName||'—') + '</div><div class="user-id">' + (s.userId||'—') + '</div></div></div></td>'
+      + '<td><span style="background:#EDE7F6;color:#4527A0;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;">' + (s.docType||'—') + '</span></td>'
+      + '<td style="font-family:monospace;font-size:13px;font-weight:700;">' + (s.docNumber||'—') + '</td>'
+      + '<td style="font-size:12px;color:#546E7A;">' + (s.submittedAt||'—') + '</td>'
+      + '<td><div style="display:flex;flex-wrap:wrap;">' + docLinks + '</div></td>'
+      + '<td>' + statusChip + '</td>'
+      + '<td>' + actionHtml + '</td>'
+      + '</tr>';
+  }).join('');
+}
+
+function openKycHoldModal(uid) {
+  _kycHoldUserId = uid;
+  var modal = document.getElementById('kycHoldModal');
+  var reason = document.getElementById('kyc-hold-reason');
+  if (modal) { modal.style.display = 'flex'; }
+  if (reason) reason.value = '';
+}
+function closeKycHoldModal() {
+  var modal = document.getElementById('kycHoldModal');
+  if (modal) modal.style.display = 'none';
+  _kycHoldUserId = '';
+}
+function confirmKycHold() {
+  if (!hasPerm('kyc')) { toast('Permission nahi hai!', 'error'); return; }
+  var uid = _kycHoldUserId;
+  var reason = (document.getElementById('kyc-hold-reason')||{}).value || '';
+  if (!reason.trim()) { toast('Hold reason likhna zaruri hai!', 'error'); return; }
+  if (!window._FB) return;
+  const { db, ref, update } = window._FB;
+  update(ref(db, 'kyc_submissions/' + uid), { status: 'hold', holdReason: reason.trim(), heldAt: new Date().toLocaleString('en-IN'), heldBy: staffSession.name, heldById: staffSession.staffId }).then(function() {
+    // Also update in local cache
+    var idx = _kycAllSubs.findIndex(function(s) { return s.userId === uid; });
+    if (idx >= 0) { _kycAllSubs[idx].status = 'hold'; _kycAllSubs[idx].holdReason = reason; }
+    addStaffLog('KYC Hold', uid + ' — ' + reason);
+    toast('⏸ KYC Hold pe rakh diya gaya.', 'success');
+    closeKycHoldModal();
+    kycUpdateStats(_kycAllSubs);
+    kycRenderTable(kycActiveTab, '');
+    staffUpdateKycBadge();
+  }).catch(function(err) { toast('Error: ' + err.message, 'error'); });
+}
+
+function staffApproveKycSubmission(uid, docType) {
+  if (!hasPerm('kyc')) { toast('Permission nahi hai!', 'error'); return; }
+  if (!window._FB) return;
+  const { db, ref, update } = window._FB;
+  update(ref(db, 'users/' + uid), { kyc: 'approved', kycDoc: docType }).then(function() {
+    return update(ref(db, 'kyc_submissions/' + uid), { status: 'approved', approvedAt: new Date().toLocaleString('en-IN'), approvedBy: staffSession.name, approvedById: staffSession.staffId });
+  }).then(function() {
+    const midx = usersData.findIndex(function(u) { return u.userId === uid; });
+    if (midx >= 0) { usersData[midx].kyc = 'approved'; usersData[midx].kycDoc = docType; }
+    addStaffLog('KYC Submission Approved', uid + (docType ? ' — ' + docType : ''));
+    toast('✅ KYC Approved! User verified ho gaya.', 'success');
+    staffLoadKycSubmissions(kycActiveTab);
+    buildStaffKyc();
+    staffUpdateKycBadge();
+  }).catch(function(err) { toast('❌ Error: ' + err.message, 'error'); });
+}
+
+function staffRejectKycSubmission(uid) {
+  if (!hasPerm('kyc')) { toast('Permission nahi hai!', 'error'); return; }
+  const reason = prompt('KYC Reject karne ka karan likhein (user ko dikhega):') || 'Documents valid nahi hain.';
+  if (!window._FB) return;
+  const { db, ref, update } = window._FB;
+  update(ref(db, 'users/' + uid), { kyc: 'rejected', kycRejectReason: reason }).then(function() {
+    return update(ref(db, 'kyc_submissions/' + uid), { status: 'rejected', rejectedAt: new Date().toLocaleString('en-IN'), rejectReason: reason, rejectedBy: staffSession.name, rejectedById: staffSession.staffId });
+  }).then(function() {
+    const midx = usersData.findIndex(function(u) { return u.userId === uid; });
+    if (midx >= 0) usersData[midx].kyc = 'rejected';
+    addStaffLog('KYC Submission Rejected', uid + ' — ' + reason);
+    toast('KYC Rejected ✗', 'error');
+    staffLoadKycSubmissions(kycActiveTab);
+    buildStaffKyc();
+    staffUpdateKycBadge();
+  }).catch(function(err) { toast('❌ Error: ' + err.message, 'error'); });
+}
+
+function staffUpdateKycBadge() {
+  if (!window._FB) return;
+  const { db, ref, get } = window._FB;
+  get(ref(db, 'kyc_submissions')).then(function(snap) {
+    if (!snap.exists()) { const el = document.getElementById('sb-kyc-count'); if(el) { el.textContent = '0'; } return; }
+    const pending = Object.values(snap.val()).filter(function(s) { return s && s.status === 'pending'; }).length;
+    const el = document.getElementById('sb-kyc-count');
+    if (el) { el.textContent = pending; el.style.display = pending > 0 ? '' : 'none'; }
+  }).catch(function() {});
+}
+
+// ============================================================
+//  WALLET REQUESTS
+// ============================================================
+function normalizeWalletReq(sr, fbNodeKey) {
+  if (!sr || !sr.id) return null;
+  const uObj  = usersData.find(u => u.userId === sr.userId);
+  const uName = (uObj && uObj.name) ? uObj.name : (sr.user || 'User');
+  return {
+    id: sr.id, user: uName, userId: sr.userId || '---',
+    avatar: uName.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(),
+    amount: parseFloat(sr.amount) || 0, method: sr.method || '', utr: sr.utr || '',
+    note: sr.note || '', time: sr.time || '', status: sr.status || 'pending',
+    screenshotUrl: sr.screenshotUrl || '', screenshotData: sr.screenshotData || '',
+    hasScreenshot: !!(sr.screenshotUrl || sr.screenshotData || sr.hasScreenshot),
+    approvedBy: sr.approvedBy || '', approvedById: sr.approvedById || '', approveTime: sr.approveTime || '',
+    rejectReason: sr.rejectReason || '', _fbKey: sr._fbKey || fbNodeKey || null
+  };
+}
+
+function loadWalletRequests() {
+  if (!window._FB) return;
+  const { db, ref, onValue } = window._FB;
+  onValue(ref(db, 'wallet_requests'), function(snap) {
+    const raw = snap.val();
+    if (!raw) { walletRequests = []; renderWalletRequests(document.getElementById('wr-filter').value); loadDashboardStats(); return; }
+    walletRequests = Object.entries(raw)
+      .map(([k, v]) => normalizeWalletReq(v, k))
+      .filter(Boolean)
+      .sort((a,b) => (b.id > a.id) ? 1 : -1);
+    renderWalletRequests(document.getElementById('wr-filter').value);
+    loadDashboardStats();
+  });
+}
+
+function renderWalletRequests(filter) {
+  filter = filter || 'all';
+  const list = document.getElementById('walletRequestsList');
+  const pendingCount = walletRequests.filter(r=>r.status==='pending').length;
+  const approvedCount = walletRequests.filter(r=>r.status==='approved').length;
+  const rejectedCount = walletRequests.filter(r=>r.status==='rejected').length;
+
+  // Stats update
+  const el = (id, v) => { const e = document.getElementById(id); if(e) e.textContent = v; };
+  el('wa-pending-count', pendingCount);
+  el('wa-approved-count', approvedCount);
+  el('wa-rejected-count', rejectedCount);
+  el('sb-wr-count', pendingCount);
+  el('stat-wr-pending', pendingCount);
+
+  // Pending alert banner
+  const alertEl = document.getElementById('wr-pending-alert');
+  const alertTxt = document.getElementById('wr-alert-text');
+  if (alertEl) alertEl.style.display = pendingCount > 0 ? 'flex' : 'none';
+  if (alertTxt) alertTxt.textContent = pendingCount;
+
+  // Topbar bell
+  const walletBell = document.getElementById('topbar-wallet-bell');
+  const walletBadgeEl = document.getElementById('topbar-wallet-badge');
+  if (walletBell && walletBadgeEl) {
+    walletBadgeEl.textContent = pendingCount;
+    walletBell.style.display = (pendingCount > 0 && staffSession?.permissions?.wallet) ? 'block' : 'none';
+  }
+
+  let shown = filter === 'all' ? walletRequests : walletRequests.filter(r => r.status === filter);
+
+  if (!shown.length) {
+    list.innerHTML = `<div style="text-align:center;padding:60px 20px;background:#fff;border-radius:14px;box-shadow:var(--card-shadow);">
+      <i class="fas fa-check-circle" style="font-size:48px;color:var(--green);margin-bottom:16px;display:block;"></i>
+      <div style="font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;color:var(--text);">Koi Request Nahi!</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:6px;">Is filter mein koi requests nahi hain.</div>
+    </div>`;
+    return;
+  }
+
+  const avatarColors = ['#1565C0','#2E7D32','#E65100','#7B1FA2','#00695C'];
+
+  list.innerHTML = shown.map((req) => {
+    const idx = walletRequests.indexOf(req);
+    const doneClass = req.status === 'approved' ? 'approved' : (req.status === 'rejected' ? 'rejected' : '');
+    const avatarColor = avatarColors[idx % avatarColors.length];
+    const isPending = req.status === 'pending';
+
+    // Screenshot HTML
+    let ssHtml = '';
+    if (req.screenshotUrl && req.screenshotUrl.startsWith('http')) {
+      ssHtml = `<div class="ar-ss" onclick="openSsModal(${idx})">
+        <img src="${req.screenshotUrl}" style="width:100%;height:120px;object-fit:cover;display:block;" alt="Payment Screenshot"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div style="display:none;background:linear-gradient(135deg,#E3F2FD,#E8F5E9);height:120px;align-items:center;justify-content:center;gap:10px;">
+          <i class="fas fa-image" style="font-size:32px;color:#90A4AE;"></i>
+          <div style="font-size:13px;color:#546E7A;"><strong>Payment Screenshot</strong><br><span style="font-size:11px;">Image load nahi hui</span></div>
+        </div>
+        <div class="ar-ss-overlay"><span><i class="fas fa-search-plus"></i> Screenshot Dekhen</span></div>
+      </div>`;
+    } else if (req.hasScreenshot || req.screenshotData) {
+      const imgSrc = req.screenshotData || '';
+      ssHtml = `<div class="ar-ss" onclick="openSsModal(${idx})">
+        ${imgSrc ? `<img src="${imgSrc}" style="width:100%;height:120px;object-fit:cover;display:block;" alt="Payment Screenshot">` :
+          `<div style="background:linear-gradient(135deg,#E3F2FD,#E8F5E9);height:120px;display:flex;align-items:center;justify-content:center;gap:10px;">
+            <i class="fas fa-image" style="font-size:32px;color:#90A4AE;"></i>
+            <div style="font-size:13px;color:#546E7A;"><strong>Payment Screenshot</strong><br><span style="font-size:11px;">Click karke dekhen</span></div>
+          </div>`}
+        <div class="ar-ss-overlay"><span><i class="fas fa-search-plus"></i> Screenshot Dekhen</span></div>
+      </div>`;
+    } else {
+      ssHtml = `<div style="background:linear-gradient(135deg,#F8FBFF,#EFF3FF);border-radius:10px;height:80px;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px;border:1.5px dashed #C5D8F8;">
+        <i class="fas fa-image" style="font-size:22px;color:#B0BEC5;"></i>
+        <span style="font-size:12px;color:#90A4AE;">Screenshot nahi mili</span>
+      </div>`;
+    }
+
+    // Action HTML
+    let actionHtml = '';
+    if (isPending) {
+      actionHtml = `<div class="ar-actions" id="ar-action-${idx}">
+        <div style="flex:1;">
+          <textarea id="ar-reason-${idx}" placeholder="Reason / Note (reject ke liye zaruri, approve ke liye optional)..."
+            style="width:100%;padding:10px 14px;border:1.5px solid #C5D8F8;border-radius:10px;font-family:'Hind',sans-serif;font-size:13px;outline:none;resize:none;min-height:70px;box-sizing:border-box;"></textarea>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <button class="btn-approve" onclick="staffApproveWalletReq(${idx})"><i class="fas fa-check"></i> Approve</button>
+          <button class="btn-reject" onclick="staffRejectWalletReq(${idx})"><i class="fas fa-times"></i> Reject</button>
+        </div>
+      </div>`;
+    } else {
+      actionHtml = `<div class="ar-status-done ${doneClass}">
+        <i class="fas fa-${req.status==='approved'?'check-circle':'times-circle'}"></i>
+        ${req.status==='approved' ? 'Approved' : 'Rejected'} by ${req.approvedBy || 'Staff'} &nbsp;·&nbsp; ${req.approveTime || ''}
+        ${req.rejectReason ? `<div class="ar-reson-show">Karan: ${req.rejectReason}</div>` : ''}
+      </div>`;
+    }
+
+    return `<div class="approval-row ${doneClass}" id="ar-row-${idx}">
+      <div class="ar-top">
+        <div class="ar-user">
+          <div class="ar-av" style="background:linear-gradient(135deg,${avatarColor},${avatarColor}99);">${req.avatar || '?'}</div>
+          <div>
+            <div class="ar-name">${req.user}</div>
+            <div class="ar-id">${req.userId} &nbsp;·&nbsp; ${req.time || ''}</div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div class="ar-amt">₹${req.amount.toLocaleString('en-IN')}</div>
+          <div class="ar-req-id">Req ID: ${req.id}</div>
+        </div>
+      </div>
+
+      <div class="ar-details">
+        <div class="ar-detail-item">
+          <div class="ar-detail-label">Payment Method</div>
+          <div class="ar-detail-val"><i class="fas fa-mobile-alt" style="color:var(--primary);margin-right:5px;"></i>${req.method || '—'}</div>
+        </div>
+        <div class="ar-detail-item">
+          <div class="ar-detail-label">UTR / Transaction ID</div>
+          <div class="ar-detail-val" style="font-family:monospace;font-size:12px;">${req.utr || '—'}</div>
+        </div>
+        <div class="ar-detail-item">
+          <div class="ar-detail-label">Note</div>
+          <div class="ar-detail-val">${req.note || '—'}</div>
+        </div>
+      </div>
+
+      ${ssHtml}
+      ${actionHtml}
+    </div>`;
+  }).join('');
+}
+
+function staffApproveWalletReq(idx) {
+  if (!hasPerm('wallet')) { toast('Permission nahi hai!', 'error'); return; }
+  const req = walletRequests[idx];
+  const approveTime = new Date().toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  req.status = 'approved'; req.approvedBy = staffSession.name; req.approvedById = staffSession.staffId; req.approveTime = approveTime;
+
+  const uid = req.userId;
+  if (uid && window._FB) {
+    const { db, ref, get: fbGet, set: fbSet, update: fbUpdate } = window._FB;
+    const uObj = usersData.find(u => u.userId === uid);
+    const curBal = uObj ? uObj.walletNum : 0;
+    const newBal = +(curBal + req.amount).toFixed(2);
+    fbSet(ref(db, 'wallet_updates/' + uid), { balance: newBal, time: Date.now() }).catch(()=>{});
+    fbSet(ref(db, 'users/' + uid + '/walletBal'), newBal).catch(()=>{});
+    fbUpdate(ref(db, 'user_transactions/' + uid + '/' + req.id), { status: 'approved', approveTime }).catch(() => {
+      fbSet(ref(db, 'user_transactions/' + uid + '/' + req.id), { id: req.id, title: 'Wallet Recharge', amount: req.amount, utr: req.utr, method: req.method, time: approveTime, type: 'recharge', status: 'approved' }).catch(()=>{});
+    });
+    if (uObj) uObj.walletNum = newBal;
+  }
+  if (window._FB && req._fbKey) {
+    const { db, ref, update: fbUpdate } = window._FB;
+    fbUpdate(ref(db, 'wallet_requests/' + req._fbKey), { status: 'approved', approvedBy: staffSession.name, approvedById: staffSession.staffId, approveTime, rejectReason: '' }).catch(()=>{});
+  }
+  addStaffLog('Wallet Approved', req.user + ' (' + uid + ') — ₹' + req.amount);
+  toast(`✓ ${req.user} ka ₹${req.amount} wallet request APPROVE ho gaya!`, 'success');
+  renderWalletRequests(document.getElementById('wr-filter').value);
+  loadDashboardStats();
+}
+
+function staffRejectWalletReq(idx) {
+  if (!hasPerm('wallet')) { toast('Permission nahi hai!', 'error'); return; }
+  const reason = document.getElementById('ar-reason-'+idx).value.trim();
+  if (!reason) { toast('Reject karne ke liye reason likhna zaruri hai!', 'error'); return; }
+  const req = walletRequests[idx];
+  const approveTime = new Date().toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  req.status = 'rejected'; req.approvedBy = staffSession.name; req.approvedById = staffSession.staffId; req.approveTime = approveTime; req.rejectReason = reason;
+
+  if (window._FB && req._fbKey) {
+    const { db, ref, update: fbUpdate, set: fbSet } = window._FB;
+    fbUpdate(ref(db, 'wallet_requests/' + req._fbKey), { status: 'rejected', approvedBy: staffSession.name, approvedById: staffSession.staffId, approveTime, rejectReason: reason }).catch(()=>{});
+    if (req.userId && req.id) {
+      const safeId = req.id.replace(/[.#$/[\]]/g, '_');
+      fbUpdate(ref(db, 'user_transactions/' + req.userId + '/' + safeId), { status: 'rejected', rejectReason: reason, approveTime }).catch(() => {
+        fbSet(ref(db, 'user_transactions/' + req.userId + '/' + safeId), { id: req.id, title: 'Wallet Recharge', amount: req.amount, utr: req.utr||'', method: req.method||'', time: approveTime, type: 'recharge', status: 'rejected', rejectReason: reason }).catch(()=>{});
+      });
+    }
+  }
+  addStaffLog('Wallet Rejected', req.user + ' (' + req.userId + ') — ₹' + req.amount + ' — ' + reason);
+  toast(`✗ ${req.user} ka wallet request REJECT kar diya.`, 'error');
+  renderWalletRequests(document.getElementById('wr-filter').value);
+  loadDashboardStats();
+}
+
+function openSsModal(idx) {
+  const req = walletRequests[idx];
+  document.getElementById('ssModalImg').src = req.screenshotUrl || req.screenshotData || '';
+  document.getElementById('ssModal').classList.add('show');
+}
+function closeSsModal() { document.getElementById('ssModal').classList.remove('show'); }
+
+// ============================================================
+//  COMPLAINTS
+// ============================================================
+function startComplaintsBadgeSync() {
+  if (!window._FB) return;
+  const { db, ref, onValue } = window._FB;
+  onValue(ref(db, 'complaints'), function(snap) {
+    const list = [];
+    if (snap.exists()) snap.forEach(child => { const c = child.val() || {}; c._fbKey = child.key; if (!c.id) c.id = child.key; list.push(c); });
+    list.reverse();
+    _complaintsCache = list;
+    const open = list.filter(c => (c.status||'').toLowerCase() !== 'resolved').length;
+    document.getElementById('sb-complaint-count').textContent = open;
+    document.getElementById('stat-complaints-open').textContent = open;
+    if (document.getElementById('page-complaints').classList.contains('active')) renderStaffComplaints(list);
+  });
+}
+
+function loadStaffComplaints() {
+  renderStaffComplaints(_complaintsCache);
+}
+
+function renderStaffComplaints(complaints) {
+  const tbody = document.getElementById('complaints-tbody');
+  if (!complaints.length) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:24px;color:#90A4AE;"><i class="fas fa-inbox" style="display:block;font-size:22px;margin-bottom:6px;opacity:.4;"></i>Koi complaint nahi abhi tak</td></tr>';
+    return;
+  }
+  tbody.innerHTML = complaints.map((c, i) => `
+    <tr>
+      <td><strong>${c.id || ('CMP'+i)}</strong></td>
+      <td>${c.userName || c.userId || '—'}</td>
+      <td>${c.service || '—'}</td>
+      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${(c.desc||'').replace(/"/g,"'")}">${c.desc || '—'}</td>
+      <td><span class="priority-chip ${(c.priority||'medium').toLowerCase()}">${c.priority || 'Normal'}</span></td>
+      <td><span class="status-chip ${c.status==='Resolved'?'active':(c.status==='In Progress'?'pending':'inactive')}">${c.status || 'Pending'}</span></td>
+      <td>
+        ${c.status === 'Resolved'
+          ? '<span class="status-chip active"><i class="fas fa-check-circle"></i> Solved</span>'
+          : `<button class="btn-success" style="font-size:11px;padding:4px 10px;" onclick="staffComplaintStatus('${c.id||i}','Resolved')">✓ Resolve</button>
+             <button class="btn-primary" style="font-size:11px;padding:4px 10px;background:#1565C0;" onclick="staffComplaintStatus('${c.id||i}','In Progress')">⏳ In Progress</button>`}
+      </td>
+    </tr>`).join('');
+}
+
+function staffComplaintStatus(id, status) {
+  if (!hasPerm('complaints')) { toast('Permission nahi hai!', 'error'); return; }
+  const idx = _complaintsCache.findIndex(c => c.id === id || String(c.id) === String(id));
+  if (idx < 0) return;
+  const nowStr = new Date().toLocaleString('en-IN');
+  const patch = { status, updatedBy: staffSession.name, updatedById: staffSession.staffId, updatedAt: nowStr };
+  if (status === 'Resolved') { patch.resolvedBy = staffSession.name; patch.resolvedById = staffSession.staffId; patch.resolvedAt = nowStr; }
+  Object.assign(_complaintsCache[idx], patch);
+  const fbKey = _complaintsCache[idx]._fbKey;
+  if (window._FB && fbKey) {
+    const { db, ref, update } = window._FB;
+    update(ref(db, 'complaints/' + fbKey), patch).catch(()=>{});
+  }
+  addStaffLog('Complaint Updated', (_complaintsCache[idx].userName||id) + ' — status: ' + status);
+  toast('Complaint status update ho gaya: ' + status, 'success');
+  renderStaffComplaints(_complaintsCache);
+}
+
+// ============================================================
+//  PAN APPLICATIONS
+// ============================================================
+
+let _panAppsUnsubscribers = [];
+function loadStaffPanApps() {
+  if (!staffSession || !hasPerm('panApplications')) return;
+  if (!window._FB) { window.addEventListener('firebase-ready', loadStaffPanApps, { once: true }); return; }
+  const { db, ref, onValue } = window._FB;
+  const tbody = document.getElementById('pan-apps-tbody');
+  tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:24px;color:#90A4AE;">Loading...</td></tr>';
+
+  // Pehle wale listeners hatao
+  _panAppsUnsubscribers.forEach(fn => fn());
+  _panAppsUnsubscribers = [];
+
+  // Chaaro paths ka combined data store
+  const _segments = { nsdl: [], corr: [], uti: [], utic: [] };
+
+  function rebuildCache() {
+    _panAppsCache = [
+      ..._segments.nsdl,
+      ..._segments.corr,
+      ..._segments.uti,
+      ..._segments.utic
+    ];
+    _panAppsCache.sort((a, b) => parseStaffDT(b.datetime || b.createdAt) - parseStaffDT(a.datetime || a.createdAt));
+    document.getElementById('sb-pan-count').textContent = _panAppsCache.filter(a => (a.status || 'Pending') === 'Pending').length;
+    renderStaffPanApps();
+  }
+
+  const paths = [
+    { key: 'nsdl', path: 'pan_applications',  type: 'NSDL New'       },
+    { key: 'corr', path: 'pan_corrections',   type: 'Correction'     },
+    { key: 'uti',  path: 'uti_applications',  type: 'UTI'            },
+    { key: 'utic', path: 'uti_corrections',   type: 'UTI Correction' }
+  ];
+
+  paths.forEach(({ key, path, type }) => {
+    const unsub = onValue(ref(db, path), function(snap) {
+      _segments[key] = [];
+      if (snap.exists()) snap.forEach(c => {
+        const v = c.val();
+        // ✅ FIX: Agar UTI Correction application galti se 'uti_applications' path mein
+        // save/approve ho gayi ho, toh record ke apne corrType/appType/ack field se
+        // asli type pehchano — sirf Firebase path (folder) par bharosa mat karo.
+        let resolvedType = type;
+        const ackVal = String(v.ack || c.key || '');
+        const looksLikeCorrection = !!v.corrType || (v.appType && String(v.appType).toLowerCase().includes('correction'));
+        if (path === 'uti_applications' && (looksLikeCorrection || ackVal.indexOf('UTIC') === 0)) {
+          resolvedType = 'UTI Correction';
+        } else if (path === 'pan_applications' && looksLikeCorrection) {
+          resolvedType = 'Correction';
+        }
+        _segments[key].push({ ...v, _key: c.key, _type: resolvedType, _srcPath: path });
+      });
+      rebuildCache();
+    }, function(err) {
+      // Path exist nahi karta — silently skip, baaki data dikhata raho
+      console.warn('PAN path skip (' + path + '):', err.message || err);
+      _segments[key] = [];
+      rebuildCache();
+    });
+    _panAppsUnsubscribers.push(unsub);
+  });
+}
+
+let staffPanCurrentTab = 'all';
+
+function switchStaffPanTab(tab, el) {
+  staffPanCurrentTab = tab;
+  document.querySelectorAll('#page-pan-applications .pan-tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderStaffPanApps();
+}
+
+// ✅ Stat cards (Pending/Under Process/Approved/Rejected) par click karne se
+// us status ke hisaab se list filter ho jaye — corresponding tab button khud activate ho jata hai.
+function staffPanStatClick(status) {
+  const tabId = 'pan-tab-' + status.replace(/\s+/g, '');
+  const tabBtn = document.getElementById(tabId);
+  switchStaffPanTab(status, tabBtn);
+  const tableCard = document.querySelector('#page-pan-applications .table-card');
+  if (tableCard) tableCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function updateStaffPanStats() {
+  const all = _panAppsCache;
+  const pending = all.filter(a => (a.status || 'Pending') === 'Pending').length;
+  const processing = all.filter(a => a.status === 'Under Process').length;
+  const approved = all.filter(a => a.status === 'Approved').length;
+  const rejected = all.filter(a => a.status === 'Rejected').length;
+  const el = id => document.getElementById(id);
+  if (el('psf-pending')) el('psf-pending').textContent = pending;
+  if (el('psf-processing')) el('psf-processing').textContent = processing;
+  if (el('psf-approved')) el('psf-approved').textContent = approved;
+  if (el('psf-rejected')) el('psf-rejected').textContent = rejected;
+  if (el('psftc-all')) el('psftc-all').textContent = all.length;
+  if (el('psftc-nsdl')) el('psftc-nsdl').textContent = all.filter(a => a._type === 'NSDL New').length;
+  if (el('psftc-corr')) el('psftc-corr').textContent = all.filter(a => a._type === 'Correction').length;
+  if (el('psftc-uti')) el('psftc-uti').textContent = all.filter(a => a._type === 'UTI').length;
+  if (el('psftc-utic')) el('psftc-utic').textContent = all.filter(a => a._type === 'UTI Correction').length;
+  if (el('psftc-pending')) el('psftc-pending').textContent = pending;
+  if (el('psftc-processing')) el('psftc-processing').textContent = processing;
+  if (el('psftc-approved')) el('psftc-approved').textContent = approved;
+  if (el('psftc-rejected')) el('psftc-rejected').textContent = rejected;
+}
+
+function renderStaffPanApps() {
+  const tbody = document.getElementById('pan-apps-tbody');
+  const filter = (document.getElementById('pan-filter') || {}).value || 'all';
+  const search = ((document.getElementById('pan-search') || {}).value || '').toLowerCase();
+
+  updateStaffPanStats();
+
+  let list = _panAppsCache;
+  // Tab filter: type tabs (NSDL New / Correction / UTI) ya status tabs (Pending/Under Process/Approved/Rejected)
+  if (['NSDL New', 'Correction', 'UTI', 'UTI Correction'].includes(staffPanCurrentTab)) {
+    list = list.filter(a => a._type === staffPanCurrentTab);
+  } else if (['Pending', 'Under Process', 'Approved', 'Rejected'].includes(staffPanCurrentTab)) {
+    list = list.filter(a => (a.status || 'Pending') === staffPanCurrentTab);
+  }
+  // Status dropdown filter (additional, independent of tab)
+  if (filter !== 'all') list = list.filter(a => (a.status || 'Pending') === filter);
+  if (search) list = list.filter(a =>
+    (a.naam || a.name || '').toLowerCase().includes(search) ||
+    (a.ack || a.ackNo || a.applicationNo || '').toLowerCase().includes(search) ||
+    (a.mobile || '').toLowerCase().includes(search) ||
+    (a.userId || a.userid || a.uid || '').toLowerCase().includes(search) ||
+    (a.shop || a.shopName || '').toLowerCase().includes(search) ||
+    (a.aadhar || a.aadhaar || '').toLowerCase().includes(search) ||
+    (a.dob || '').toLowerCase().includes(search)
+  );
+  document.getElementById('pan-count-lbl').textContent = list.length;
+  if (!list.length) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:24px;color:#90A4AE;">Koi application nahi mili</td></tr>';
+    return;
+  }
+  const statusColor = { Approved: '#2E7D32', Rejected: '#C62828', Pending: '#E65100', 'Under Process': '#1565C0', Hold: '#6A1B9A' };
+  tbody.innerHTML = list.map((a, i) => {
+    const st = a.status || 'Pending';
+    const sc = statusColor[st] || '#607D8B';
+    const realIdx = _panAppsCache.indexOf(a);
+    return `<tr>
+      <td style="font-family:monospace;font-size:12px;">${a.ack || a.ackNo || a.applicationNo || '—'}</td>
+      <td><b>${a.naam || a.name || '—'}</b><br><span style="font-size:11px;color:#90A4AE;">DOB: ${a.dob || '—'}</span><br><span style="font-size:11px;color:#90A4AE;font-family:monospace;">Aadhar: ${a.aadhar || a.aadhaar || '—'}</span></td>
+      <td>${a.mobile || '—'}</td>
+      <td><span style="font-size:12px;font-weight:700;color:#1565C0;">${a.userId || a.userid || a.uid || '—'}</span><br><span style="font-size:11px;color:#90A4AE;">${a.shop || a.shopName || '—'}</span></td>
+      <td><span style="background:${a._type==='NSDL New'?'#E3F2FD':a._type==='Correction'?'#FFF3E0':a._type==='UTI'?'#EDE7F6':'#FCE4EC'};color:${a._type==='NSDL New'?'#1565C0':a._type==='Correction'?'#E65100':a._type==='UTI'?'#6A1B9A':'#AD1457'};font-size:11px;padding:2px 8px;border-radius:50px;font-weight:700;">${a._type==='NSDL New'?'NSDL New':a._type==='Correction'?'NSDL Correction':a._type==='UTI'?'UTI New':'UTI Correction'}</span></td>
+      <td style="font-size:12px;">${a.datetime || a.createdAt || '—'}</td>
+      <td><span style="background:${sc}20;color:${sc};font-size:11px;padding:3px 10px;border-radius:50px;font-weight:700;">${st}</span></td>
+      <td>
+        <div style="display:flex;flex-direction:column;gap:5px;min-width:160px;">
+          <button onclick="openStaffPanAppModal(${realIdx})" style="background:#1565C0;color:#fff;border:none;border-radius:6px;padding:8px 10px;font-size:12.5px;font-weight:600;cursor:pointer;width:100%;"><i class="fas fa-eye"></i> Detail / Doc</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function staffPanExportCSV() {
+  if (!_panAppsCache.length) { toast('Export karne ke liye koi data nahi hai', 'error'); return; }
+  const rows = [['ACK No', 'Naam', 'Mobile', 'DOB', 'Aadhar', 'Applied By (User ID)', 'Shop Name', 'Type', 'Date', 'Status']];
+  _panAppsCache.forEach(a => {
+    rows.push([
+      a.ack || a.ackNo || a.applicationNo || '',
+      a.naam || a.name || '',
+      a.mobile || '',
+      a.dob || '',
+      a.aadhar || a.aadhaar || '',
+      a.userId || a.userid || a.uid || '',
+      a.shop || a.shopName || '',
+      a._type || '',
+      a.datetime || a.createdAt || '',
+      a.status || 'Pending'
+    ]);
+  });
+  const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'pan-applications-' + new Date().toISOString().slice(0, 10) + '.csv';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+  toast('✅ CSV download ho gaya', 'success');
+}
+
+function updateStaffPanStatus(idx, newStatus, sel) {
+  if (!newStatus) return;
+  sel.value = '';
+  const app = _panAppsCache[idx];
+  if (!app) return;
+
+  // Reject/Hold ke liye reason zaruri hai (user/admin ko dikhega)
+  let reason = '';
+  if (newStatus === 'Rejected') {
+    reason = prompt('PAN Application Reject karne ka karan likhein:') || '';
+    if (!reason.trim()) { toast('Reject karne ke liye reason likhna zaruri hai!', 'error'); return; }
+  } else if (newStatus === 'Hold') {
+    reason = prompt('PAN Application Hold karne ka karan likhein:') || '';
+    if (!reason.trim()) { toast('Hold karne ke liye reason likhna zaruri hai!', 'error'); return; }
+  }
+
+  if (!window._FB) { toast('Database connect nahi hai!', 'error'); return; }
+  const { db, ref, update } = window._FB;
+  const pathMap = { 'NSDL New': 'pan_applications', 'Correction': 'pan_corrections', 'UTI': 'uti_applications', 'UTI Correction': 'uti_corrections' };
+  const fbPath = (app._srcPath || pathMap[app._type] || 'pan_applications') + '/' + app._key;
+  const nowIso = new Date().toISOString();
+  const nowStr = new Date().toLocaleString('en-IN');
+
+  const payload = { status: newStatus, updatedAt: nowIso, updatedBy: staffSession.name, updatedById: staffSession.staffId };
+  if (newStatus === 'Approved') {
+    payload.approvedBy = staffSession.name; payload.approvedById = staffSession.staffId; payload.approvedAt = nowStr;
+  } else if (newStatus === 'Rejected') {
+    payload.rejectedBy = staffSession.name; payload.rejectedById = staffSession.staffId; payload.rejectedAt = nowStr; payload.rejectReason = reason.trim();
+  } else if (newStatus === 'Hold') {
+    payload.heldBy = staffSession.name; payload.heldById = staffSession.staffId; payload.heldAt = nowStr; payload.holdReason = reason.trim();
+  }
+
+  update(ref(db, fbPath), payload).then(() => {
+    Object.assign(app, payload);
+    addStaffLog('PAN Status Update', (app.naam || app.name || app._key) + ' → ' + newStatus + (reason ? ' — ' + reason : ''));
+    toast('✅ Status update ho gaya: ' + newStatus, 'success');
+    renderStaffPanApps();
+    document.getElementById('sb-pan-count').textContent = _panAppsCache.filter(a => (a.status || 'Pending') === 'Pending').length;
+    // ✅ Approve/Reject/Hold ke baad detail modal apne aap band ho jaye
+    if (staffPanModalIdx === idx) closeStaffPanAppModal();
+  }).catch(() => toast('Update failed! Dobara try karen.', 'error'));
+}
+
+// ============================================================
+//  PAN APPLICATION DETAIL MODAL — Customer Doc Download + Slip Upload
+// ============================================================
+function openStaffPanAppModal(idx) {
+  const a = _panAppsCache[idx];
+  if (!a) return;
+  staffPanModalIdx = idx;
+  const statusColor = { Approved: '#2E7D32', Rejected: '#C62828', Pending: '#E65100', 'Under Process': '#1565C0', Hold: '#6A1B9A' };
+  const st = a.status || 'Pending';
+  const sc = statusColor[st] || '#607D8B';
+
+  const provider = (a._type === 'UTI' || a._type === 'UTI Correction') ? 'UTI' : 'NSDL';
+  const providerColor = a._type === 'UTI' ? '#6A1B9A' : a._type === 'UTI Correction' ? '#AD1457' : '#1565C0';
+  const typeLabel = a._type === 'NSDL New' ? 'NSDL New' : a._type === 'Correction' ? 'NSDL Correction' : a._type === 'UTI' ? 'UTI New' : 'UTI Correction';
+  document.getElementById('spam-title').innerHTML = `<i class="fas fa-id-card" style="color:var(--primary);margin-right:8px;"></i><span style="background:${providerColor};color:#fff;font-size:11px;padding:3px 10px;border-radius:50px;margin-right:8px;">${typeLabel}</span>${(a._type === 'Correction' || a._type === 'UTI Correction') ? 'Correction' : 'New PAN'} — ${a.ack || a.ackNo || a.applicationNo || a._key}`;
+
+  let html = `<div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+    <span style="background:${a._type==='NSDL New'?'#E3F2FD':a._type==='Correction'?'#FFF3E0':a._type==='UTI'?'#EDE7F6':'#FCE4EC'};color:${a._type==='NSDL New'?'#1565C0':a._type==='Correction'?'#E65100':a._type==='UTI'?'#6A1B9A':'#AD1457'};font-size:12px;padding:4px 12px;border-radius:50px;font-weight:700;">${a._type==='NSDL New'?'NSDL New':a._type==='Correction'?'NSDL Correction':a._type==='UTI'?'UTI New':'UTI Correction'}</span>
+    <span style="background:${sc}20;color:${sc};font-size:12px;padding:4px 12px;border-radius:50px;font-weight:700;">${st}</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;">
+    <div><div style="font-size:11px;color:var(--muted);font-weight:700;">Naam</div><div style="font-size:13px;font-weight:700;">${a.naam || a.name || '—'}</div></div>
+    <div><div style="font-size:11px;color:var(--muted);font-weight:700;">Mobile</div><div style="font-size:13px;font-weight:700;">${a.mobile || '—'}</div></div>
+    <div><div style="font-size:11px;color:var(--muted);font-weight:700;">Father's Name</div><div style="font-size:13px;">${a.father || '—'}</div></div>
+    <div><div style="font-size:11px;color:var(--muted);font-weight:700;">DOB</div><div style="font-size:13px;">${a.dob || '—'}</div></div>
+    <div><div style="font-size:11px;color:var(--muted);font-weight:700;">Aadhar No.</div><div style="font-size:13px;font-family:monospace;">${a.aadhar || '—'}</div></div>
+    <div><div style="font-size:11px;color:var(--muted);font-weight:700;">Date</div><div style="font-size:13px;">${a.datetime || a.createdAt || '—'}</div></div>
+    <div style="grid-column:1/-1;"><div style="font-size:11px;color:var(--muted);font-weight:700;">Address</div><div style="font-size:13px;">${a.address || '—'}</div></div>
+  </div>`;
+
+  // Documents Submitted (proof types)
+  html += `<div style="font-family:'Baloo 2',cursive;font-size:13px;font-weight:800;color:var(--text);margin-bottom:10px;border-bottom:1px solid #f0f4ff;padding-bottom:8px;"><i class="fas fa-file-alt"></i> Documents Submitted</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;">
+    <div><div style="font-size:11px;color:var(--muted);font-weight:700;">ID Proof</div><div style="font-size:13px;">${a.idProof || 'Aadhaar Card'}</div></div>
+    <div><div style="font-size:11px;color:var(--muted);font-weight:700;">Address Proof</div><div style="font-size:13px;">${a.addrProof || 'Aadhaar Card'}</div></div>
+    <div><div style="font-size:11px;color:var(--muted);font-weight:700;">DOB Proof</div><div style="font-size:13px;">${a.dobProof || 'Aadhaar Card'}</div></div>
+    <div><div style="font-size:11px;color:var(--muted);font-weight:700;">Photo / Sign</div><div style="font-size:13px;color:#2E7D32;">✅ ${(a.photoData || a.uploadedFileData) ? 'Uploaded' : 'Pending'} / ${(a.signData || a.uploadedFileData) ? 'Uploaded' : 'Pending'}</div></div>
+  </div>`;
+
+  // Customer documents (photo / signature / combined uploaded PDF)
+  if (a.uploadedFileData) {
+    html += `<div style="background:#E8F5E9;border:1.5px solid #A5D6A7;border-radius:10px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+      <div><i class="fas fa-file-pdf" style="color:#1B5E20;"></i> <b>Customer Document</b><br><span style="font-size:11px;color:#1B5E20;">${a.uploadedFileName || 'document.pdf'}</span></div>
+      <button onclick="staffDownloadPanFile('${a.uploadedFileData}','${a.uploadedFileName || 'document.pdf'}')" style="background:#1B5E20;color:#fff;border:none;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;"><i class="fas fa-download"></i> Doc Download</button>
+    </div>`;
+  }
+  // ✅ Photo & Signature — UTI applications mein alag se save hote hain (jaise admin panel mein)
+  if (a.photoData || a.signData) {
+    html += `<div style="background:linear-gradient(135deg,#E8F5E9,#F1F8E9);border:2px solid #66BB6A;border-radius:14px;padding:16px;margin-bottom:18px;">
+      <div style="font-family:'Baloo 2',cursive;font-size:14px;font-weight:800;color:#2E7D32;margin-bottom:14px;"><i class="fas fa-camera"></i> Photo & Signature — User ne upload kiya</div>
+      <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;">
+        ${a.photoData ? `
+        <div style="flex:1;min-width:140px;background:#fff;border:1.5px solid #A5D6A7;border-radius:10px;padding:12px;text-align:center;">
+          <div style="font-size:11px;font-weight:800;color:#1565C0;margin-bottom:8px;"><i class="fas fa-user"></i> PHOTO (200×267 px)</div>
+          <img src="${a.photoData}" style="width:80px;height:107px;object-fit:cover;border-radius:6px;border:2px solid #1565C0;display:block;margin:0 auto 10px;" onerror="this.style.display='none'">
+          <div style="font-size:10px;color:#546E7A;margin-bottom:8px;word-break:break-all;">${a.photoName || 'photo.jpg'}</div>
+          <button onclick="staffDownloadPanFile('${a.photoData}','${a.photoName || 'user-photo.jpg'}')" style="background:#1565C0;color:#fff;border:none;border-radius:7px;padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-family:'Hind',sans-serif;"><i class="fas fa-download"></i> Download Photo</button>
+        </div>` : `<div style="flex:1;min-width:140px;background:#fff;border:1.5px dashed #ccc;border-radius:10px;padding:12px;text-align:center;color:#90A4AE;font-size:12px;"><i class="fas fa-user" style="font-size:24px;display:block;margin-bottom:6px;"></i>Photo upload nahi hua</div>`}
+        ${a.signData ? `
+        <div style="flex:2;min-width:200px;background:#fff;border:1.5px solid #FFCC80;border-radius:10px;padding:12px;text-align:center;">
+          <div style="font-size:11px;font-weight:800;color:#E65100;margin-bottom:8px;"><i class="fas fa-pen-fancy"></i> SIGNATURE (560×140 px)</div>
+          <img src="${a.signData}" style="width:100%;max-width:220px;height:55px;object-fit:contain;border-radius:6px;border:2px solid #E65100;display:block;margin:0 auto 10px;background:#fff8f0;" onerror="this.style.display='none'">
+          <div style="font-size:10px;color:#546E7A;margin-bottom:8px;word-break:break-all;">${a.signName || 'signature.jpg'}</div>
+          <button onclick="staffDownloadPanFile('${a.signData}','${a.signName || 'user-signature.jpg'}')" style="background:#E65100;color:#fff;border:none;border-radius:7px;padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-family:'Hind',sans-serif;"><i class="fas fa-download"></i> Download Signature</button>
+        </div>` : `<div style="flex:2;min-width:200px;background:#fff;border:1.5px dashed #ccc;border-radius:10px;padding:12px;text-align:center;color:#90A4AE;font-size:12px;"><i class="fas fa-pen-fancy" style="font-size:24px;display:block;margin-bottom:6px;"></i>Signature upload nahi hua</div>`}
+      </div>
+    </div>`;
+  } else if (!a.uploadedFileData) {
+    if (a.docUploaded) {
+      html += `<div style="background:#FFF9C4;border:1.5px solid #F9A825;border-radius:10px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#F57F17;"><i class="fas fa-info-circle"></i> <strong>Note:</strong> Is application mein photo/sign alag se save nahi hua. User ne documents combine PDF mein submit kiye hain.</div>`;
+    } else {
+      html += `<div style="background:#FFF8E1;border:1.5px dashed #FFD54F;border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#F57F17;"><i class="fas fa-info-circle"></i> Is application mein customer document attach nahi mila.</div>`;
+    }
+  }
+  if (a.extraDocs && a.extraDocs.length) {
+    html += `<div style="background:#F3E5F5;border:1.5px solid #CE93D8;border-radius:10px;padding:12px 16px;margin-bottom:14px;">
+      <div style="font-size:12px;font-weight:800;color:#6A1B9A;margin-bottom:8px;"><i class="fas fa-paperclip"></i> Supporting Documents (${a.extraDocs.length})</div>
+      ${a.extraDocs.map((d, di) => `<div style="display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #E1BEE7;border-radius:7px;padding:8px 12px;margin-bottom:6px;flex-wrap:wrap;gap:6px;">
+        <span style="font-size:12px;">${d.type || 'Document'} — ${d.name || ''}</span>
+        <button onclick="staffDownloadPanFile('${d.url || d.data}','${d.name || 'doc_'+di+'.pdf'}')" style="background:#6A1B9A;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;cursor:pointer;"><i class="fas fa-download"></i></button>
+      </div>`).join('')}
+    </div>`;
+  }
+
+  // Existing slip — show with replace + delete option
+  if (a.slipUrl) {
+    html += `<div id="spam-slip-done-box" style="background:#E0F2F1;border:1.5px solid #80CBC4;border-radius:10px;padding:12px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <i class="fas fa-check-circle" style="color:#00695C;font-size:18px;"></i>
+        <div><b style="color:#00695C;">Slip Upload Ho Chuki Hai</b><br><span style="font-size:11px;color:#00695C;">${a.slipName || 'Acknowledgement Slip'}</span></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button onclick="staffDeleteSlip(${idx})" style="background:#C62828;color:#fff;border:none;border-radius:7px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;"><i class="fas fa-trash"></i> Hatao</button>
+        <button onclick="staffShowReplaceSlip(${idx})" style="background:#E65100;color:#fff;border:none;border-radius:7px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;"><i class="fas fa-sync-alt"></i> Badlo</button>
+      </div>
+    </div>
+    <div id="spam-replace-slip-zone" style="display:none;">
+      <div style="font-size:13px;font-weight:800;color:#E65100;margin:8px 0 6px;"><i class="fas fa-upload"></i> Nayi Slip Upload Karen</div>
+      <div class="slip-upload-zone" style="border:2px dashed #C5D8F8;border-radius:12px;padding:18px;text-align:center;cursor:pointer;" onclick="document.getElementById('spam-slip-input').click()">
+        <i class="fas fa-cloud-upload-alt" style="font-size:26px;color:#90A4AE;display:block;margin-bottom:6px;"></i>
+        <div style="font-size:13px;font-weight:700;">PDF / Image upload karen (Max 5MB)</div>
+        <input type="file" id="spam-slip-input" accept=".pdf,image/*" style="display:none;" onchange="staffHandleSlipUpload(${idx}, this)">
+      </div>
+      <div id="spam-slip-status" style="margin-top:8px;font-size:12px;"></div>
+    </div>`;
+  } else {
+    // No slip yet — show upload zone
+    html += `<div style="font-size:13px;font-weight:800;color:#E65100;margin:10px 0;"><i class="fas fa-upload"></i> Acknowledgement Slip Upload Karen</div>
+    <div class="slip-upload-zone" style="border:2px dashed #C5D8F8;border-radius:12px;padding:18px;text-align:center;cursor:pointer;" onclick="document.getElementById('spam-slip-input').click()">
+      <i class="fas fa-cloud-upload-alt" style="font-size:26px;color:#90A4AE;display:block;margin-bottom:6px;"></i>
+      <div style="font-size:13px;font-weight:700;">PDF / Image upload karen (Max 5MB)</div>
+      <input type="file" id="spam-slip-input" accept=".pdf,image/*" style="display:none;" onchange="staffHandleSlipUpload(${idx}, this)">
+    </div>
+    <div id="spam-slip-status" style="margin-top:8px;font-size:12px;"></div>`;
+  }
+
+  // Next Step instructions (sirf pending/processing ke liye)
+  if (st === 'Pending' || st === 'Under Process') {
+    html += `<div style="background:#E8F5E9;border:1.5px solid #A5D6A7;border-radius:10px;padding:12px 16px;margin-top:14px;">
+      <div style="font-size:12px;font-weight:800;color:#2E7D32;margin-bottom:6px;"><i class="fas fa-info-circle"></i> Next Step (${provider} Portal):</div>
+      <div style="font-size:13px;color:#1B5E20;">1. <strong>Customer Doc Download</strong> karein — photo, sign aur documents dekhein<br>2. Apne admin ID se <strong>${provider}</strong> portal par apply karen<br>3. Wapas aake slip upload karen<br>4. Approve karen — user ko slip milegi</div>
+    </div>`;
+  }
+
+  document.getElementById('spam-body').innerHTML = html;
+
+  let actHtml = `<button class="pan-modal-action-btn" style="background:#546E7A;color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;" onclick="closeStaffPanAppModal()"><i class="fas fa-times"></i> Band Karen</button>`;
+  if (st !== 'Approved' && st !== 'Rejected' && st !== 'Hold') {
+    actHtml += `<button style="background:#2E7D32;color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;" onclick="updateStaffPanStatus(${idx},'Approved',{value:''})">✔ Approve</button>`;
+    actHtml += `<button style="background:#C62828;color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;" onclick="updateStaffPanStatus(${idx},'Rejected',{value:''})">✖ Reject</button>`;
+    actHtml += `<button style="background:#6A1B9A;color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;" onclick="updateStaffPanStatus(${idx},'Hold',{value:''})">⏸ Hold</button>`;
+  } else {
+    actHtml += `<span style="background:${st==='Approved'?'#E8F5E9':st==='Rejected'?'#FFEBEE':'#EDE7F6'};color:${st==='Approved'?'#2E7D32':st==='Rejected'?'#C62828':'#6A1B9A'};padding:8px 18px;border-radius:8px;font-size:13px;font-weight:800;">
+      ${st==='Approved'?'✔ Approved':st==='Rejected'?'✖ Rejected':'⏸ Hold'}  — Status Lock Hai
+    </span>`;
+  }
+  document.getElementById('spam-actions').innerHTML = actHtml;
+  document.getElementById('staffPanAppModal').classList.add('show');
+}
+
+function closeStaffPanAppModal() {
+  document.getElementById('staffPanAppModal').classList.remove('show');
+  staffPanModalIdx = -1;
+}
+let staffPanModalIdx = -1;
+
+// Force-download any Cloudinary/base64 file URL
+function staffDownloadPanFile(url, filename) {
+  if (!url) { toast('File nahi mila!', 'error'); return; }
+  if (url.startsWith('data:')) {
+    const a = document.createElement('a');
+    a.href = url; a.download = filename || 'document';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    toast('✅ Document download ho raha hai!', 'success');
+    return;
+  }
+  let dlUrl = url.includes('res.cloudinary.com') && url.includes('/upload/') && !url.includes('fl_attachment')
+    ? url.replace('/upload/', '/upload/fl_attachment/') : url;
+  fetch(dlUrl).then(r => r.blob()).then(blob => {
+    const blobUrl = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = blobUrl; a.download = filename || 'document';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 3000);
+    toast('✅ Document download ho raha hai!', 'success');
+  }).catch(() => window.open(dlUrl, '_blank'));
+}
+
+function staffShowReplaceSlip(idx) {
+  const zone = document.getElementById('spam-replace-slip-zone');
+  if (zone) zone.style.display = 'block';
+}
+
+function staffDeleteSlip(idx) {
+  if (!confirm('Kya aap yeh slip hataana chahte hain?')) return;
+  const app = _panAppsCache[idx];
+  if (!app || !window._FB) { toast('Database connect nahi hai!', 'error'); return; }
+  const { db, ref, update } = window._FB;
+  const pathMap = { 'NSDL New': 'pan_applications', 'Correction': 'pan_corrections', 'UTI': 'uti_applications', 'UTI Correction': 'uti_corrections' };
+  const fbPath = (app._srcPath || pathMap[app._type] || 'pan_applications') + '/' + app._key;
+  update(ref(db, fbPath), { slipUrl: null, slipName: null, updatedAt: new Date().toISOString(), updatedBy: staffSession.name, updatedById: staffSession.staffId }).then(() => {
+    app.slipUrl = null;
+    app.slipName = null;
+    addStaffLog('PAN Slip Delete', (app.naam || app.name || app._key) + ' — Slip hatai gai');
+    toast('✅ Slip hata di gayi, ab nayi upload karen', 'success');
+    openStaffPanAppModal(idx);
+  }).catch(() => toast('Delete fail hua, dobara try karen.', 'error'));
+}
+
+function staffHandleSlipUpload(idx, input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { toast('File 5MB se choti honi chahiye', 'error'); return; }
+  const app = _panAppsCache[idx];
+  if (!app) return;
+  const statusEl = document.getElementById('spam-slip-status');
+  statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Upload ho raha hai...';
+  uploadToCloudinary(file).then(function (slipUrl) {
+    if (!window._FB) { toast('Database connect nahi hai!', 'error'); return; }
+    const { db, ref, update } = window._FB;
+    const pathMap = { 'NSDL New': 'pan_applications', 'Correction': 'pan_corrections', 'UTI': 'uti_applications', 'UTI Correction': 'uti_corrections' };
+    const fbPath = (app._srcPath || pathMap[app._type] || 'pan_applications') + '/' + app._key;
+    update(ref(db, fbPath), { slipUrl: slipUrl, slipName: file.name, updatedAt: new Date().toISOString(), updatedBy: staffSession.name, updatedById: staffSession.staffId }).then(() => {
+      app.slipUrl = slipUrl;
+      app.slipName = file.name;
+      statusEl.innerHTML = '<span style="color:#2E7D32;"><i class="fas fa-check-circle"></i> Slip upload ho gaya!</span>';
+      addStaffLog('PAN Slip Upload', (app.naam || app.name || app._key) + ' — ' + file.name);
+      toast('✅ Slip upload ho gaya', 'success');
+      openStaffPanAppModal(idx); // refresh modal content
+    }).catch(() => { statusEl.innerHTML = '<span style="color:#C62828;">Save fail hua, dobara try karen.</span>'; });
+  }).catch(function (err) {
+    console.error('Slip upload error:', err);
+    statusEl.innerHTML = '<span style="color:#C62828;">Upload fail hua, dobara try karen.</span>';
+    toast('Slip upload fail hua', 'error');
+  });
+}
+
+
+
+function loadStaffHcr() {
+  if (!staffSession || !hasPerm('hardCopy')) return;
+  if (!window._FB) { window.addEventListener('firebase-ready', loadStaffHcr, { once: true }); return; }
+  const { db, ref, get } = window._FB;
+  const tbody = document.getElementById('hcr-tbody');
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:#90A4AE;">Loading...</td></tr>';
+  get(ref(db, 'hard_copy_requests')).then(function(snap) {
+    _hcrCache = [];
+    if (snap.exists()) snap.forEach(c => _hcrCache.push({ ...c.val(), _key: c.key }));
+    _hcrCache.sort((a, b) => parseStaffDT(b.requestedAt) - parseStaffDT(a.requestedAt));
+    document.getElementById('sb-hcr-count').textContent = _hcrCache.filter(r => r.status === 'Pending').length;
+    renderStaffHcr();
+  }).catch(() => {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:#e53935;">Data load nahi ho paya.</td></tr>';
+  });
+}
+
+function renderStaffHcr() {
+  const tbody = document.getElementById('hcr-tbody');
+  const filter = (document.getElementById('hcr-filter') || {}).value || 'all';
+  let list = _hcrCache;
+  if (filter !== 'all') list = list.filter(r => r.status === filter);
+  document.getElementById('hcr-count-lbl').textContent = list.length;
+  if (!list.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:#90A4AE;">Koi request nahi mili</td></tr>';
+    return;
+  }
+  const statusColor = { Approved: '#2E7D32', Pending: '#E65100', Dispatched: '#1565C0' };
+  tbody.innerHTML = list.map(r => {
+    const st = r.status || 'Pending';
+    const sc = statusColor[st] || '#607D8B';
+    return `<tr>
+      <td style="font-family:monospace;font-size:12px;">${r._key || '—'}</td>
+      <td>${r.userName || r.userId || '—'}</td>
+      <td style="font-size:12px;max-width:160px;">${r.address || '—'}</td>
+      <td style="font-size:12px;">${r.requestedAt || '—'}</td>
+      <td><span style="background:${sc}20;color:${sc};font-size:11px;padding:3px 10px;border-radius:50px;font-weight:700;">${st}</span></td>
+      <td>
+        ${st === 'Pending' ? `<button onclick="updateStaffHcr('${r._key}','Approved')" style="background:#2E7D32;color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer;margin-right:4px;">Approve</button>` : ''}
+        ${st === 'Approved' ? `<button onclick="updateStaffHcr('${r._key}','Dispatched')" style="background:#1565C0;color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer;">Dispatched</button>` : ''}
+        ${st === 'Dispatched' ? '<span style="color:#90A4AE;font-size:12px;">Completed</span>' : ''}
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function updateStaffHcr(key, newStatus) {
+  if (!window._FB) { toast('Database connect nahi hai!', 'error'); return; }
+  const { db, ref, update } = window._FB;
+  update(ref(db, 'hard_copy_requests/' + key), { status: newStatus, updatedAt: new Date().toISOString(), updatedBy: staffSession.name, updatedById: staffSession.staffId }).then(() => {
+    const item = _hcrCache.find(r => r._key === key);
+    if (item) item.status = newStatus;
+    addStaffLog('Hard Copy Update', key + ' → ' + newStatus);
+    toast('✅ Hard Copy status update: ' + newStatus, 'success');
+    renderStaffHcr();
+    document.getElementById('sb-hcr-count').textContent = _hcrCache.filter(r => r.status === 'Pending').length;
+  }).catch(() => toast('Update failed!', 'error'));
+}
+
+// ============================================================
+//  PAN ENQUIRY REQUESTS
+// ============================================================
+
+const SVC_LABELS = {
+  'aadhar-to-pan': { label:'Find PAN (Aadhar→PAN)', icon:'fas fa-search-plus', color:'#E65100', charge:130 },
+  'aadhar-link':   { label:'Aadhar-PAN Link Status', icon:'fas fa-link',       color:'#00695C', charge:10  },
+  'pan-verify':    { label:'PAN Verify Instant',     icon:'fas fa-user-check', color:'#1B5E20', charge:5   },
+  'pan-details':   { label:'PAN Card Details',       icon:'fas fa-id-badge',   color:'#0277BD', charge:15  },
+  'epan-pdf':      { label:'E-PAN PDF',              icon:'fas fa-file-pdf',   color:'#6A1B9A', charge:72  }
+};
+let staffPeqFilter = 'all';
+let staffPenqUploadFile = null;
+
+let _penqUnsubscribe = null;
+function loadStaffPanEnquiry() {
+  if (!staffSession || !hasPerm('panEnquiry')) return;
+  if (!window._FB) { window.addEventListener('firebase-ready', loadStaffPanEnquiry, { once: true }); return; }
+  const { db, ref, onValue, get } = window._FB;
+  const listEl = document.getElementById('peqf-list');
+  if (listEl) listEl.innerHTML = '<div style="text-align:center;padding:24px;color:#90A4AE;">Loading...</div>';
+  if (_penqUnsubscribe) { _penqUnsubscribe(); _penqUnsubscribe = null; }
+
+  function applySnap(snap, source) {
+    _panEnqCache = [];
+    const rawKeys = [];
+    if (snap.exists()) snap.forEach(c => { rawKeys.push(c.key); _panEnqCache.push({ ...c.val(), reqId: c.val().reqId || c.key, _key: c.key }); });
+    _panEnqCache.sort((a, b) => parseStaffDT(b.date || b.createdAt || b.datetime) - parseStaffDT(a.date || a.createdAt || a.datetime));
+    const pendingCount = _panEnqCache.filter(r => !r.adminResult).length;
+    const sb = document.getElementById('sb-penq-count');
+    if (sb) sb.textContent = pendingCount;
+    console.log('[PAN Enquiry] (' + source + ') raw keys from Firebase:', rawKeys);
+    console.log('[PAN Enquiry] (' + source + ') records loaded:', _panEnqCache.length, '— pending:', pendingCount);
+    staffPeqFilter = 'all';
+    renderStaffPanEnqList();
+  }
+
+  // ✅ Pehle ek fresh one-time get() bhi karte hain — isse stale/cached
+  // realtime-connection issues ki wajah se naye records miss nahi honge.
+  get(ref(db, 'pan_enquiry_requests')).then(snap => applySnap(snap, 'initial-get')).catch(err => {
+    console.error('PAN enquiry initial get error:', err);
+    if (err && err.code === 'PERMISSION_DENIED' && listEl) {
+      listEl.innerHTML = '<div style="text-align:center;padding:24px;color:#e53935;background:#FFEBEE;border-radius:12px;"><i class="fas fa-lock" style="font-size:24px;display:block;margin-bottom:8px;"></i><strong>Permission Denied!</strong><br><span style="font-size:12px;">Aapke staff account ko <code>pan_enquiry_requests</code> path padhne ki permission nahi hai. Admin se Firebase Rules check karwayein.</span></div>';
+    }
+  });
+
+  // Phir realtime listener attach karte hain taaki future updates turant dikhein.
+  _penqUnsubscribe = onValue(ref(db, 'pan_enquiry_requests'), function(snap) {
+    applySnap(snap, 'onValue');
+  }, function(err) {
+    console.error('PAN enquiry load error:', err);
+    if (listEl) {
+      if (err && err.code === 'PERMISSION_DENIED') {
+        listEl.innerHTML = '<div style="text-align:center;padding:24px;color:#e53935;background:#FFEBEE;border-radius:12px;"><i class="fas fa-lock" style="font-size:24px;display:block;margin-bottom:8px;"></i><strong>Permission Denied!</strong><br><span style="font-size:12px;">Aapke staff account ko <code>pan_enquiry_requests</code> path padhne ki permission nahi hai. Admin se Firebase Rules check karwayein.</span></div>';
+      } else {
+        listEl.innerHTML = '<div style="text-align:center;padding:24px;color:#e53935;">Data load nahi ho paya. Dobara try karen.<br><span style="font-size:11px;">' + (err.message||err) + '</span></div>';
+      }
+    }
+  });
+}
+
+function filterStaffPanEnq(type, el) {
+  staffPeqFilter = type;
+  document.querySelectorAll('#page-pan-enquiry .pan-tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderStaffPanEnqList();
+}
+
+// ✅ Stat cards (Pending/Completed/Revenue/Total) par click karne se
+// us hisaab se list filter ho jaye — corresponding tab button khud activate ho jata hai.
+function staffPeqStatClick(type) {
+  const tabIdMap = { pending: 'peq-tab-pending', completed: 'peq-tab-completed', all: 'peq-tab-all' };
+  const tabBtn = document.getElementById(tabIdMap[type] || 'peq-tab-all');
+  filterStaffPanEnq(type, tabBtn);
+  const listEl = document.getElementById('peqf-list');
+  if (listEl) listEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function updateStaffPenqStats() {
+  const all = _panEnqCache;
+  const pending = all.filter(r => !r.adminResult).length;
+  const done = all.filter(r => r.adminResult).length;
+  const rev = all.reduce((s, r) => s + (r.charge || 0), 0);
+  const el = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  el('peqf-pending', pending);
+  el('peqf-done', done);
+  el('peqf-revenue', '₹' + rev);
+  el('peqf-total', all.length);
+}
+
+function renderStaffPanEnqList() {
+  let all = _panEnqCache;
+  const search = (document.getElementById('peq-search')?.value || '').toLowerCase();
+
+  updateStaffPenqStats();
+
+  if (staffPeqFilter === 'pending') all = all.filter(r => !r.adminResult);
+  else if (staffPeqFilter === 'completed') all = all.filter(r => !!r.adminResult);
+  else if (staffPeqFilter !== 'all') all = all.filter(r => r.service === staffPeqFilter);
+
+  if (search) all = all.filter(r =>
+    (r.userId || '').toLowerCase().includes(search) ||
+    (r.userName || '').toLowerCase().includes(search) ||
+    (r.name || '').toLowerCase().includes(search) ||
+    (r.pan || '').toLowerCase().includes(search) ||
+    (r.aadhar || '').toLowerCase().includes(search) ||
+    (r.reqId || '').toLowerCase().includes(search)
+  );
+
+  const listEl = document.getElementById('peqf-list');
+  const emptyEl = document.getElementById('peqf-empty');
+  if (!listEl) return;
+
+  if (!all.length) {
+    listEl.innerHTML = '';
+    if (emptyEl) emptyEl.style.display = 'block';
+    return;
+  }
+  if (emptyEl) emptyEl.style.display = 'none';
+
+  const svcMeta = (svc) => SVC_LABELS[svc] || { label: svc || 'Service', icon: 'fas fa-search', color: '#546E7A', charge: 0 };
+
+  listEl.innerHTML = all.map((r) => {
+    const svc = svcMeta(r.service);
+    const isDone = !!r.adminResult;
+    const borderColor = isDone ? '#2E7D32' : svc.color;
+    const statusBg = isDone ? '#E8F5E9' : '#FFF3E0';
+    const statusClr = isDone ? '#2E7D32' : '#E65100';
+    const statusTxt = isDone ? '✅ Completed' : '⏳ Pending';
+
+    let dataHtml = '';
+    if (r.aadhar) dataHtml += `<span style="background:#f0f4ff;padding:3px 10px;border-radius:6px;font-size:12px;"><i class="fas fa-id-card" style="color:#546E7A;margin-right:4px;"></i>${r.aadhar}</span>`;
+    if (r.pan) dataHtml += `<span style="background:#f0f4ff;padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700;letter-spacing:1px;">${r.pan}</span>`;
+    if (r.name) dataHtml += `<span style="background:#f0f4ff;padding:3px 10px;border-radius:6px;font-size:12px;">${r.name}</span>`;
+    if (r.dob) dataHtml += `<span style="background:#f0f4ff;padding:3px 10px;border-radius:6px;font-size:12px;">DOB: ${r.dob}</span>`;
+    if (r.mobile) dataHtml += `<span style="background:#f0f4ff;padding:3px 10px;border-radius:6px;font-size:12px;">📱 ${r.mobile}</span>`;
+
+    return `<div style="background:#fff;border-radius:14px;padding:18px 20px;box-shadow:0 2px 14px rgba(21,101,192,0.09);border-left:4px solid ${borderColor};${isDone ? 'opacity:.85;' : ''}">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:44px;height:44px;border-radius:12px;background:${svc.color}22;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i class="${svc.icon}" style="font-size:18px;color:${svc.color};"></i>
+          </div>
+          <div>
+            <div style="font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;color:${svc.color};">${svc.label}</div>
+            <div style="font-size:11px;color:#546E7A;margin-top:2px;">
+              <i class="fas fa-user" style="margin-right:4px;"></i>${String(r.userName || 'User').replace('[object Object]', 'User')} (${String(r.userId || '—').replace('[object Object]', '—')}) &nbsp;|&nbsp; Req: <strong style="color:#1565C0;">${r.reqId}</strong> &nbsp;|&nbsp; ${r.date || ''}
+            </div>
+          </div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:var(--primary);">₹${r.charge || svc.charge}</div>
+          <span style="background:${statusBg};color:${statusClr};padding:3px 10px;border-radius:50px;font-size:11px;font-weight:700;">${statusTxt}</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">${dataHtml}</div>
+
+      ${isDone ? `
+      <div style="background:#E8F5E9;border-radius:10px;padding:12px 16px;margin-bottom:10px;">
+        <div style="font-size:12px;font-weight:700;color:#2E7D32;margin-bottom:4px;"><i class="fas fa-check-circle"></i> Jawab bheja gaya:</div>
+        <div style="font-size:13px;color:#1B5E20;white-space:pre-wrap;">${r.adminResult}</div>
+        ${r.adminPdfName ? '<div style="margin-top:8px;font-size:12px;color:#546E7A;"><i class="fas fa-file-pdf" style="color:#c62828;"></i> PDF: ' + r.adminPdfName + '</div>' : ''}
+      </div>` : ''}
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        ${!isDone ? `<button onclick="openStaffPenqReplyModal('${r.reqId}')" style="background:linear-gradient(135deg,#1565C0,#1976D2);color:#fff;border:none;padding:9px 20px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Baloo 2',cursive;display:flex;align-items:center;gap:6px;"><i class="fas fa-reply"></i> Reply Bhejein</button>` : ''}
+        ${!isDone ? `<button onclick="deleteStaffPenqRequest('${r.reqId}')" style="background:#FFEBEE;color:#c62828;border:none;padding:9px 16px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;"><i class="fas fa-trash"></i></button>` : ''}
+        ${isDone ? `<button onclick="openStaffPenqReplyModal('${r.reqId}')" style="background:#FFF3E0;color:#E65100;border:none;padding:9px 16px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Baloo 2',cursive;"><i class="fas fa-edit"></i> Edit Reply</button>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openStaffPenqReplyModal(reqId) {
+  if (!hasPerm('panEnquiry')) { toast('Aapke paas is action ki permission nahi hai', 'error'); return; }
+  const req = _panEnqCache.find(r => r.reqId === reqId);
+  if (!req) { toast('Request nahi mili!', 'error'); return; }
+  const svc = SVC_LABELS[req.service] || { label: req.service || 'Service', icon: 'fas fa-search', color: '#546E7A' };
+
+  document.getElementById('staff-penq-modal-title').innerHTML = `<i class="${svc.icon}" style="color:${svc.color};margin-right:8px;"></i> ${svc.label} — Reply Bhejein`;
+
+  const body = document.getElementById('staff-penq-modal-body');
+  body.innerHTML = `
+    <div style="background:#F8FBFF;border-radius:10px;padding:14px 16px;margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px;">
+      <div><span style="color:#90A4AE;">User:</span> <strong>${String(req.userName || 'User').replace('[object Object]', 'User')} (${String(req.userId || '—').replace('[object Object]', '—')})</strong></div>
+      <div><span style="color:#90A4AE;">Req ID:</span> <strong style="color:#1565C0;">${req.reqId}</strong></div>
+      <div><span style="color:#90A4AE;">Service:</span> <strong style="color:${svc.color};">${svc.label}</strong></div>
+      <div><span style="color:#90A4AE;">Charge:</span> <strong style="color:#2E7D32;">₹${req.charge || ''}</strong></div>
+      ${req.name ? `<div><span style="color:#90A4AE;">Name:</span> <strong>${req.name}</strong></div>` : ''}
+      ${req.pan ? `<div><span style="color:#90A4AE;">PAN:</span> <strong style="letter-spacing:2px;">${req.pan}</strong></div>` : ''}
+      ${req.aadhar ? `<div><span style="color:#90A4AE;">Aadhar:</span> <strong>${req.aadhar}</strong></div>` : ''}
+      ${req.dob ? `<div><span style="color:#90A4AE;">DOB:</span> <strong>${req.dob}</strong></div>` : ''}
+      ${req.mobile ? `<div><span style="color:#90A4AE;">Mobile:</span> <strong>${req.mobile}</strong></div>` : ''}
+    </div>
+    <div style="margin-bottom:14px;">
+      <label style="display:block;font-size:12px;font-weight:700;color:#333;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;">
+        <i class="fas fa-reply" style="color:${svc.color};margin-right:4px;"></i> User ko Result / Jawab likhen *
+      </label>
+      <textarea id="staff-penq-reply-text" rows="5"
+        placeholder="Yahan PAN details, link status, verification result ya koi bhi information likhein..."
+        style="width:100%;padding:12px 14px;border:1.5px solid #C5D8F8;border-radius:10px;font-size:14px;font-family:'Hind',sans-serif;outline:none;resize:vertical;box-sizing:border-box;"></textarea>
+    </div>
+    <div style="margin-bottom:6px;">
+      <label style="display:block;font-size:12px;font-weight:700;color:#333;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;">
+        <i class="fas fa-file-pdf" style="color:#c62828;margin-right:4px;"></i> PDF / Document Upload karna ho to (Optional)
+      </label>
+      <div id="staff-penq-upload-zone" style="border:2px dashed #C5D8F8;border-radius:10px;padding:20px;text-align:center;cursor:pointer;background:#F8FBFF;">
+        <i class="fas fa-cloud-upload-alt" style="font-size:28px;color:#90A4AE;margin-bottom:8px;display:block;"></i>
+        <div style="font-size:13px;font-weight:700;color:#546E7A;">PDF ya Image Upload Karen</div>
+        <div style="font-size:11px;color:#B0BEC5;margin-top:4px;">Click karein — PDF, JPG, PNG (max 5MB)</div>
+        <input type="file" id="staff-penq-file-inp" accept=".pdf,image/*" style="display:none;">
+      </div>
+      <div id="staff-penq-file-preview" style="display:none;margin-top:8px;background:#E8F5E9;border-radius:8px;padding:10px 14px;align-items:center;gap:10px;">
+        <i class="fas fa-file-pdf" style="font-size:22px;color:#2E7D32;flex-shrink:0;"></i>
+        <div style="flex:1;">
+          <div id="staff-penq-fname" style="font-weight:700;font-size:13px;color:#2E7D32;"></div>
+          <div id="staff-penq-fsize" style="font-size:11px;color:#546E7A;"></div>
+        </div>
+        <button id="staff-penq-remove-btn" style="background:#FFEBEE;color:#c62828;border:none;border-radius:6px;padding:5px 10px;cursor:pointer;font-size:12px;"><i class="fas fa-times"></i></button>
+      </div>
+    </div>`;
+
+  const ta = document.getElementById('staff-penq-reply-text');
+  if (ta) ta.value = req.adminResult || '';
+
+  const fileInp = document.getElementById('staff-penq-file-inp');
+  if (fileInp) {
+    fileInp.onchange = function () { staffPenqFileChosen(this); };
+    fileInp.addEventListener('click', function (e) { e.stopPropagation(); });
+  }
+  const uploadZone = document.getElementById('staff-penq-upload-zone');
+  if (uploadZone) {
+    uploadZone.onclick = function (e) { e.stopPropagation(); document.getElementById('staff-penq-file-inp').click(); };
+  }
+  const removeBtn = document.getElementById('staff-penq-remove-btn');
+  if (removeBtn) { removeBtn.onclick = function (e) { e.stopPropagation(); staffPenqFileRemove(); }; }
+
+  const actionsDiv = document.getElementById('staff-penq-modal-actions');
+  actionsDiv.innerHTML = `
+    <button id="staff-penq-send-btn" style="background:linear-gradient(135deg,#2E7D32,#43A047);color:#fff;border:none;padding:12px 28px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;">
+      <i class="fas fa-paper-plane"></i> User ko Bhejein
+    </button>
+    <button id="staff-penq-cancel-btn" style="background:#f0f4ff;color:#546E7A;border:1.5px solid #C5D8F8;padding:12px 20px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;">
+      <i class="fas fa-times"></i> Cancel
+    </button>`;
+
+  document.getElementById('staff-penq-send-btn').addEventListener('click', function (e) {
+    e.stopPropagation();
+    const btn = this;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Bhej raha hai...';
+    setTimeout(function () { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> User ko Bhejein'; }, 10000);
+    sendStaffPenqReply(reqId);
+  });
+  document.getElementById('staff-penq-cancel-btn').addEventListener('click', closeStaffPenqModal);
+
+  document.getElementById('staffPenqModal').classList.add('show');
+}
+
+function staffPenqFileChosen(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { toast('File 5MB se chhoti honi chahiye!', 'error'); return; }
+  staffPenqUploadFile = file;
+  document.getElementById('staff-penq-upload-zone').style.borderColor = '#66BB6A';
+  const prev = document.getElementById('staff-penq-file-preview');
+  if (prev) {
+    prev.style.display = 'flex';
+    document.getElementById('staff-penq-fname').textContent = file.name;
+    document.getElementById('staff-penq-fsize').textContent = file.size < 1024 * 1024 ? (file.size / 1024).toFixed(1) + ' KB' : (file.size / 1024 / 1024).toFixed(2) + ' MB';
+  }
+}
+
+function staffPenqFileRemove() {
+  staffPenqUploadFile = null;
+  const inp = document.getElementById('staff-penq-file-inp');
+  if (inp) inp.value = '';
+  const zone = document.getElementById('staff-penq-upload-zone');
+  if (zone) zone.style.borderColor = '#C5D8F8';
+  const prev = document.getElementById('staff-penq-file-preview');
+  if (prev) prev.style.display = 'none';
+}
+
+function sendStaffPenqReply(reqId) {
+  const replyEl = document.getElementById('staff-penq-reply-text');
+  const replyText = (replyEl && replyEl.value || '').trim();
+  if (!replyText) { toast('Reply text likhna zaruri hai!', 'error'); return; }
+
+  const idx = _panEnqCache.findIndex(r => r.reqId === reqId);
+  if (idx < 0) { toast('Request nahi mili!', 'error'); return; }
+  if (!window._FB) { toast('Database connect nahi hai!', 'error'); return; }
+  const { db, ref, update } = window._FB;
+  const req = _panEnqCache[idx];
+
+  function saveReply(pdfUrl, pdfName) {
+    const patch = { adminResult: replyText, adminRepliedAt: new Date().toLocaleString('en-IN'), status: 'completed', repliedBy: staffSession.name, repliedById: staffSession.staffId };
+    if (pdfUrl) { patch.adminPdfUrl = pdfUrl; patch.adminPdfName = pdfName || 'reply.pdf'; }
+    update(ref(db, 'pan_enquiry_requests/' + (req._key || reqId)), patch).then(() => {
+      Object.assign(_panEnqCache[idx], patch);
+      addStaffLog('PAN Enquiry Reply', (req.userName || req.userId || reqId) + ' — ' + (SVC_LABELS[req.service]?.label || req.service));
+      closeStaffPenqModal();
+      renderStaffPanEnqList();
+      document.getElementById('sb-penq-count').textContent = _panEnqCache.filter(r => !r.adminResult).length;
+      toast('✅ Reply bhej di gayi!', 'success');
+    }).catch(err => {
+      console.error('PAN enquiry reply save fail:', err);
+      toast('Update failed! Dobara try karen.', 'error');
+    });
+  }
+
+  if (staffPenqUploadFile) {
+    toast('PDF upload ho raha hai... ⏳', 'success');
+    uploadToCloudinary(staffPenqUploadFile).then(pdfUrl => {
+      saveReply(pdfUrl, staffPenqUploadFile.name);
+      staffPenqUploadFile = null;
+    }).catch(err => {
+      toast('PDF upload failed: ' + err.message, 'error');
+    });
+  } else {
+    saveReply(null, null);
+  }
+}
+
+function deleteStaffPenqRequest(reqId) {
+  if (!hasPerm('panEnquiry')) { toast('Aapke paas is action ki permission nahi hai', 'error'); return; }
+  if (!confirm('Is request ko delete karen?')) return;
+  if (!window._FB) { toast('Database connect nahi hai!', 'error'); return; }
+  const { db, ref, remove } = window._FB;
+  const req = _panEnqCache.find(r => r.reqId === reqId);
+  if (!req) return;
+  remove(ref(db, 'pan_enquiry_requests/' + (req._key || reqId))).then(() => {
+    _panEnqCache = _panEnqCache.filter(r => r.reqId !== reqId);
+    addStaffLog('PAN Enquiry Deleted', req.userName || req.userId || reqId);
+    renderStaffPanEnqList();
+    document.getElementById('sb-penq-count').textContent = _panEnqCache.filter(r => !r.adminResult).length;
+    toast('Request delete ho gayi.', 'success');
+  }).catch(() => toast('Delete failed! Dobara try karen.', 'error'));
+}
+
+function closeStaffPenqModal() {
+  document.getElementById('staffPenqModal').classList.remove('show');
+  staffPenqUploadFile = null;
+}
+
+// ============================================================
+//  Cloudinary upload helper (PDF/image, optional reply attachments)
+// ============================================================
+const JSK_CLOUDINARY = { cloudName: 'drxavv6sb', uploadPreset: 'jsk_uploads' };
+async function uploadToCloudinary(file) {
+  if (!file) throw new Error('File nahi mili upload ke liye');
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', JSK_CLOUDINARY.uploadPreset);
+  formData.append('folder', 'jsk_uploads');
+  const uploadUrl = `https://api.cloudinary.com/v1_1/${JSK_CLOUDINARY.cloudName}/auto/upload`;
+  const resp = await fetch(uploadUrl, { method: 'POST', body: formData });
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err.error?.message || 'Cloudinary upload failed: ' + resp.status);
+  }
+  const data = await resp.json();
+  if (!data.secure_url) throw new Error('Cloudinary se URL nahi mila');
+  return data.secure_url;
+}
+
+function loadDashboardStats() {
+  if (!staffSession) return;
+  if (hasPerm('viewUsers') || hasPerm('addUser') || hasPerm('kyc')) {
+    document.getElementById('stat-total-users').textContent = usersData.length;
+    document.getElementById('sb-user-count').textContent = usersData.length;
+    const kycPending = usersData.filter(u => u.kyc === 'pending' || !u.kyc).length;
+    document.getElementById('stat-kyc-pending').textContent = kycPending;
+    document.getElementById('sb-kyc-count').textContent = kycPending;
+  }
+  if (hasPerm('wallet')) {
+    const pendingWR = walletRequests.filter(r=>r.status==='pending').length;
+    document.getElementById('stat-wr-pending').textContent = pendingWR;
+    document.getElementById('sb-wr-count').textContent = pendingWR;
+  }
+  if (hasPerm('panApplications')) {
+    const panPending = _panAppsCache.filter(a => (a.status || 'Pending') === 'Pending').length;
+    document.getElementById('stat-pan-pending').textContent = panPending;
+    document.getElementById('sb-pan-count').textContent = panPending;
+  }
+  if (hasPerm('hardCopy')) {
+    const hcrPending = _hcrCache.filter(r => r.status === 'Pending').length;
+    document.getElementById('stat-hcr-pending').textContent = hcrPending;
+    document.getElementById('sb-hcr-count').textContent = hcrPending;
+  }
+}
+</script>
+
+</body>
+</html>
