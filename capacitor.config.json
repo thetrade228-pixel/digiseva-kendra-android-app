@@ -10,7 +10,7 @@
       "launchShowDuration": 1500,
       "backgroundColor": "#1565C0",
       "androidSplashResourceName": "splash",
-      "showSpinner": false
+      "overlaysWebView": false
     },
     "StatusBar": {
       "style": "DARK",
