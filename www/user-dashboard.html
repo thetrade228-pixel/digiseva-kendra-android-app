@@ -27,7 +27,7 @@ body{font-family:'Hind',sans-serif;background:var(--bg);color:var(--text);displa
 /* ===== SIDEBAR ===== */
 .sidebar{
   width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--sidebar);
-  display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;padding-top: env(safe-area-inset-top, 0px);
+  display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;padding-top: calc(env(safe-area-inset-top, 0px) + 16px);
   
   overflow-y:auto;z-index:200;transition:.3s;
 }
@@ -87,8 +87,8 @@ body{font-family:'Hind',sans-serif;background:var(--bg);color:var(--text);displa
 .topbar{
   background:#fff;padding:0 24px;height:60px;
   display:flex;align-items:center;justify-content:space-between;
-  box-shadow:0 2px 12px rgba(21,101,192,0.08);position:sticky;top: calc(env(safe-area-inset-top, 0px) + 12px);z-index:5000;
-  margin-top: calc(env(safe-area-inset-top, 0px) + 12px);
+  box-shadow:0 2px 12px rgba(21,101,192,0.08);position:sticky;top: calc(env(safe-area-inset-top, 0px) + 28px);z-index:5000;
+  margin-top: calc(env(safe-area-inset-top, 0px) + 28px);
 }
 .topbar-left{display:flex;align-items:center;gap:14px;flex:1;min-width:0;}
 .menu-toggle{background:none;border:none;cursor:pointer;font-size:20px;color:var(--muted);display:none;}
