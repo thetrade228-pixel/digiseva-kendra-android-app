@@ -15348,6 +15348,21 @@ function getNotices()  { try{ return JSON.parse(localStorage.getItem(NOTICES_KEY
 function getMessages() { try{ return JSON.parse(localStorage.getItem(MESSAGES_KEY)||'[]'); }catch(e){return [];} }
 function getReadNotices()  { try{ return JSON.parse(localStorage.getItem(getReadNoticesKey())||'[]'); }catch(e){return [];} }
 function getReadMessages() { try{ return JSON.parse(localStorage.getItem(getReadMessagesKey())||'[]'); }catch(e){return [];} }
+  // ✅ Firebase se fresh notices/messages laao (naye device/browser ke liye zaroori)
+function syncNoticesMessagesFromFirebase(cb) {
+  if (!window._FB) { cb && cb(); return; }
+  const { db, ref, get } = window._FB;
+  let done = 0; const total = 2;
+  function checkDone() { done++; if (done >= total) cb && cb(); }
+  get(ref(db, 'admin/notices')).then(function(snap) {
+    if (snap.exists()) { try { localStorage.setItem(NOTICES_KEY, JSON.stringify(snap.val())); } catch(e) {} }
+    checkDone();
+  }).catch(function(e) { console.warn('Notices Firebase load fail:', e); checkDone(); });
+  get(ref(db, 'admin/messages')).then(function(snap) {
+    if (snap.exists()) { try { localStorage.setItem(MESSAGES_KEY, JSON.stringify(snap.val())); } catch(e) {} }
+    checkDone();
+  }).catch(function(e) { console.warn('Messages Firebase load fail:', e); checkDone(); });
+}
 
 function getCurrentUserId() {
   try{ const u = JSON.parse(localStorage.getItem('jsk_current_user')||'{}'); return u.userId||null; }catch(e){return null;}
@@ -15540,8 +15555,8 @@ if(!document.getElementById('notif-anim-style')) {
   st.textContent = '@keyframes bellShake{0%,100%{transform:rotate(0);}15%{transform:rotate(15deg);}30%{transform:rotate(-12deg);}45%{transform:rotate(10deg);}60%{transform:rotate(-8deg);}75%{transform:rotate(5deg);}90%{transform:rotate(-3deg);}}';
   document.head.appendChild(st);
 }
-refreshAndAnimate();
-setInterval(refreshAndAnimate, 15000);
+syncNoticesMessagesFromFirebase(function(){ refreshAndAnimate(); });
+setInterval(function(){ syncNoticesMessagesFromFirebase(function(){ refreshAndAnimate(); }); }, 15000);
 
 function toggleUserDropdown(e) {
   if (e) e.stopPropagation();
